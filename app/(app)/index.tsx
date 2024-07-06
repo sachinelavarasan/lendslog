@@ -1,7 +1,8 @@
-import { FirebaseContext } from '@/contexts/firebase-context';
-import { useSegments, useRouter } from 'expo-router';
 import { useContext, useEffect } from 'react';
 import { ActivityIndicator, View } from 'react-native';
+import { useRouter } from 'expo-router';
+
+import { FirebaseContext } from '@/contexts/firebase-context';
 
 const StartPage = () => {
   const { user } = useContext(FirebaseContext);

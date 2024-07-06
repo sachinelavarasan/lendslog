@@ -1,14 +1,6 @@
-import { Ionicons } from '@expo/vector-icons';
 import React, { useState, forwardRef } from 'react';
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TextInput,
-  TextInputProps,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, TextInput, TextInputProps, TouchableOpacity, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 interface ExtraInputProps {
   label?: string;

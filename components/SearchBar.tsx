@@ -1,7 +1,7 @@
 // SearchBar.js
-import React, { useState } from "react";
-import { StyleSheet, TextInput, View, Keyboard } from "react-native";
-import { Feather, Entypo } from "@expo/vector-icons";
+import React, { useState } from 'react';
+import { StyleSheet, TextInput, View, Keyboard } from 'react-native';
+import { Feather, Entypo } from '@expo/vector-icons';
 
 interface Props {
   searchPhrase: string;
@@ -14,18 +14,9 @@ const SearchBar = ({ searchPhrase, onChange, onClick, onClose }: Props) => {
   const [clicked, setIsClicked] = useState(false);
   return (
     <View style={styles.container}>
-      <View
-        style={
-          clicked ? styles.searchBar__clicked : styles.searchBar__unclicked
-        }
-      >
+      <View style={clicked ? styles.searchBar__clicked : styles.searchBar__unclicked}>
         {/* search Icon */}
-        <Feather
-          name="search"
-          size={20}
-          color="#C7C7C7"
-          style={{ marginLeft: 10 }}
-        />
+        <Feather name="search" size={20} color="#C7C7C7" style={{ marginLeft: 10 }} />
         {/* Input field */}
         <TextInput
           style={styles.input}
@@ -44,7 +35,7 @@ const SearchBar = ({ searchPhrase, onChange, onClick, onClose }: Props) => {
             onClick(searchPhrase);
             setIsClicked(false);
           }}
-          placeholderTextColor={"#C7C7C7"}
+          placeholderTextColor={'#C7C7C7'}
         />
 
         <View style={styles.actions}>
@@ -102,59 +93,59 @@ export default SearchBar;
 const styles = StyleSheet.create({
   container: {
     // margin: 15,
-    justifyContent: "flex-start",
-    alignItems: "center",
-    flexDirection: "row",
-    width: "100%"
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexDirection: 'row',
+    width: '100%',
   },
   searchBar__unclicked: {
     padding: 10,
-    flexDirection: "row",
-    width: "100%",
-    backgroundColor: "#14141D",
+    flexDirection: 'row',
+    width: '100%',
+    backgroundColor: '#14141D',
     borderRadius: 4,
-    alignItems: "center",
-    elevation: 3
+    alignItems: 'center',
+    elevation: 3,
   },
   searchBar__clicked: {
     padding: 10,
-    flexDirection: "row",
-    width: "100%",
-    backgroundColor: "#14141D",
+    flexDirection: 'row',
+    width: '100%',
+    backgroundColor: '#14141D',
     borderRadius: 4,
-    alignItems: "center",
-    justifyContent: "space-evenly",
-    elevation: 3
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    elevation: 3,
   },
   input: {
     fontSize: 14,
     marginLeft: 20,
-    width: "70%",
-    color:'#FFF',
+    width: '70%',
+    color: '#FFF',
   },
   actions: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginRight: 2
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginRight: 2,
   },
   check: {
     height: 25,
     width: 25,
     borderRadius: 25,
-    backgroundColor: "#00B0B0",
-    alignContent: "center",
-    justifyContent: "center",
-    marginRight: 15
+    backgroundColor: '#00B0B0',
+    alignContent: 'center',
+    justifyContent: 'center',
+    marginRight: 15,
   },
   close: {
     height: 25,
     width: 25,
     borderRadius: 25,
-    alignContent: "center",
-    justifyContent: "center",
-    borderColor: "#00B0B0",
+    alignContent: 'center',
+    justifyContent: 'center',
+    borderColor: '#00B0B0',
     borderWidth: 1,
-    marginRight: 5
-  }
+    marginRight: 5,
+  },
 });

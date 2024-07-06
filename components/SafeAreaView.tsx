@@ -1,5 +1,6 @@
-import { StyleSheet, SafeAreaView, type ViewProps } from 'react-native';
 import React from 'react';
+import { StyleSheet, SafeAreaView, type ViewProps } from 'react-native';
+
 import { useThemeColor } from '@/hooks/useThemeColor';
 
 type SafeAreaViewComponentProps = ViewProps & {
@@ -17,7 +18,7 @@ const SafeAreaViewComponent = ({
 }: SafeAreaViewComponentProps) => {
   const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
   return (
-    <SafeAreaView style={[{ backgroundColor },styles.container, style]} {...otherProps}>
+    <SafeAreaView style={[{ backgroundColor }, styles.container, style]} {...otherProps}>
       {children}
     </SafeAreaView>
   );

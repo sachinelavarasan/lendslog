@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
 interface HeaderWithCountProps {
   title: string;
@@ -38,6 +38,6 @@ const styles = StyleSheet.create({
   countSpan: {
     backgroundColor: 'rgba(255,200,58,0.78)',
     borderRadius: 20,
-    marginLeft:10
+    marginLeft: 10,
   },
 });

@@ -1,27 +1,27 @@
+import { useRouter } from 'expo-router';
+import { StyleSheet, Text, StatusBar, TouchableOpacity } from 'react-native';
 
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity } from 'react-native';
+import { auth } from '@/firebaseConfig';
 
 import { ThemedView } from '@/components/ThemedView';
-import { auth } from '@/firebaseConfig';
 import SafeAreaViewComponent from '@/components/SafeAreaView';
-import { useRouter } from 'expo-router';
 
-export default function Lends() {
+export default function AddLendsLog() {
   const router = useRouter();
   const signOut = () => {
     auth.signOut();
     router.replace('/(auth)/login');
   };
   return (
-    <SafeAreaViewComponent style={{ flex: 1, paddingTop: StatusBar.currentHeight }}>
-      <ThemedView>
-        <Text style={{color:'#D9D9D9'}}>Explore yourself 😍</Text>
+    <SafeAreaViewComponent>
+      <ThemedView style={{ flex: 1, paddingTop: StatusBar.currentHeight }}>
+        <Text style={{ color: '#D9D9D9' }}>Explore yourself 😍</Text>
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
             signOut();
           }}>
-          <Text style={{color:'#14141D'}}>Sign Out</Text>
+          <Text style={{ color: '#14141D' }}>Sign Out</Text>
         </TouchableOpacity>
       </ThemedView>
     </SafeAreaViewComponent>

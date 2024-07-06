@@ -1,7 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import { deviceWidth } from '@/utils/functions';
-
+import { StyleSheet, Text, View } from 'react-native';
 interface IDueCardProps {
   data: {
     name: string;

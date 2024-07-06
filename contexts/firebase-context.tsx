@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from 'react';
-import { auth } from '@/firebaseConfig';
 import { onAuthStateChanged, UserInfo } from 'firebase/auth';
+
+import { auth } from '@/firebaseConfig';
 
 export const FirebaseContext = createContext<{
   user: UserInfo | null;
@@ -16,7 +17,7 @@ export const FirebaseProvider: React.FC<Props> = ({ children }) => {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState<UserInfo | null>(null);
   const onAuthStateChange = (user: UserInfo | null) => {
-    console.log("🚀 ~ onAuthStateChange ~ user:", user)
+    console.log('🚀 ~ onAuthStateChange ~ user:', user);
     setUser(user);
     if (initializing) setInitializing(false);
   };

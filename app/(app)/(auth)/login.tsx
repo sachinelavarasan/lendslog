@@ -1,6 +1,6 @@
+import React, { useState } from 'react';
 import {
   ActivityIndicator,
-  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -9,16 +9,17 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
+import { useRouter } from 'expo-router';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+
 import Input from '@/components/Input';
 import Spacer from '@/components/Spacer';
 import AuthLink from '@/components/AuthLink';
-import { useRouter } from 'expo-router';
 import SafeAreaViewComponent from '@/components/SafeAreaView';
-import { isEmail } from '@/utils/Validation';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/firebaseConfig';
 
+import { isEmail } from '@/utils/Validation';
+
+import { auth } from '@/firebaseConfig';
 
 type StateType = string | undefined;
 
@@ -29,20 +30,20 @@ export default function SignIn() {
   const [password, setPassword] = useState<StateType>('12345678');
   const [errors, setErrors] = useState<{ email: string; password: string }>({
     email: '',
-    password: ''
+    password: '',
   });
   const [isAuthError, setIsAuthError] = useState<string>();
 
   const signIn = async () => {
     setIsAuthError('');
     if (!isEmail(email)) {
-      setErrors((state) => ({ ...state, email: 'Invalid email' }));
+      setErrors(state => ({ ...state, email: 'Invalid email' }));
       return false;
     }
     if (!password) {
-      setErrors((state) => ({
+      setErrors(state => ({
         ...state,
-        password: 'Password cannot be an empty'
+        password: 'Password cannot be an empty',
       }));
       return false;
     }
@@ -56,7 +57,7 @@ export default function SignIn() {
           setEmail('');
           setPassword('');
         })
-        .catch((error) => setIsAuthError(error.message))
+        .catch(error => setIsAuthError(error.message))
         .finally(() => setIsLoading(false));
     }
   };
@@ -64,95 +65,82 @@ export default function SignIn() {
   return (
     <KeyboardAvoidingView
       {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}
-      style={{ flex: 1 }}
-    >
+      style={{ flex: 1 }}>
       <SafeAreaViewComponent>
-      <ScrollView
-        bounces={false}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ flex: 1 }}
-        keyboardShouldPersistTaps={'always'}
-      >
-        <View style={styles.container}>
-          <View style={styles.formContainer}>
-            <View style={styles.imageContainer}>
-              {/* <Image
+        <ScrollView
+          bounces={false}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ flex: 1 }}
+          keyboardShouldPersistTaps={'always'}>
+          <View style={styles.container}>
+            <View style={styles.formContainer}>
+              <View style={styles.imageContainer}>
+                {/* <Image
                 source={require('@/assets/images/app-screen-icon.png')}
                 style={styles.image}
                 resizeMode="contain"
               /> */}
                 <Text style={styles.label}>Login</Text>
-            </View>
-            <View style={styles.errorContainer}>
-              {isAuthError ? (
-                <Text style={styles.error}>{isAuthError}</Text>
-              ) : null}
-            </View>
-            <Spacer height={10} />
-            <View style={styles.loginContainer}>
-              <Input
-                value={email}
-                placeholder="Enter Email"
-                label="Email"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoComplete="off"
-                onChangeText={(text) => {
-                  setErrors({ email: '', password: '' });
-                  setEmail(text);
-                }}
-                error={errors.email}
-              />
-              <Spacer height={20} />
-              <Input
-                value={password}
-                placeholder="Enter password"
-                label="Password"
-                autoCapitalize="none"
-                isPassword
-                onChangeText={(text) => {
-                  setErrors({ email: '', password: '' });
-                  setPassword(text);
-                }}
-                error={errors.password}
-              />
-              <Spacer height={50} />
-              <View style={styles.btnContainer}>
-                <TouchableOpacity
-                  style={[styles.button, isLoading ? styles.disable : {}]}
-                  onPress={() => {
-                    if (!isLoading) {
-                      signIn();
-                    }
-                  }}
-                >
-                  {isLoading ? (
-                    <ActivityIndicator
-                      animating
-                      color={'#14141D'}
-                      style={styles.loader}
-                    />
-                  ) : null}
-                  <Text
-                    style={[styles.title, isLoading ? styles.textDisable : {}]}
-                  >
-                    Sign In
-                  </Text>
-                </TouchableOpacity>
               </View>
-              <Spacer height={50} />
-              <AuthLink
-                linkText="Sign Up"
-                description="Create account"
-                onPress={() => {
-                  router.navigate('/sign-up');
-                }}
-              />
-              <Spacer height={50} />
+              <View style={styles.errorContainer}>
+                {isAuthError ? <Text style={styles.error}>{isAuthError}</Text> : null}
+              </View>
+              <Spacer height={10} />
+              <View style={styles.loginContainer}>
+                <Input
+                  value={email}
+                  placeholder="Enter Email"
+                  label="Email"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoComplete="off"
+                  onChangeText={text => {
+                    setErrors({ email: '', password: '' });
+                    setEmail(text);
+                  }}
+                  error={errors.email}
+                />
+                <Spacer height={20} />
+                <Input
+                  value={password}
+                  placeholder="Enter password"
+                  label="Password"
+                  autoCapitalize="none"
+                  isPassword
+                  onChangeText={text => {
+                    setErrors({ email: '', password: '' });
+                    setPassword(text);
+                  }}
+                  error={errors.password}
+                />
+                <Spacer height={50} />
+                <View style={styles.btnContainer}>
+                  <TouchableOpacity
+                    style={[styles.button, isLoading ? styles.disable : {}]}
+                    onPress={() => {
+                      if (!isLoading) {
+                        signIn();
+                      }
+                    }}>
+                    {isLoading ? (
+                      <ActivityIndicator animating color={'#14141D'} style={styles.loader} />
+                    ) : null}
+                    <Text style={[styles.title, isLoading ? styles.textDisable : {}]}>Sign In</Text>
+                  </TouchableOpacity>
+                </View>
+                <Spacer height={50} />
+                <AuthLink
+                  linkText="Sign Up"
+                  description="Create account"
+                  onPress={() => {
+                    router.navigate('/sign-up');
+                  }}
+                />
+                <Spacer height={50} />
+              </View>
             </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
       </SafeAreaViewComponent>
     </KeyboardAvoidingView>
   );
@@ -165,7 +153,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: -20
+    marginLeft: -20,
   },
   loginContainer: {
     justifyContent: 'center',
@@ -221,6 +209,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: '800',
     marginBottom: 2,
-    fontFamily: 'Avenir-Black'
+    fontFamily: 'Avenir-Black',
   },
 });

@@ -1,22 +1,22 @@
-import React from 'react';
-import { Tabs } from 'expo-router';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StatusBar, StyleSheet, TouchableOpacity, View, Text } from 'react-native';
+
+import Lends from '@/components/LogSearch';
+import { MaterialTopTabs } from '@/components/MaterialTopTabs';
+import SafeAreaViewComponent from '@/components/SafeAreaView';
+import { ThemedView } from '@/components/ThemedView';
 
 const ROUTES = [
   {
     name: 'index',
     title: 'Today',
-    icon: require('@/assets/icons/Today.png'),
   },
   {
-    name: 'add',
-    title: 'Add',
-    icon: require('@/assets/icons/add.png'),
+    name: 'week',
+    title: 'Week',
   },
   {
-    name: 'lends',
-    title: 'Lends',
-    icon: require('@/assets/icons/week-month-icon.png'),
+    name: 'month',
+    title: 'Month',
   },
 ];
 
@@ -29,13 +29,9 @@ function MyTabBar({ state, descriptors, navigation }: any) {
         justifyContent: 'space-between',
         alignItems: 'center',
         elevation: 10,
-        backgroundColor: '#0B0B0F',
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderTopColor: '#14141D',
-        borderTopWidth: 1,
-        position: 'static',
-        bottom: 0,
+        backgroundColor: '#14141D',
+        padding: 10,
+        marginVertical: 15,
       }}>
       {state.routes.map((route: any, index: number) => {
         const { options } = descriptors[route.key];
@@ -75,18 +71,24 @@ function MyTabBar({ state, descriptors, navigation }: any) {
             onPress={onPress}
             onLongPress={onLongPress}
             key={route.key}
-            style={[{ flex: 1, alignItems: 'center', marginBottom: 10 }]}>
+            style={[
+              {
+                width: '30%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              },
+            ]}>
             <View
               style={[
-                { height: 55, width: 55, padding: 5, alignItems: 'center' },
+                { width: '100%', padding: 8, alignItems: 'center' },
                 isFocused ? styles.activeColor : null,
               ]}>
-              <Image source={options.tabBarIcon} />
               <Text
                 style={{
-                  color: '#D9D9D9',
-                  fontFamily: 'Avenir-Book',
-                  fontSize: 10,
+                  color: '#ffffff',
+                  fontFamily: isFocused ? 'Avenir-Black' : 'Avenir-Book',
+                  fontSize: 16,
                 }}>
                 {label}
               </Text>
@@ -98,31 +100,34 @@ function MyTabBar({ state, descriptors, navigation }: any) {
   );
 }
 
-export default function TabLayout() {
+export default function Layout() {
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarShowLabel: false,
-      }}
-      tabBar={props => <MyTabBar {...props} />}>
-      {ROUTES.map(item => (
-        <Tabs.Screen
-          key={item.name}
-          name={item.name}
-          options={{
-            title: item.title,
-            tabBarIcon: item.icon,
-          }}
-        />
-      ))}
-    </Tabs>
+      <SafeAreaViewComponent>
+        <ThemedView style={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 20 }}>
+          <Lends />
+          <MaterialTopTabs
+            screenOptions={{
+              tabBarShowLabel: false,
+            }}
+            tabBar={props => <MyTabBar {...props} />}>
+            {ROUTES.map(item => (
+              <MaterialTopTabs.Screen
+                key={item.name}
+                name={item.name}
+                options={{
+                  title: item.title,
+                }}
+              />
+            ))}
+          </MaterialTopTabs>
+        </ThemedView>
+      </SafeAreaViewComponent>
   );
 }
 
 const styles = StyleSheet.create({
   activeColor: {
-    backgroundColor: '#14141D',
-    borderRadius: 10,
+    backgroundColor: 'rgba(0, 176, 176, 0.6902)',
+    borderRadius: 4,
   },
 });
