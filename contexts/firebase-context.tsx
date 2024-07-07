@@ -17,7 +17,7 @@ export const FirebaseProvider: React.FC<Props> = ({ children }) => {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState<UserInfo | null>(null);
   const onAuthStateChange = (user: UserInfo | null) => {
-    console.log('🚀 ~ onAuthStateChange ~ user:', user);
+    console.log('🚀 ~ onAuthStateChange ~ user:', user?.email);
     setUser(user);
     if (initializing) setInitializing(false);
   };

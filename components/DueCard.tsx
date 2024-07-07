@@ -4,7 +4,7 @@ interface IDueCardProps {
   data: {
     name: string;
     type: string;
-    amt: number;
+    amount: number;
   };
 }
 
@@ -51,7 +51,7 @@ const DueCard = ({ data }: IDueCardProps) => {
         </View>
       </View>
       <Text style={styles.subText}>
-        Due amount : <Text style={[styles.subText, { fontWeight: 700 }]}>{data.amt}</Text>
+        Due amount : <Text style={[styles.subText, { fontWeight: 700 }]}>{data.amount}</Text>
       </Text>
     </View>
   );
