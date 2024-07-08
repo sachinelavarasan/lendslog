@@ -1,21 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
 
-import { BorrowersSlice } from "@/redux/borrowers/borrowersSlice";
+import rootReducer from "./slices";
 
 export const store = configureStore({
-  reducer: {
-    lends: BorrowersSlice.reducer,
-  },
+  reducer: rootReducer,
 });
 
-// // Infer the `RootState` and `AppDispatch` types from the store itself
-// export type RootState = ReturnType<typeof store.getState>;
-// // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-// export type AppDispatch = typeof store.dispatch;
+// Infer the `RootState` and `AppDispatch` types from the store itself
+export type RootState = ReturnType<typeof store.getState>;
 
-export const useAppDispatch: () => typeof store.dispatch = useDispatch;
-
-export const useAppSelector: TypedUseSelectorHook<
-  ReturnType<typeof store.getState>
-> = useSelector;
+// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
+export type AppDispatch = typeof store.dispatch;

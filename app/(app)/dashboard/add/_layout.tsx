@@ -7,8 +7,8 @@ import { ThemedView } from '@/components/ThemedView';
 import SafeAreaViewComponent from '@/components/SafeAreaView';
 import AddBorrower from './add';
 
-import { useAppDispatch } from '@/redux/store';
-import { addBorrower } from '@/redux/borrowers/borrowersSlice';
+import { useAppDispatch } from '@/redux/hooks';
+import { addBorrower } from '@/redux/slices/borrowers/borrowersSlice';
 
 export default function AddLendsLog() {
   const router = useRouter();
@@ -31,7 +31,7 @@ export default function AddLendsLog() {
         <View style={styles.layout}>
           <AddBorrower
             onSubmit={(name: string, borrowAmount: string, type: string) => {
-              dispatch(addBorrower({ name: name, amount: borrowAmount, type: type  }));
+              dispatch(addBorrower({ name: name, amount: borrowAmount, type: type }));
             }}
           />
         </View>

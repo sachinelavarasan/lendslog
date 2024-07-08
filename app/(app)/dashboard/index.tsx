@@ -9,21 +9,22 @@ import DueCard from '@/components/DueCard';
 import HeaderWithCount from '@/components/HeaderWithCount';
 
 import { db } from '@/firebaseConfig';
-import { useAppSelector } from '@/redux/store';
+import { useAppSelector } from '@/redux/hooks';
+import { borrowerSelector } from '@/redux/slices/borrowers/borrowersSlice';
 
 export default function HomeScreen() {
-  const lendLog = useAppSelector((state) => state.lends.log);
-  console.log("lendLog ========", lendLog)
+  const { log } = useAppSelector(borrowerSelector);
+  console.log('lendLog ========', log);
   // const router = useRouter();
-    const fetchData= async()=>{
-  const querySnapshot = await getDocs(collection(db, "admin"));
-  querySnapshot.forEach((doc) => {
-    console.log(`${doc.id} => ${doc.data().name}`);
-    })
-  }
-    useEffect(()=>{
-      fetchData();
-  },[])
+  const fetchData = async () => {
+    const querySnapshot = await getDocs(collection(db, 'admin'));
+    querySnapshot.forEach(doc => {
+      console.log(`${doc.id} => ${doc.data().name}`);
+    });
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
   // const data = [
   //   {
   //     name: 'John Paul',
@@ -58,7 +59,7 @@ export default function HomeScreen() {
           bounces={false}
           style={{ marginBottom: 20, paddingBottom: 20 }}
           showsVerticalScrollIndicator={false}
-          data={[...lendLog]}
+          data={[...log]}
           renderItem={({ item }: any) => {
             return <DueCard data={item} />;
           }}

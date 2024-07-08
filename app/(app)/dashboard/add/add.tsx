@@ -1,6 +1,5 @@
-import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-
+import { useRouter } from 'expo-router';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 
 const AddBorrower = ({ onSubmit }: any) => {
@@ -12,18 +11,14 @@ const AddBorrower = ({ onSubmit }: any) => {
     <View>
       <Text style={styles.label}>Enter Title</Text>
       <TextInput style={styles.input} value={name} onChangeText={text => setName(text)} />
-      <Text style={styles.label}>Enter Content</Text>
+      <Text style={styles.label}>Enter Amount</Text>
       <TextInput
         style={styles.input}
         value={borrowAmount}
         onChangeText={text => setBorrowAmount(text)}
       />
       <Text style={styles.label}>Enter Type</Text>
-      <TextInput
-        style={styles.input}
-        value={type}
-        onChangeText={text => setType(text)}
-      />
+      <TextInput style={styles.input} value={type} onChangeText={text => setType(text)} />
       <View
         style={{
           display: 'flex',

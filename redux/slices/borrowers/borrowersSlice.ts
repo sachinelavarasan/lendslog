@@ -54,5 +54,8 @@ export const BorrowersSlice = createSlice({
   },
 });
 
-export default BorrowersSlice.reducer;
 export const { addBorrower, editBorrower, deleteBorrower } = BorrowersSlice.actions;
+
+export const borrowerSelector = (state: { borrower: BorrowerState }) => state.borrower;
+
+export const borrowerReducer = BorrowersSlice.reducer;
