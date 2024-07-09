@@ -1,25 +1,34 @@
 import { useContext, useEffect } from 'react';
 import { ActivityIndicator, View } from 'react-native';
-import { useRouter } from 'expo-router';
+import { Redirect, useRouter } from 'expo-router';
 
 import { FirebaseContext } from '@/contexts/firebase-context';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { fetchProfile } from '@/redux/slices/auth/authSlice';
 
 const StartPage = () => {
-  const { user } = useContext(FirebaseContext);
-  const router = useRouter();
-  useEffect(() => {
-    if (user) {
-      router.replace('dashboard');
-    } else if (!user) {
-      router.replace('/(auth)/login');
-    }
-  }, [user]);
+  const dispatch = useAppDispatch();
+  const { user, isAuthenticateLoading } = useAppSelector(state=>state.auth);
 
-  return (
-    <View style={{ flex: 1, justifyContent: 'center' }}>
-      <ActivityIndicator size="large" color="#FFCA3A" />
-    </View>
-  );
+  useEffect(() => {
+    dispatch(fetchProfile())
+  }, []);
+
+  if(isAuthenticateLoading && !user){
+    return (
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        <ActivityIndicator size="large" color="#FFCA3A" />
+      </View>
+    );
+  }
+  if(!isAuthenticateLoading && !user)
+  return <Redirect href="/(auth)/login" />;
+
+  if(!isAuthenticateLoading && user)
+  return <Redirect href="dashboard" />;
+
+  return null;
+
 };
 
 export default StartPage;

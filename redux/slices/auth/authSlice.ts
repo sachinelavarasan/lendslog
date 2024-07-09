@@ -4,16 +4,19 @@ import { ThunkAction } from 'redux-thunk';
 
 import * as authApi from '@/api/auth';
 import { RootState } from '@/redux/store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface authState {
   error: null;
   isLoading: boolean;
   user: null; // user type
+  isAuthenticateLoading: boolean;
 }
 const initialState: authState = {
   error: null,
   isLoading: false,
   user: null,
+  isAuthenticateLoading: false
 };
 
 const authSlice = createSlice({
@@ -26,6 +29,9 @@ const authSlice = createSlice({
     setIsLoading(state, action) {
       state.isLoading = action.payload;
     },
+    setIsAuthenticateLoading(state, action) {
+      state.isAuthenticateLoading = action.payload;
+    },
     setUser(state, action) {
       state.user = action.payload;
     },
@@ -35,7 +41,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { setError, setIsLoading, setUser } = authSlice.actions;
+export const { setError, setIsLoading, setIsAuthenticateLoading, setUser, clearUser } = authSlice.actions;
 
 export const logIn =
   (
@@ -52,8 +58,8 @@ export const logIn =
 
       if (user) {
         dispatch(setUser(user));
-        localStorage.setItem('jwtToken', jwtToken);
-        localStorage.setItem('userId', user.us_id);
+        await AsyncStorage.setItem('@jwtToken', jwtToken);
+        await AsyncStorage.setItem('@user', JSON.stringify(user));
 
         if (callback) {
           callback();
@@ -61,7 +67,7 @@ export const logIn =
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        dispatch(setError(error?.response?.data?.message || 'Something went wrong.'));
+        dispatch(setError(error.response?.data.error || 'Something went wrong.'));
       }
     } finally {
       dispatch(setIsLoading(false));
@@ -70,7 +76,7 @@ export const logIn =
 
 export const signUp =
   (
-    data: { name: string; password: string; email: string },
+    data: { name?: string; password: string; email: string },
     callback: () => void
   ): ThunkAction<void, RootState, unknown, UnknownAction> =>
   async dispatch => {
@@ -84,19 +90,49 @@ export const signUp =
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        dispatch(setError(error?.response?.data?.message || 'Something went wrong.'));
+        dispatch(setError(error?.response?.data?.error || 'Something went wrong.'));
       }
     } finally {
       dispatch(setIsLoading(false));
     }
   };
 
+  export const fetchProfile =
+  (callback?: () => void): ThunkAction<void, RootState, unknown, UnknownAction> =>
+  async (
+    dispatch
+  ) => {
+
+    try {
+      dispatch(setIsAuthenticateLoading(true));
+      const response = await authApi.fetchProfile();
+
+      const { user } = response.data;
+
+      if (user) {
+        dispatch(setUser(user));
+        await AsyncStorage.setItem("@user", JSON.stringify(user));
+      }
+    } catch (error: unknown) {
+      if (callback) {
+        dispatch(logout(callback));
+      }
+      // if (error instanceof AxiosError) {
+      //   dispatch(
+      //     setError(error?.response?.data?.message || "Something went wrong."),
+      //   );
+      // }
+    } finally {
+      dispatch(setIsAuthenticateLoading(false));
+    }
+  };
+
 export const logout =
   (callBack?: () => void): ThunkAction<void, RootState, unknown, UnknownAction> =>
-  dispatch => {
-    // dispatch(clearUser());
-    localStorage.removeItem('jwtToken');
-    localStorage.removeItem('userId');
+  async dispatch => {
+    dispatch(clearUser());
+    await AsyncStorage.removeItem('@jwtToken');
+    await AsyncStorage.removeItem('@user');
     if (callBack) {
       callBack();
     }

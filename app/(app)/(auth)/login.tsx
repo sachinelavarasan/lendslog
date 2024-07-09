@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -10,56 +10,60 @@ import {
   View,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
 import Input from '@/components/Input';
 import Spacer from '@/components/Spacer';
 import AuthLink from '@/components/AuthLink';
 import SafeAreaViewComponent from '@/components/SafeAreaView';
 
-import { isEmail } from '@/utils/Validation';
+import { logIn, setError } from '@/redux/slices/auth/authSlice';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
-import { auth } from '@/firebaseConfig';
+const schema = z.object({
+  email: z.string().email({ message: 'Invalid Email' }),
+  password: z.string().min(8, { message: 'Minimum 8 characters' }),
+});
 
-type StateType = string | undefined;
+type FormData = {
+  email: string;
+  password: string;
+};
 
 export default function SignIn() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [email, setEmail] = useState<StateType>('elavarasan@gmail.com');
-  const [password, setPassword] = useState<StateType>('12345678');
-  const [errors, setErrors] = useState<{ email: string; password: string }>({
-    email: '',
-    password: '',
+  const dispatch = useAppDispatch();
+  const { isLoading, error } = useAppSelector(state => state.auth);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isDirty },
+    reset,
+  } = useForm({
+    defaultValues: {
+      email: 'janani@gmail.com',
+      password: '1234567822',
+    },
+    resolver: zodResolver(schema),
   });
-  const [isAuthError, setIsAuthError] = useState<string>();
 
-  const signIn = async () => {
-    setIsAuthError('');
-    if (!isEmail(email)) {
-      setErrors(state => ({ ...state, email: 'Invalid email' }));
-      return false;
-    }
-    if (!password) {
-      setErrors(state => ({
-        ...state,
-        password: 'Password cannot be an empty',
-      }));
-      return false;
-    }
+  useEffect(() => {
+    return () => {
+      dispatch(setError(null));
+    };
+  }, []);
 
-    setErrors({ email: '', password: '' });
-    setIsLoading(true);
-    if (email && password) {
-      await signInWithEmailAndPassword(auth, email, password)
-        .then(async ({ user }) => {
-          router.replace('/dashboard');
-          setEmail('');
-          setPassword('');
-        })
-        .catch(error => setIsAuthError(error.message))
-        .finally(() => setIsLoading(false));
-    }
+  const onSubmit = ({ email, password }: FormData) => {
+    dispatch(
+      logIn({ email, password }, () => {
+        reset();
+        dispatch(setError(null));
+        router.replace('/dashboard');
+      })
+    );
   };
 
   return (
@@ -82,46 +86,50 @@ export default function SignIn() {
               /> */}
                 <Text style={styles.label}>Login</Text>
               </View>
-              <View style={styles.errorContainer}>
-                {isAuthError ? <Text style={styles.error}>{isAuthError}</Text> : null}
-              </View>
               <Spacer height={10} />
               <View style={styles.loginContainer}>
-                <Input
-                  value={email}
-                  placeholder="Enter Email"
-                  label="Email"
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  autoComplete="off"
-                  onChangeText={text => {
-                    setErrors({ email: '', password: '' });
-                    setEmail(text);
-                  }}
-                  error={errors.email}
+                <Controller
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      placeholder="Enter Email"
+                      label="Email"
+                      keyboardType="email-address"
+                      autoCapitalize="none"
+                      autoComplete="off"
+                      onBlur={field.onBlur}
+                      onChangeText={field.onChange}
+                      error={errors.email?.message}
+                    />
+                  )}
+                  name="email"
                 />
                 <Spacer height={20} />
-                <Input
-                  value={password}
-                  placeholder="Enter password"
-                  label="Password"
-                  autoCapitalize="none"
-                  isPassword
-                  onChangeText={text => {
-                    setErrors({ email: '', password: '' });
-                    setPassword(text);
-                  }}
-                  error={errors.password}
+                <Controller
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      placeholder="Enter password"
+                      label="Password"
+                      autoCapitalize="none"
+                      isPassword
+                      onBlur={field.onBlur}
+                      onChangeText={field.onChange}
+                      error={errors.password?.message}
+                    />
+                  )}
+                  name="password"
                 />
-                <Spacer height={50} />
+                <View style={styles.errorContainer}>
+                  {error ? <Text style={styles.error}>{error}</Text> : null}
+                </View>
+                <Spacer height={10} />
                 <View style={styles.btnContainer}>
                   <TouchableOpacity
-                    style={[styles.button, isLoading ? styles.disable : {}]}
-                    onPress={() => {
-                      if (!isLoading) {
-                        signIn();
-                      }
-                    }}>
+                    style={[styles.button, !isDirty || isLoading ? styles.disable : {}]}
+                    onPress={handleSubmit(onSubmit)}>
                     {isLoading ? (
                       <ActivityIndicator animating color={'#14141D'} style={styles.loader} />
                     ) : null}
@@ -133,7 +141,7 @@ export default function SignIn() {
                   linkText="Sign Up"
                   description="Create account"
                   onPress={() => {
-                    router.navigate('/sign-up');
+                    router.replace('/sign-up');
                   }}
                 />
                 <Spacer height={50} />
@@ -191,18 +199,21 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir-Black',
   },
   disable: {
-    opacity: 0.8,
+    opacity: 0.7,
   },
   textDisable: { opacity: 0 },
   errorContainer: {
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
+    display: 'flex',
+    width: '100%',
+    paddingTop: 20,
+    paddingBottom: 10,
   },
   error: {
-    fontSize: 16,
+    fontSize: 14,
     color: 'red',
     fontFamily: 'Avenir-Book',
-    paddingHorizontal: 35,
   },
   label: {
     fontSize: 30,

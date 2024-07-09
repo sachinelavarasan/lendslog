@@ -4,7 +4,9 @@ export const logIn = (data: { email: string; password: string }) =>
   axios.post("/auth/login", data);
 
 export const signUp = (data: {
-  name: string;
+  name?: string;
   password: string;
   email: string;
 }) => axios.post("/auth/signup", data);
+
+export const fetchProfile = () => axios.get("/auth/me");

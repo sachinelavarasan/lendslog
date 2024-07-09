@@ -9,13 +9,15 @@ import AddBorrower from './add';
 
 import { useAppDispatch } from '@/redux/hooks';
 import { addBorrower } from '@/redux/slices/borrowers/borrowersSlice';
+import { logout } from '@/redux/slices/auth/authSlice';
 
 export default function AddLendsLog() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const signOut = () => {
-    auth.signOut();
-    router.replace('/(auth)/login');
+    dispatch(logout(()=>{
+      router.replace('/(auth)/login');
+    }));
   };
   return (
     <SafeAreaViewComponent>

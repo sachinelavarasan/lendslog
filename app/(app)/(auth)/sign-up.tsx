@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -10,7 +10,10 @@ import {
   Text,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller, useForm } from 'react-hook-form';
+// import OTPTextInput from 'react-native-otp-textinput';
 
 import Input from '@/components/Input';
 import Spacer from '@/components/Spacer';
@@ -19,45 +22,53 @@ import SafeAreaViewComponent from '@/components/SafeAreaView';
 
 import { isEmail } from '@/utils/Validation';
 
-import { auth } from '@/firebaseConfig';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { setError, signUp } from '@/redux/slices/auth/authSlice';
 
-type StateType = string | undefined;
+const schema = z.object({
+  email: z.string().email({ message: 'Invalid Email' }),
+  password: z.string().min(8, { message: 'Minimum 8 characters' }),
+});
+
+type FormData = {
+  email: string;
+  password: string;
+};
 
 const Register = () => {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [email, setEmail] = useState<StateType>();
-  const [password, setPassword] = useState<StateType>();
-  const [errors, setErrors] = useState<{ email: string; password: string }>({
-    email: '',
-    password: '',
+  // const otpInput = useRef<OTPTextInput>(null);
+  const dispatch = useAppDispatch();
+  const { isLoading, error } = useAppSelector(state => state.auth);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isDirty },
+    reset,
+  } = useForm({
+    defaultValues: {
+      email: 'janani@gmail.com',
+      password: '1234567822',
+    },
+    resolver: zodResolver(schema),
   });
-  const [isAuthError, setIsAuthError] = useState<string>();
 
-  const signUp = async () => {
-    setIsAuthError('');
-    if (!isEmail(email)) {
-      setErrors(state => ({ ...state, email: 'Invalid email' }));
-      return false;
-    }
-    if (!password) {
-      setErrors(state => ({
-        ...state,
-        password: 'Password cannot be an empty',
-      }));
-      return false;
-    }
+  useEffect(() => {
+    return () => {
+      dispatch(setError(null));
+    };
+  }, []);
 
-    setErrors({ email: '', password: '' });
-    setIsLoading(true);
+  const register = async ({ email, password }: FormData) => {
     if (email && password) {
-      await createUserWithEmailAndPassword(auth, email, password)
-        .then(async ({ user }) => {
-          setEmail('');
-          setPassword('');
+      dispatch(
+        signUp({ email, password }, () => {
+          reset();
+          dispatch(setError(null));
+          router.replace('/(auth)/login');
         })
-        .catch(error => setIsAuthError(error.message))
-        .finally(() => setIsLoading(false));
+      );
     }
   };
 
@@ -81,46 +92,50 @@ const Register = () => {
               /> */}
                 <Text style={styles.label}>Sign Up</Text>
               </View>
-              <View style={styles.errorContainer}>
-                {isAuthError ? <Text style={styles.error}>{isAuthError}</Text> : null}
-              </View>
               <Spacer height={10} />
               <View style={styles.loginContainer}>
-                <Input
-                  value={email}
-                  placeholder="Enter Email"
-                  label="Email"
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  autoComplete="off"
-                  onChangeText={text => {
-                    setErrors({ email: '', password: '' });
-                    setEmail(text);
-                  }}
-                  error={errors.email}
+                <Controller
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      placeholder="Enter Email"
+                      label="Email"
+                      keyboardType="email-address"
+                      autoCapitalize="none"
+                      autoComplete="off"
+                      onBlur={field.onBlur}
+                      onChangeText={field.onChange}
+                      error={errors.email?.message}
+                    />
+                  )}
+                  name="email"
                 />
                 <Spacer height={20} />
-                <Input
-                  value={password}
-                  placeholder="Enter password"
-                  label="Password"
-                  autoCapitalize="none"
-                  isPassword
-                  onChangeText={text => {
-                    setErrors({ email: '', password: '' });
-                    setPassword(text);
-                  }}
-                  error={errors.password}
+                <Controller
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      placeholder="Enter password"
+                      label="Password"
+                      autoCapitalize="none"
+                      isPassword
+                      onBlur={field.onBlur}
+                      onChangeText={field.onChange}
+                      error={errors.password?.message}
+                    />
+                  )}
+                  name="password"
                 />
-                <Spacer height={50} />
+                <View style={styles.errorContainer}>
+                  {error ? <Text style={styles.error}>{error}</Text> : null}
+                </View>
+                <Spacer height={10} />
                 <View style={styles.btnContainer}>
                   <TouchableOpacity
-                    style={[styles.button, isLoading ? styles.disable : {}]}
-                    onPress={() => {
-                      if (!isLoading) {
-                        signUp();
-                      }
-                    }}>
+                    style={[styles.button, !isDirty || isLoading ? styles.disable : {}]}
+                    onPress={handleSubmit(register)}>
                     {isLoading ? (
                       <ActivityIndicator animating color={'#14141D'} style={styles.loader} />
                     ) : null}
@@ -132,10 +147,18 @@ const Register = () => {
                   linkText="Sign In"
                   description="Already have an account ?"
                   onPress={() => {
-                    router.navigate('/login');
+                    router.replace('/login');
                   }}
                 />
                 <Spacer height={50} />
+                {/* <OTPTextInput
+                  ref={otpInput}
+                  inputCount={6}
+                  containerStyle={styles.textInputContainer}
+                  textInputStyle={styles.roundedTextInput}
+                  inputCellLength={1} tintColor="#FFCA3A" offTintColor="#ffca3a87"
+                  keyboardType='numeric'
+                  autoFocus={true}></OTPTextInput> */}
               </View>
             </View>
           </View>
@@ -190,18 +213,21 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir-Black',
   },
   disable: {
-    opacity: 0.8,
+    opacity: 0.7,
   },
   textDisable: { opacity: 0 },
   errorContainer: {
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
+    display: 'flex',
+    width: '100%',
+    paddingTop: 20,
+    paddingBottom: 10,
   },
   error: {
-    fontSize: 16,
+    fontSize: 14,
     color: 'red',
     fontFamily: 'Avenir-Book',
-    paddingHorizontal: 35,
   },
   label: {
     fontSize: 30,
@@ -209,6 +235,19 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     marginBottom: 2,
     fontFamily: 'Avenir-Black',
+  },
+  textInputContainer: {
+    marginBottom: 20,
+  },
+  roundedTextInput: {
+    borderRadius: 16,
+    borderWidth: 4,
+    color: '#FFCA3A',
+    padding: 0,
+    fontSize: 28,
+    lineHeight: 33,
+    fontWeight: '700',
+    verticalAlign: 'middle',
   },
 });
 

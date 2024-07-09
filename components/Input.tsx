@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     position: 'absolute',
     marginBottom: -15,
+    fontFamily: 'Avenir-Book',
   },
   inputIconPassword: {
     height: 20,

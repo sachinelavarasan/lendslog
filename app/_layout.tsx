@@ -7,10 +7,10 @@ import { store } from '@/redux/store';
 
 export default function RootLayout() {
   return (
-    <FirebaseProvider>
+    // <FirebaseProvider>
       <Provider store={store}>
         <Slot />
       </Provider>
-    </FirebaseProvider>
+    // </FirebaseProvider>
   );
 }
