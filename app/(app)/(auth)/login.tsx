@@ -45,7 +45,7 @@ export default function SignIn() {
   } = useForm({
     defaultValues: {
       email: 'janani@gmail.com',
-      password: '1234567822',
+      password: '12345678',
     },
     resolver: zodResolver(schema),
   });
