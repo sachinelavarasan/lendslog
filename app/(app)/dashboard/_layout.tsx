@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View, Platform } from 'react-native';
 
 const ROUTES = [
   {
@@ -30,8 +30,9 @@ function MyTabBar({ state, descriptors, navigation }: any) {
         alignItems: 'center',
         elevation: 10,
         backgroundColor: '#0B0B0F',
-        paddingVertical: 10,
+        paddingBottom: Platform.OS === "ios" ? 10 : 0,
         paddingHorizontal: 20,
+        paddingTop: 10,
         borderTopColor: '#14141D',
         borderTopWidth: 1,
         position: 'static',

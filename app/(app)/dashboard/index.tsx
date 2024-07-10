@@ -1,6 +1,14 @@
 import { useEffect } from 'react';
 // import { useRouter } from 'expo-router';
-import { StyleSheet, StatusBar, Text, View, TouchableOpacity, FlatList } from 'react-native';
+import {
+  StyleSheet,
+  StatusBar,
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+  Platform,
+} from 'react-native';
 import { collection, getDocs } from 'firebase/firestore';
 
 import { ThemedView } from '@/components/ThemedView';
@@ -54,17 +62,19 @@ export default function HomeScreen() {
   return (
     <SafeAreaViewComponent>
       <ThemedView style={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 20 }}>
-        <HeaderWithCount title="Today due users list" count={10} />
-        <FlatList
-          bounces={false}
-          style={{ marginBottom: 20, paddingBottom: 20 }}
-          showsVerticalScrollIndicator={false}
-          data={[...log]}
-          renderItem={({ item }: any) => {
-            return <DueCard data={item} />;
-          }}
-          keyExtractor={(item: any, index: number) => item.name + index}
-        />
+        <View style={{ paddingTop: Platform.OS === 'android' ? 10 : 5 }}>
+          <HeaderWithCount title="Today due users list" count={10} countText='users'/>
+          <FlatList
+            bounces={false}
+            style={{ marginBottom: 20, paddingBottom: 20 }}
+            showsVerticalScrollIndicator={false}
+            data={[...log]}
+            renderItem={({ item }: any) => {
+              return <DueCard data={item} />;
+            }}
+            keyExtractor={(item: any, index: number) => item.name + index}
+          />
+        </View>
       </ThemedView>
     </SafeAreaViewComponent>
   );

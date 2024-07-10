@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { Redirect, useRouter } from 'expo-router';
 
-import { FirebaseContext } from '@/contexts/firebase-context';
+// import { FirebaseContext } from '@/contexts/firebase-context';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { fetchProfile } from '@/redux/slices/auth/authSlice';
 
