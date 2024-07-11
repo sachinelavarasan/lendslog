@@ -45,7 +45,7 @@ const SearchBar = ({ searchPhrase, onChange, onClick, onClose }: Props) => {
                 <Entypo
                   name="check"
                   size={20}
-                  color="#E1DFDF"
+                  color="#14141D"
                   style={{ padding: 2 }}
                   onPress={() => {
                     Keyboard.dismiss();
@@ -59,7 +59,7 @@ const SearchBar = ({ searchPhrase, onChange, onClick, onClose }: Props) => {
                 <Entypo
                   name="cross"
                   size={20}
-                  color="#fff"
+                  color="rgba(255,200,58,0.78)"
                   style={{ padding: 1.5 }}
                   onPress={() => {
                     Keyboard.dismiss();
@@ -99,7 +99,8 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   searchBar__unclicked: {
-    padding: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
     flexDirection: 'row',
     width: '100%',
     backgroundColor: '#14141D',
@@ -108,7 +109,8 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   searchBar__clicked: {
-    padding: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
     flexDirection: 'row',
     width: '100%',
     backgroundColor: '#14141D',
@@ -133,7 +135,7 @@ const styles = StyleSheet.create({
     height: 25,
     width: 25,
     borderRadius: 25,
-    backgroundColor: '#00B0B0',
+    backgroundColor: 'rgba(255,200,58,0.78)',
     alignContent: 'center',
     justifyContent: 'center',
     marginRight: 15,
@@ -144,7 +146,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     alignContent: 'center',
     justifyContent: 'center',
-    borderColor: '#00B0B0',
+    borderColor: 'rgba(255,200,58,0.78)',
     borderWidth: 1,
     marginRight: 5,
   },

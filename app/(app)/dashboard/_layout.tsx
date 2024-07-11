@@ -1,6 +1,14 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
-import { Image, StyleSheet, Text, TouchableOpacity, View, Platform } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Platform,
+  Dimensions,
+} from 'react-native';
 
 const ROUTES = [
   {
@@ -30,7 +38,7 @@ function MyTabBar({ state, descriptors, navigation }: any) {
         alignItems: 'center',
         elevation: 10,
         backgroundColor: '#0B0B0F',
-        paddingBottom: Platform.OS === "ios" ? 10 : 0,
+        paddingBottom: Platform.OS === 'ios' ? 10 : 0,
         paddingHorizontal: 20,
         paddingTop: 10,
         borderTopColor: '#14141D',
@@ -86,7 +94,7 @@ function MyTabBar({ state, descriptors, navigation }: any) {
               <Text
                 style={{
                   color: '#D9D9D9',
-                  fontFamily: 'Avenir-Book',
+                  fontFamily: 'Inter-700',
                   fontSize: 10,
                 }}>
                 {label}
@@ -100,24 +108,31 @@ function MyTabBar({ state, descriptors, navigation }: any) {
 }
 
 export default function TabLayout() {
+  const { width, height } = Dimensions.get('window');
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarShowLabel: false,
-      }}
-      tabBar={props => <MyTabBar {...props} />}>
-      {ROUTES.map(item => (
-        <Tabs.Screen
-          key={item.name}
-          name={item.name}
-          options={{
-            title: item.title,
-            tabBarIcon: item.icon,
-          }}
-        />
-      ))}
-    </Tabs>
+    <View
+      style={{
+        width,
+        height,
+      }}>
+      <Tabs
+        screenOptions={{
+          headerShown: false,
+          tabBarShowLabel: false,
+        }}
+        tabBar={props => <MyTabBar {...props} />}>
+        {ROUTES.map(item => (
+          <Tabs.Screen
+            key={item.name}
+            name={item.name}
+            options={{
+              title: item.title,
+              tabBarIcon: item.icon,
+            }}
+          />
+        ))}
+      </Tabs>
+    </View>
   );
 }
 

@@ -40,7 +40,7 @@ export default function SignIn() {
   const {
     control,
     handleSubmit,
-    formState: { errors, isDirty },
+    formState: { errors, isValid },
     reset,
   } = useForm({
     defaultValues: {
@@ -78,15 +78,20 @@ export default function SignIn() {
           keyboardShouldPersistTaps={'always'}>
           <View style={styles.container}>
             <View style={styles.formContainer}>
+              {error && (
+                <View style={styles.errorContainer}>
+                  <Text style={styles.error}>{error}</Text>
+                </View>
+              )}
               <View style={styles.imageContainer}>
                 {/* <Image
                 source={require('@/assets/images/app-screen-icon.png')}
                 style={styles.image}
                 resizeMode="contain"
               /> */}
-                <Text style={styles.label}>Login</Text>
+                <Text style={styles.label}>Welcome Back! 👋 </Text>
               </View>
-              <Spacer height={10} />
+              <Spacer height={45} />
               <View style={styles.loginContainer}>
                 <Controller
                   control={control}
@@ -101,6 +106,7 @@ export default function SignIn() {
                       onBlur={field.onBlur}
                       onChangeText={field.onChange}
                       error={errors.email?.message}
+                      borderLess
                     />
                   )}
                   name="email"
@@ -118,17 +124,16 @@ export default function SignIn() {
                       onBlur={field.onBlur}
                       onChangeText={field.onChange}
                       error={errors.password?.message}
+                      borderLess
                     />
                   )}
                   name="password"
                 />
-                <View style={styles.errorContainer}>
-                  {error ? <Text style={styles.error}>{error}</Text> : null}
-                </View>
-                <Spacer height={10} />
+                <Spacer height={35} />
                 <View style={styles.btnContainer}>
                   <TouchableOpacity
-                    style={[styles.button, !isDirty || isLoading ? styles.disable : {}]}
+                    style={[styles.button, !isValid || isLoading ? styles.disable : {}]}
+                    disabled={!isValid || isLoading}
                     onPress={handleSubmit(onSubmit)}>
                     {isLoading ? (
                       <ActivityIndicator animating color={'#14141D'} style={styles.loader} />
@@ -139,7 +144,7 @@ export default function SignIn() {
                 <Spacer height={50} />
                 <AuthLink
                   linkText="Sign Up"
-                  description="Create account"
+                  description="Doesn't have an account? "
                   onPress={() => {
                     router.replace('/sign-up');
                   }}
@@ -159,9 +164,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   imageContainer: {
+    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: -20,
   },
   loginContainer: {
     justifyContent: 'center',
@@ -183,9 +188,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     backgroundColor: '#FFCA3A',
-    borderRadius: 15,
-    paddingVertical: 15,
-    paddingHorizontal: 25,
+    borderRadius: 8,
+    paddingVertical: Platform.OS === 'android' ? 12 : 16,
+    width: '100%',
   },
   loader: {
     position: 'absolute',
@@ -194,9 +199,8 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#14141D',
-    fontWeight: '600',
     fontSize: 16,
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Inter-600',
   },
   disable: {
     opacity: 0.7,
@@ -204,7 +208,7 @@ const styles = StyleSheet.create({
   textDisable: { opacity: 0 },
   errorContainer: {
     justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     display: 'flex',
     width: '100%',
     paddingTop: 20,
@@ -212,14 +216,14 @@ const styles = StyleSheet.create({
   },
   error: {
     fontSize: 14,
-    color: 'red',
-    fontFamily: 'Avenir-Book',
+    color: '#f02d3a',
+    fontFamily: 'Inter-500',
+    letterSpacing: 0.5,
   },
   label: {
     fontSize: 30,
     color: '#FFFFFF',
-    fontWeight: '800',
     marginBottom: 2,
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Inter-800',
   },
 });

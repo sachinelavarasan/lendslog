@@ -1,5 +1,13 @@
 import React, { useState, forwardRef } from 'react';
-import { StyleSheet, Text, TextInput, TextInputProps, TouchableOpacity, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TextInputProps,
+  TouchableOpacity,
+  View,
+  Platform,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 interface ExtraInputProps {
@@ -83,27 +91,26 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     borderWidth: 0,
-    paddingVertical: 12,
-    fontSize: 14,
-    fontWeight: '600',
-    fontFamily: 'Avenir-Book',
+    paddingVertical: Platform.OS === 'android' ? 12 : 16,
+    fontSize: 16,
+    fontFamily: 'Inter-300',
     color: '#FFFFFF',
     paddingHorizontal: 24,
   },
   label: {
-    fontSize: 14,
-    color: '#999999',
-    fontWeight: '600',
-    marginBottom: 2,
-    fontFamily: 'Avenir-Book',
+    fontSize: 16,
+    color: '#c7c7c7',
+    marginBottom: 6,
+    fontFamily: 'Inter-400',
   },
   error: {
     fontSize: 12,
-    color: 'red',
+    color: '#f02d3a',
     bottom: 0,
     position: 'absolute',
-    marginBottom: -15,
-    fontFamily: 'Avenir-Book',
+    marginBottom: -20,
+    fontFamily: 'Inter-300',
+    letterSpacing: 0.5,
   },
   inputIconPassword: {
     height: 20,
@@ -116,6 +123,5 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 15,
-    fontWeight: '900',
   },
 });

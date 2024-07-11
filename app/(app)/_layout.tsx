@@ -14,9 +14,15 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
-    'Avenir-Book': require('../../assets/fonts/AvenirLTStd-Book.otf'),
-    'Avenir-Black': require('../../assets/fonts/AvenirLTStd-Black.otf'),
+    'Inter-100': require('../../assets/fonts/Inter-Thin.ttf'),
+    'Inter-200': require('../../assets/fonts/Inter-ExtraLight.ttf'),
+    'Inter-300': require('../../assets/fonts/Inter-Light.ttf'),
+    'Inter-400': require('../../assets/fonts/Inter-Regular.ttf'),
+    'Inter-500': require('../../assets/fonts/Inter-Medium.ttf'),
+    'Inter-600': require('../../assets/fonts/Inter-SemiBold.ttf'),
+    'Inter-700': require('../../assets/fonts/Inter-Bold.ttf'),
+    'Inter-800': require('../../assets/fonts/Inter-ExtraBold.ttf'),
+    'Inter-900': require('../../assets/fonts/Inter-Black.ttf'),
   });
 
   useEffect(() => {
@@ -31,7 +37,7 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <ExpoStatus backgroundColor="#FFCA3A" />
+      <ExpoStatus backgroundColor="rgba(255,200,58,0.6)" />
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />

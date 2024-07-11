@@ -7,9 +7,16 @@ interface HeaderWithCountProps {
   countText?: string;
 }
 
-const HeaderWithCount = ({ title, count , countText }: HeaderWithCountProps) => {
+const HeaderWithCount = ({ title, count, countText }: HeaderWithCountProps) => {
   return (
-    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: 10 , justifyContent:"space-between"}}>
+    <View
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 10,
+        justifyContent: 'space-between',
+      }}>
       <Text style={[styles.header]}>{title}</Text>
       {count && (
         <View style={styles.countSpan}>
@@ -27,12 +34,10 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 24,
     color: '#FFFFFF',
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Inter-700',
     textTransform: 'capitalize',
-    fontWeight: '800',
   },
   count: {
-    fontWeight: '800',
     fontSize: 30,
     color: 'rgba(255,200,58,0.78)',
     padding: 2,
@@ -42,14 +47,14 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginLeft: 10,
     display: 'flex',
-    flexDirection:"row",
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
   countText: {
-    color:"#c7c7c7",
-    fontSize: 16, 
-    fontWeight: "regular",
+    color: '#c7c7c7',
+    fontSize: 16,
+    fontFamily: 'Inter-500',
     marginLeft: 3,
-  }
+  },
 });

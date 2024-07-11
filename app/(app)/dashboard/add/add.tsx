@@ -32,7 +32,7 @@ const AddBorrower = ({ onSubmit }: any) => {
             onSubmit(name, borrowAmount, type);
             router.replace('/dashboard');
           }}>
-          <Text style={{ color: '#FFFFFF', fontFamily: 'Avenir-Black', fontSize: 14 }}>Add</Text>
+          <Text style={{ color: '#FFFFFF', fontFamily: 'Inter-600', fontSize: 14 }}>Add</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -48,14 +48,14 @@ const styles = StyleSheet.create({
     margin: 5,
     borderRadius: 6,
     color: '#FFFFFF',
-    fontFamily: 'Avenir-Book',
+    fontFamily: 'Inter-400',
   },
   label: {
     fontSize: 14,
     marginBottom: 5,
     marginLeft: 5,
     color: '#F2F2F2',
-    fontFamily: 'Avenir-Book',
+    fontFamily: 'Inter-600',
   },
   button: {
     alignItems: 'center',

@@ -43,8 +43,7 @@ const DueCard = ({ data }: IDueCardProps) => {
             style={{
               color: '#FFFFFF',
               fontSize: 12,
-              fontFamily: 'Avenir-Book',
-              fontWeight: '700',
+              fontFamily: 'Inter-600',
             }}>
             {data.type}
           </Text>
@@ -68,15 +67,13 @@ const styles = StyleSheet.create({
   name: {
     color: '#FFFFFF',
     fontSize: 18,
-    fontFamily: 'Avenir-Black',
-    fontWeight: '700',
+    fontFamily: 'Inter-700',
     maxWidth: 250,
   },
   subText: {
     color: '#C7C7C7',
     fontSize: 14,
-    fontFamily: 'Avenir-Book',
-    fontWeight: '500',
+    fontFamily: 'Inter-400',
     marginTop: 8,
   },
 });

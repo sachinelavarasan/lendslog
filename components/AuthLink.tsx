@@ -31,16 +31,14 @@ const styles = StyleSheet.create({
   },
   linkText: {
     color: '#FFCA3A',
-    fontWeight: '900',
     fontSize: 16,
     textDecorationLine: 'underline',
-    fontFamily: 'Avenir-Book',
+    fontFamily: 'Inter-500',
   },
   description: {
     color: '#D9D9D9',
-    fontWeight: '800',
     fontSize: 16,
     marginRight: 15,
-    fontFamily: 'Avenir-Book',
+    fontFamily: 'Inter-400',
   },
 });

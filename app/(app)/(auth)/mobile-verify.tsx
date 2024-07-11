@@ -104,15 +104,15 @@ const MobileVerify = () => {
                   backgroundColor: '#14141D',
                   width: width - 60,
                   borderRadius: 10,
-                  padding: 20,
+                  paddingVertical: 30,
+                  paddingHorizontal: 30,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
                 <Text
                   style={{
-                    color: '#A0CF5D',
-                    fontWeight: '600',
+                    color: '#ffffff',
                     fontSize: 20,
                     textAlign: 'center',
                     lineHeight: 24,
@@ -127,7 +127,7 @@ const MobileVerify = () => {
                       width: 'auto',
                       paddingVertical: 12,
                       paddingHorizontal: 30,
-                      backgroundColor: '#A0CF5D',
+                      backgroundColor: 'rgba(0, 176, 176, 0.6902)',
                     },
                   ]}
                   onPress={() => {
@@ -153,13 +153,12 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 28,
     color: '#FFFFFF',
-    fontWeight: 'bold',
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Inter-600',
   },
   subtext: {
     fontSize: 16,
     color: '#F2F2F2',
-    fontFamily: 'Avenir-Book',
+    fontFamily: 'Inter-600',
     paddingVertical: 20,
     maxWidth: 300,
     textAlign: 'center',
@@ -175,7 +174,6 @@ const styles = StyleSheet.create({
     padding: 0,
     fontSize: 28,
     lineHeight: 33,
-    fontWeight: '700',
     verticalAlign: 'middle',
   },
   button: {
@@ -192,9 +190,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   title: {
-    color: '#14141D',
+    color: '#000',
     fontSize: 18,
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Inter-500',
     textAlign: 'center',
   },
   disable: {
@@ -211,6 +209,6 @@ const styles = StyleSheet.create({
   error: {
     fontSize: 16,
     color: 'red',
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Inter-400',
   },
 });

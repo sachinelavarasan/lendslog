@@ -49,7 +49,7 @@ const Register = () => {
   const {
     control,
     handleSubmit,
-    formState: { errors, isDirty },
+    formState: { errors, isValid },
     reset,
   } = useForm({
     defaultValues: {
@@ -68,13 +68,13 @@ const Register = () => {
   }, []);
 
   const register = async (data: FormData) => {
-      dispatch(
-        signUp(data, () => {
-          reset();
-          dispatch(setError(null));
-          router.replace('/(auth)/login');
-        })
-      );
+    dispatch(
+      signUp(data, () => {
+        reset();
+        dispatch(setError(null));
+        router.replace('/(auth)/login');
+      })
+    );
   };
 
   return (
@@ -89,15 +89,20 @@ const Register = () => {
           keyboardShouldPersistTaps={'always'}>
           <View style={styles.container}>
             <View style={styles.formContainer}>
+              {error && (
+                <View style={styles.errorContainer}>
+                  <Text style={styles.error}>{error}</Text>
+                </View>
+              )}
               <View style={styles.imageContainer}>
                 {/* <Image
                 source={require('@/assets/images/app-screen-icon.png')}
                 style={styles.image}
                 resizeMode="contain"
               /> */}
-                <Text style={styles.label}>Sign Up</Text>
+                <Text style={styles.label}>Create your account</Text>
               </View>
-              <Spacer height={10} />
+              <Spacer height={45} />
               <View style={styles.loginContainer}>
                 <Controller
                   control={control}
@@ -112,6 +117,7 @@ const Register = () => {
                       onBlur={field.onBlur}
                       onChangeText={field.onChange}
                       error={errors.name?.message}
+                      borderLess
                     />
                   )}
                   name="name"
@@ -130,6 +136,7 @@ const Register = () => {
                       onBlur={field.onBlur}
                       onChangeText={field.onChange}
                       error={errors.email?.message}
+                      borderLess
                     />
                   )}
                   name="email"
@@ -148,6 +155,7 @@ const Register = () => {
                       onBlur={field.onBlur}
                       onChangeText={field.onChange}
                       error={errors.phone?.message}
+                      borderLess
                     />
                   )}
                   name="phone"
@@ -165,18 +173,17 @@ const Register = () => {
                       onBlur={field.onBlur}
                       onChangeText={field.onChange}
                       error={errors.password?.message}
+                      borderLess
                     />
                   )}
                   name="password"
                 />
-                <View style={styles.errorContainer}>
-                  {error ? <Text style={styles.error}>{error}</Text> : null}
-                </View>
-                <Spacer height={10} />
+                <Spacer height={35} />
                 <View style={styles.btnContainer}>
                   <TouchableOpacity
-                    style={[styles.button, !isDirty || isLoading ? styles.disable : {}]}
-                    onPress={handleSubmit(register)} disabled={isDirty || isLoading}>
+                    style={[styles.button, !isValid || isLoading ? styles.disable : {}]}
+                    onPress={handleSubmit(register)}
+                    disabled={!isValid || isLoading}>
                     {isLoading ? (
                       <ActivityIndicator animating color={'#14141D'} style={styles.loader} />
                     ) : null}
@@ -186,7 +193,7 @@ const Register = () => {
                 <Spacer height={50} />
                 <AuthLink
                   linkText="Sign In"
-                  description="Already have an account ?"
+                  description="Already have an account? "
                   onPress={() => {
                     router.replace('/login');
                   }}
@@ -214,9 +221,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   imageContainer: {
+    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: -20,
   },
   image: {
     height: 200,
@@ -238,9 +245,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     backgroundColor: '#FFCA3A',
-    borderRadius: 15,
-    paddingVertical: 15,
-    paddingHorizontal: 25,
+    borderRadius: 8,
+    paddingVertical: Platform.OS === 'android' ? 12 : 16,
+    width: '100%',
   },
   loader: {
     position: 'absolute',
@@ -249,9 +256,8 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#14141D',
-    fontWeight: '600',
     fontSize: 16,
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Inter-600',
   },
   disable: {
     opacity: 0.7,
@@ -259,7 +265,7 @@ const styles = StyleSheet.create({
   textDisable: { opacity: 0 },
   errorContainer: {
     justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     display: 'flex',
     width: '100%',
     paddingTop: 20,
@@ -267,15 +273,15 @@ const styles = StyleSheet.create({
   },
   error: {
     fontSize: 14,
-    color: 'red',
-    fontFamily: 'Avenir-Book',
+    color: '#f02d3a',
+    fontFamily: 'Inter-500',
+    letterSpacing: 0.5,
   },
   label: {
     fontSize: 30,
     color: '#FFFFFF',
-    fontWeight: '800',
     marginBottom: 2,
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Inter-800',
   },
 });
 

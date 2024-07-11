@@ -87,7 +87,7 @@ function MyTabBar({ state, descriptors, navigation }: any) {
               <Text
                 style={{
                   color: '#ffffff',
-                  fontFamily: isFocused ? 'Avenir-Black' : 'Avenir-Book',
+                  fontFamily: isFocused ? 'Inter-700' : 'Inter-500',
                   fontSize: 16,
                 }}>
                 {label}
