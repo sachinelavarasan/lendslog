@@ -8,15 +8,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface authState {
   error: null;
+  success: null;
   isLoading: boolean;
+  otpLoading: boolean;
   user: null; // user type
   isAuthenticateLoading: boolean;
 }
 const initialState: authState = {
   error: null,
+  success: null,
   isLoading: false,
+  otpLoading: false,
   user: null,
-  isAuthenticateLoading: false
+  isAuthenticateLoading: false,
 };
 
 const authSlice = createSlice({
@@ -28,6 +32,12 @@ const authSlice = createSlice({
     },
     setIsLoading(state, action) {
       state.isLoading = action.payload;
+    },
+    setOtpLoading(state, action) {
+      state.otpLoading = action.payload;
+    },
+    setSuccess(state, action) {
+      state.success = action.payload;
     },
     setIsAuthenticateLoading(state, action) {
       state.isAuthenticateLoading = action.payload;
@@ -41,7 +51,15 @@ const authSlice = createSlice({
   },
 });
 
-export const { setError, setIsLoading, setIsAuthenticateLoading, setUser, clearUser } = authSlice.actions;
+export const {
+  setError,
+  setIsLoading,
+  setIsAuthenticateLoading,
+  setUser,
+  clearUser,
+  setOtpLoading,
+  setSuccess,
+} = authSlice.actions;
 
 export const logIn =
   (
@@ -76,7 +94,7 @@ export const logIn =
 
 export const signUp =
   (
-    data: { name?: string; password: string; email: string },
+    data: { name: string; password: string; email: string },
     callback: () => void
   ): ThunkAction<void, RootState, unknown, UnknownAction> =>
   async dispatch => {
@@ -97,12 +115,9 @@ export const signUp =
     }
   };
 
-  export const fetchProfile =
+export const fetchProfile =
   (callback?: () => void): ThunkAction<void, RootState, unknown, UnknownAction> =>
-  async (
-    dispatch
-  ) => {
-
+  async dispatch => {
     try {
       dispatch(setIsAuthenticateLoading(true));
       const response = await authApi.fetchProfile();
@@ -111,7 +126,7 @@ export const signUp =
 
       if (user) {
         dispatch(setUser(user));
-        await AsyncStorage.setItem("@user", JSON.stringify(user));
+        await AsyncStorage.setItem('@user', JSON.stringify(user));
       }
     } catch (error: unknown) {
       if (callback) {
@@ -135,6 +150,56 @@ export const logout =
     await AsyncStorage.removeItem('@user');
     if (callBack) {
       callBack();
+    }
+  };
+
+export const sendOtp =
+  (
+    data: { phone: string },
+    callback?: () => void
+  ): ThunkAction<void, RootState, unknown, UnknownAction> =>
+  async dispatch => {
+    try {
+      dispatch(setOtpLoading(true));
+      const response = await authApi.sendOtp(data);
+
+      const { message } = response.data;
+      dispatch(setSuccess(message));
+
+      await AsyncStorage.setItem('@phone', JSON.stringify(data.phone));
+      if (callback) {
+        callback();
+      }
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        dispatch(setError(error?.response?.data?.error || 'Something went wrong.'));
+      }
+    } finally {
+      dispatch(setOtpLoading(false));
+    }
+  };
+export const verifyOtp =
+  (
+    data: { phone: string, code: string },
+    callback?: () => void): ThunkAction<void, RootState, unknown, UnknownAction> =>
+  async dispatch => {
+    try {
+      dispatch(setOtpLoading(true));
+      await authApi.verifyOtp(data);
+
+      await AsyncStorage.removeItem('@phone');
+      if (callback) {
+        callback();
+      }
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        dispatch(setError(error?.response?.data?.error || 'Something went wrong.'));
+      }
+    } finally {
+      if (callback) {
+        callback();
+      }
+      dispatch(setOtpLoading(false));
     }
   };
 

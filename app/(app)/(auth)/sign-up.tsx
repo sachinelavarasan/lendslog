@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -13,31 +13,36 @@ import { useRouter } from 'expo-router';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-// import OTPTextInput from 'react-native-otp-textinput';
 
 import Input from '@/components/Input';
 import Spacer from '@/components/Spacer';
 import AuthLink from '@/components/AuthLink';
 import SafeAreaViewComponent from '@/components/SafeAreaView';
 
-import { isEmail } from '@/utils/Validation';
+import { phoneValidation } from '@/utils/Validation';
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setError, signUp } from '@/redux/slices/auth/authSlice';
 
 const schema = z.object({
+  name: z.string().min(3, { message: 'Minimum 3 characters' }),
   email: z.string().email({ message: 'Invalid Email' }),
   password: z.string().min(8, { message: 'Minimum 8 characters' }),
+  phone: z
+    .string()
+    .min(1, { message: 'Must have at least 1 character' })
+    .regex(phoneValidation, { message: 'invalid phone' }),
 });
 
 type FormData = {
+  name: string;
   email: string;
+  phone: string;
   password: string;
 };
 
 const Register = () => {
   const router = useRouter();
-  // const otpInput = useRef<OTPTextInput>(null);
   const dispatch = useAppDispatch();
   const { isLoading, error } = useAppSelector(state => state.auth);
 
@@ -48,8 +53,10 @@ const Register = () => {
     reset,
   } = useForm({
     defaultValues: {
+      name: 'janani',
       email: 'janani@gmail.com',
-      password: '1234567822',
+      phone: '+918838401180',
+      password: '12345678',
     },
     resolver: zodResolver(schema),
   });
@@ -60,16 +67,14 @@ const Register = () => {
     };
   }, []);
 
-  const register = async ({ email, password }: FormData) => {
-    if (email && password) {
+  const register = async (data: FormData) => {
       dispatch(
-        signUp({ email, password }, () => {
+        signUp(data, () => {
           reset();
           dispatch(setError(null));
           router.replace('/(auth)/login');
         })
       );
-    }
   };
 
   return (
@@ -99,7 +104,25 @@ const Register = () => {
                   render={({ field }) => (
                     <Input
                       {...field}
-                      placeholder="Enter Email"
+                      placeholder="Name"
+                      label="Name"
+                      keyboardType="default"
+                      autoCapitalize="none"
+                      autoComplete="off"
+                      onBlur={field.onBlur}
+                      onChangeText={field.onChange}
+                      error={errors.name?.message}
+                    />
+                  )}
+                  name="name"
+                />
+                <Spacer height={20} />
+                <Controller
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      placeholder="Email"
                       label="Email"
                       keyboardType="email-address"
                       autoCapitalize="none"
@@ -117,7 +140,25 @@ const Register = () => {
                   render={({ field }) => (
                     <Input
                       {...field}
-                      placeholder="Enter password"
+                      placeholder="+91XXXXXXXXXX"
+                      label="Phone no"
+                      keyboardType="numeric"
+                      autoCapitalize="none"
+                      autoComplete="off"
+                      onBlur={field.onBlur}
+                      onChangeText={field.onChange}
+                      error={errors.phone?.message}
+                    />
+                  )}
+                  name="phone"
+                />
+                <Spacer height={20} />
+                <Controller
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      placeholder="Password"
                       label="Password"
                       autoCapitalize="none"
                       isPassword
@@ -135,7 +176,7 @@ const Register = () => {
                 <View style={styles.btnContainer}>
                   <TouchableOpacity
                     style={[styles.button, !isDirty || isLoading ? styles.disable : {}]}
-                    onPress={handleSubmit(register)}>
+                    onPress={handleSubmit(register)} disabled={isDirty || isLoading}>
                     {isLoading ? (
                       <ActivityIndicator animating color={'#14141D'} style={styles.loader} />
                     ) : null}
@@ -235,19 +276,6 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     marginBottom: 2,
     fontFamily: 'Avenir-Black',
-  },
-  textInputContainer: {
-    marginBottom: 20,
-  },
-  roundedTextInput: {
-    borderRadius: 16,
-    borderWidth: 4,
-    color: '#FFCA3A',
-    padding: 0,
-    fontSize: 28,
-    lineHeight: 33,
-    fontWeight: '700',
-    verticalAlign: 'middle',
   },
 });
 
