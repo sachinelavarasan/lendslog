@@ -16,7 +16,7 @@ import SafeAreaViewComponent from '@/components/SafeAreaView';
 import Spacer from '@/components/Spacer';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { otpValidation } from '@/utils/Validation';
-import { deviceWidth } from '@/utils/functions';
+import { deviceHeight, deviceWidth } from '@/utils/functions';
 import { setError, verifyOtp } from '@/redux/slices/auth/authSlice';
 import { useRouter } from 'expo-router';
 
@@ -26,6 +26,8 @@ const MobileVerify = () => {
   const { otpLoading, error } = useAppSelector(state => state.auth);
   const [otp, setOtp] = useState<string>('');
   const [isModalVisible, setModalVisible] = useState(false);
+  const width = deviceWidth();
+  const height = deviceHeight();
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -85,19 +87,58 @@ const MobileVerify = () => {
             ) : null}
             <Text style={[styles.title, otpLoading ? styles.textDisable : {}]}>Verify</Text>
           </TouchableOpacity>
-          <Modal isVisible={isModalVisible}>
-            <View style={{ flex: 1 }}>
-              <Text>Otp verified successfully!</Text>
-
-              <Button
-                title="Login"
-                onPress={() => {
-                  toggleModal();
-                  setTimeout(() => {
-                    router.navigate('/(auth)/login');
-                  }, 500);
-                }}
-              />
+          <Modal
+            isVisible={isModalVisible}
+            hasBackdrop={true}
+            deviceHeight={height}
+            deviceWidth={width}
+            coverScreen={true}>
+            <View
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <View
+                style={{
+                  backgroundColor: '#14141D',
+                  width: width - 60,
+                  borderRadius: 10,
+                  padding: 20,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Text
+                  style={{
+                    color: '#A0CF5D',
+                    fontWeight: '600',
+                    fontSize: 20,
+                    textAlign: 'center',
+                    lineHeight: 24,
+                  }}>
+                  Your mobile number has been verified successfully.
+                </Text>
+                <Spacer height={30} />
+                <TouchableOpacity
+                  style={[
+                    styles.button,
+                    {
+                      width: 'auto',
+                      paddingVertical: 12,
+                      paddingHorizontal: 30,
+                      backgroundColor: '#A0CF5D',
+                    },
+                  ]}
+                  onPress={() => {
+                    toggleModal();
+                    setTimeout(() => {
+                      router.replace('/(auth)/login');
+                    }, 500);
+                  }}>
+                  <Text style={[styles.title]}>Login</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </Modal>
         </ScrollView>
