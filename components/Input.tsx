@@ -80,9 +80,9 @@ const styles = StyleSheet.create({
   },
   textBox: {
     height: 130,
-    paddingLeft: 14,
-    paddingTop: 16,
-    paddingRight: 21,
+    paddingVertical: Platform.OS === 'android' ? 12 : 16,
+    paddingHorizontal: 20,
+    textAlignVertical: "top"
   },
   innerView: {
     flexDirection: 'row',
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Inter-300',
     color: '#FFFFFF',
-    paddingHorizontal: 24,
+    paddingHorizontal: 20,
   },
   label: {
     fontSize: 16,
