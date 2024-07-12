@@ -10,7 +10,7 @@ import {
   Dimensions,
 } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
-import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 
 const ROUTES: {
   name: string;
@@ -27,13 +27,13 @@ const ROUTES: {
     name: 'add',
     title: 'Add',
     // icon: require('@/assets/icons/add.png'),
-    icon: 'add',
+    icon: 'plus',
   },
   {
     name: 'lends',
     title: 'Lends',
     // icon: require('@/assets/icons/week-month-icon.png'),
-    icon: 'file-tray-outline',
+    icon: 'money-check-alt',
   },
 ];
 
@@ -48,13 +48,13 @@ function MyTabBar({ state, descriptors, navigation }: any) {
         elevation: 10,
         backgroundColor: '#0B0B0F',
         paddingBottom: Platform.OS === 'ios' ? 10 : 0,
-        paddingHorizontal: 20,
-        paddingTop: 10,
+        // paddingHorizontal: 20,
+        // paddingTop: 10,
         borderTopColor: '#14141D',
         borderTopWidth: 1,
         position: 'static',
         bottom: 0,
-        height:90
+        // height:90
       }}>
       {state.routes.map((route: any, index: number) => {
         const { options } = descriptors[route.key];
@@ -84,20 +84,23 @@ function MyTabBar({ state, descriptors, navigation }: any) {
             target: route.key,
           });
         };
-        const width = useSharedValue(30);
+        const borderColor = useSharedValue('transparent');
 
         if (isFocused) {
-          width.value = withSpring(40, {
+          borderColor.value = withSpring('#FFCA3A', {
             duration: 300,
             dampingRatio: 2,
-          }); // Scale up when focused
+          }); // animate when focused
+        } else {
+          borderColor.value = withSpring('transparent'); // animate when focused
         }
 
         const animatedStyle = useAnimatedStyle(() => {
           return {
-            width: width.value,
-            backgroundColor: isFocused ? '#FFCA3A' : 'transparent',
-            borderRadius: isFocused ? 90 : 0,
+            // width: width.value,
+            // backgroundColor: isFocused ? '#FFCA3A' : 'transparent',
+            // borderRadius: isFocused ? 90 : 0,
+            borderTopColor: borderColor.value,
           };
         });
 
@@ -110,20 +113,43 @@ function MyTabBar({ state, descriptors, navigation }: any) {
             onPress={onPress}
             onLongPress={onLongPress}
             key={route.key}
-            style={[{ flex: 1, alignItems: 'center', justifyContent: 'center', marginBottom: 10 }]}>
-            <Animated.View style={[{ padding:4, alignItems: 'center' }, animatedStyle]}>
+            style={[
+              {
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: 10,
+              },
+            ]}>
+            <Animated.View
+              style={[
+                {
+                  paddingHorizontal: 20,
+                  paddingVertical: 10,
+                  alignItems: 'center',
+                  borderTopWidth: 3,
+                },
+                animatedStyle,
+              ]}>
               {/* <Image source={options.tabBarIcon} /> */}
-              <Ionicons
-                name={options.tabBarIcon}
-                color={isFocused ? '#14141D' : '#FFF'}
-                size={20}
-                style={{ fontWeight: 500 }}
-              />
+              {['lends','add'].includes(route.name) ? (
+                <FontAwesome5
+                  name={options.tabBarIcon}
+                  size={24}
+                  color={isFocused ? '#FFCA3A' : '#FFF'}
+                />
+              ) : (
+                <Ionicons
+                  name={options.tabBarIcon}
+                  color={isFocused ? '#FFCA3A' : '#FFF'}
+                  size={24}
+                />
+              )}
             </Animated.View>
             <Text
               style={{
-                color: '#D9D9D9',
-                fontFamily: 'Inter-700',
+                color: isFocused ? '#FFCA3A' : '#FFF',
+                fontFamily: 'Inter-400',
                 fontSize: 10,
               }}>
               {label}
