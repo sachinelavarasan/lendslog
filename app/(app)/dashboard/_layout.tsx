@@ -9,22 +9,31 @@ import {
   Platform,
   Dimensions,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import { Ionicons } from '@expo/vector-icons';
 
-const ROUTES = [
+const ROUTES: {
+  name: string;
+  title: string;
+  icon: any;
+}[] = [
   {
     name: 'index',
     title: 'Today',
-    icon: require('@/assets/icons/Today.png'),
+    // icon: require('@/assets/icons/Today.png'),
+    icon: 'calendar',
   },
   {
     name: 'add',
     title: 'Add',
-    icon: require('@/assets/icons/add.png'),
+    // icon: require('@/assets/icons/add.png'),
+    icon: 'add',
   },
   {
     name: 'lends',
     title: 'Lends',
-    icon: require('@/assets/icons/week-month-icon.png'),
+    // icon: require('@/assets/icons/week-month-icon.png'),
+    icon: 'file-tray-outline',
   },
 ];
 
@@ -45,6 +54,7 @@ function MyTabBar({ state, descriptors, navigation }: any) {
         borderTopWidth: 1,
         position: 'static',
         bottom: 0,
+        height:90
       }}>
       {state.routes.map((route: any, index: number) => {
         const { options } = descriptors[route.key];
@@ -74,6 +84,22 @@ function MyTabBar({ state, descriptors, navigation }: any) {
             target: route.key,
           });
         };
+        const width = useSharedValue(30);
+
+        if (isFocused) {
+          width.value = withSpring(40, {
+            duration: 300,
+            dampingRatio: 2,
+          }); // Scale up when focused
+        }
+
+        const animatedStyle = useAnimatedStyle(() => {
+          return {
+            width: width.value,
+            backgroundColor: isFocused ? '#FFCA3A' : 'transparent',
+            borderRadius: isFocused ? 90 : 0,
+          };
+        });
 
         return (
           <TouchableOpacity
@@ -84,22 +110,24 @@ function MyTabBar({ state, descriptors, navigation }: any) {
             onPress={onPress}
             onLongPress={onLongPress}
             key={route.key}
-            style={[{ flex: 1, alignItems: 'center', marginBottom: 10 }]}>
-            <View
-              style={[
-                { height: 55, width: 55, padding: 5, alignItems: 'center' },
-                isFocused ? styles.activeColor : null,
-              ]}>
-              <Image source={options.tabBarIcon} />
-              <Text
-                style={{
-                  color: '#D9D9D9',
-                  fontFamily: 'Inter-700',
-                  fontSize: 10,
-                }}>
-                {label}
-              </Text>
-            </View>
+            style={[{ flex: 1, alignItems: 'center', justifyContent: 'center', marginBottom: 10 }]}>
+            <Animated.View style={[{ padding:4, alignItems: 'center' }, animatedStyle]}>
+              {/* <Image source={options.tabBarIcon} /> */}
+              <Ionicons
+                name={options.tabBarIcon}
+                color={isFocused ? '#14141D' : '#FFF'}
+                size={20}
+                style={{ fontWeight: 500 }}
+              />
+            </Animated.View>
+            <Text
+              style={{
+                color: '#D9D9D9',
+                fontFamily: 'Inter-700',
+                fontSize: 10,
+              }}>
+              {label}
+            </Text>
           </TouchableOpacity>
         );
       })}
@@ -109,6 +137,7 @@ function MyTabBar({ state, descriptors, navigation }: any) {
 
 export default function TabLayout() {
   const { width, height } = Dimensions.get('window');
+
   return (
     <View
       style={{
