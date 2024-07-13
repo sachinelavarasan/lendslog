@@ -9,30 +9,21 @@ import {
   FlatList,
   Platform,
 } from 'react-native';
-import { collection, getDocs } from 'firebase/firestore';
 
 import { ThemedView } from '@/components/ThemedView';
 import SafeAreaViewComponent from '@/components/SafeAreaView';
 import DueCard from '@/components/DueCard';
 import HeaderWithCount from '@/components/HeaderWithCount';
 
-import { db } from '@/firebaseConfig';
 import { useAppSelector } from '@/redux/hooks';
 import { borrowerSelector } from '@/redux/slices/borrowers/borrowersSlice';
+import CustomRadioButton from '@/components/RadioInput';
 
 export default function HomeScreen() {
   const { log } = useAppSelector(borrowerSelector);
   console.log('lendLog ========', log);
   // const router = useRouter();
-  const fetchData = async () => {
-    const querySnapshot = await getDocs(collection(db, 'admin'));
-    querySnapshot.forEach(doc => {
-      console.log(`${doc.id} => ${doc.data().name}`);
-    });
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
+ 
   // const data = [
   //   {
   //     name: 'John Paul',
@@ -64,6 +55,7 @@ export default function HomeScreen() {
       <ThemedView style={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 20 }}>
         <View style={{ paddingTop: Platform.OS === 'android' ? 10 : 5 }}>
           <HeaderWithCount title="Today due users list" count={10} countText='users'/>
+          <CustomRadioButton/>
           <FlatList
             bounces={false}
             style={{ marginBottom: 20, paddingBottom: 20 }}
