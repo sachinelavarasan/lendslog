@@ -17,7 +17,6 @@ import HeaderWithCount from '@/components/HeaderWithCount';
 
 import { useAppSelector } from '@/redux/hooks';
 import { borrowerSelector } from '@/redux/slices/borrowers/borrowersSlice';
-import CustomRadioButton from '@/components/RadioInput';
 
 export default function HomeScreen() {
   const { log } = useAppSelector(borrowerSelector);
@@ -55,7 +54,6 @@ export default function HomeScreen() {
       <ThemedView style={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 20 }}>
         <View style={{ paddingTop: Platform.OS === 'android' ? 10 : 5 }}>
           <HeaderWithCount title="Today due users list" count={10} countText='users'/>
-          <CustomRadioButton/>
           <FlatList
             bounces={false}
             style={{ marginBottom: 20, paddingBottom: 20 }}

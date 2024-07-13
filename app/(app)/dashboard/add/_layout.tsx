@@ -17,12 +17,15 @@ import { z } from 'zod';
 
 import Input from '@/components/Input';
 import Spacer from '@/components/Spacer';
-import AuthLink from '@/components/AuthLink';
+// import AuthLink from '@/components/AuthLink';
 import SafeAreaViewComponent from '@/components/SafeAreaView';
+import { ThemedView } from '@/components/ThemedView';
+import CustomRadioButton from '@/components/CustomRadioButton';
+import CustomCheckBox from '@/components/CustomCheckBox';
+import { CustomSelectInput } from '@/components/CustomSelectInput';
 
 import { logIn, setError } from '@/redux/slices/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { ThemedView } from '@/components/ThemedView';
 
 const schema = z.object({
   ld_borrower_name: z.string().min(3, { message: 'Minimum3 chanracters' }),
@@ -30,17 +33,17 @@ const schema = z.object({
 });
 
 type FormData = {
-  ld_borrower_name: string,
-  ld_borrower_phoneno: string,
-  ld_borrower_address: string,
-  ld_borrower_notes: string,
-  ld_nominee_name: string,
-  ld_nominee_phoneno: string,
-  ld_nominee_address: string,
-  ld_nominee_notes: string,
-  ld_lend_amount: string,
-  ld_interest_rate: string,
-  ld_total_weeks_or_month: string
+  ld_borrower_name: string;
+  ld_borrower_phoneno: string;
+  ld_borrower_address: string;
+  ld_borrower_notes: string;
+  ld_nominee_name: string;
+  ld_nominee_phoneno: string;
+  ld_nominee_address: string;
+  ld_nominee_notes: string;
+  ld_lend_amount: string;
+  ld_interest_rate: string;
+  ld_total_weeks_or_month: string;
 };
 
 export default function AddLends() {
@@ -65,7 +68,7 @@ export default function AddLends() {
       ld_nominee_notes: '',
       ld_lend_amount: '0',
       ld_interest_rate: '0',
-      ld_total_weeks_or_month: '0'
+      ld_total_weeks_or_month: '0',
     },
     resolver: zodResolver(schema),
   });
@@ -84,7 +87,7 @@ export default function AddLends() {
     //     router.replace('/dashboard');
     //   })
     // );
-    console.log(data)
+    console.log(data);
   };
 
   return (
@@ -309,7 +312,7 @@ export default function AddLends() {
                     )}
                     name="ld_interest_rate"
                   />
-                 <Spacer height={20} />
+                  <Spacer height={20} />
                   <Controller
                     control={control}
                     render={({ field }) => (
@@ -326,6 +329,11 @@ export default function AddLends() {
                     )}
                     name="ld_total_weeks_or_month"
                   />
+                </View>
+                <View style={styles.sectionContainer}>
+                  <CustomCheckBox/>
+                  <CustomRadioButton />
+                  <CustomSelectInput />
                 </View>
                 <Spacer height={35} />
                 <View style={styles.btnContainer}>
@@ -420,4 +428,3 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-
