@@ -1,19 +1,31 @@
 import React from 'react';
+import { StyleProp, TextProps, ViewStyle } from 'react-native';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
-export default function CustomCheckBox() {
+interface CustomCheckBoxProps{
+  label?: string;
+  disabled?: boolean;
+  fillColor?: string;
+  unFillColor?: string;
+  innerIconStyle?: StyleProp<ViewStyle>;
+  iconStyle?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextProps>
+  onChange:((checked: boolean) => void)
+}
+
+export default function CustomCheckBox({label,disabled,fillColor,onChange}: CustomCheckBoxProps) {
   return (
     <BouncyCheckbox
       size={24}
-      fillColor="rgba(255, 200, 58, 0.8)"
-      unFillColor="transparent"
-      text="Custom Checkbox"
+      fillColor={fillColor}
+      unFillColor='transparent'
+      text={label}
       innerIconStyle={{ borderWidth: 1, borderRadius: 4 }}
       iconStyle={{ borderRadius: 4 }}
       textStyle={{ fontFamily: 'Inter-400', textDecorationLine: 'none', color: '#c7c7c7' }}
-      disabled={true}
+      disabled={disabled}
       onPress={(isChecked: boolean) => {
-        console.log(isChecked);
+        onChange(isChecked);
       }}
     />
   );

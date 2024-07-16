@@ -1,32 +1,42 @@
 import React, { useMemo, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import RadioGroup, { RadioButton, RadioButtonProps } from 'react-native-radio-buttons-group';
+import { StyleSheet, View, Text } from 'react-native';
+import { RadioButton, RadioButtonProps } from 'react-native-radio-buttons-group';
 
-export default function CustomRadioButton() {
-  const radioButtons: RadioButtonProps[] = useMemo(
-    () => [
-      {
-        id: '1', // acts as primary key, should be unique and non-empty string
-        label: 'Option 1',
-        value: 'option1',
-      },
-      {
-        id: '2',
-        label: 'Option 2',
-        value: 'option2',
-      },
-    ],
-    []
-  );
+interface CustomRadioButtonProps {
+  options: RadioButtonProps[];
+  onChange: (id: number | string) => void;
+  value: string;
+  label?: string;
+  disabled?: boolean;
+}
 
-  const [selectedId, setSelectedId] = useState<string | undefined>();
+export default function CustomRadioButton({
+  options,
+  onChange,
+  value,
+  label,
+  disabled,
+}: CustomRadioButtonProps) {
+  const [selectedId, setSelectedId] = useState<string | undefined>(value);
   function handlePress(id: string) {
+    onChange(id);
     setSelectedId(id);
   }
 
   return (
-    <View style={styles.container}>
-      {radioButtons.map((button, index) => (
+    <>
+      {label && (
+        <Text
+          style={[
+            { fontSize: 16, color: '#c7c7c7', marginVertical: 3, fontFamily: 'Inter-400' },
+            disabled && { opacity: 0.5 },
+          ]}>
+          {label}
+        </Text>
+      )}
+
+      <View style={styles.container}>
+        {options.map((button, index) => (
           <RadioButton
             {...button}
             key={button.id}
@@ -36,10 +46,11 @@ export default function CustomRadioButton() {
             borderColor="#FFCA3A"
             color="#FFCA3A"
             containerStyle={{ marginHorizontal: 0 }}
-            // disabled
+            disabled={disabled}
           />
-      ))}
-    </View>
+        ))}
+      </View>
+    </>
   );
 }
 

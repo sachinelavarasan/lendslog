@@ -331,9 +331,46 @@ export default function AddLends() {
                   />
                 </View>
                 <View style={styles.sectionContainer}>
-                  <CustomCheckBox/>
-                  <CustomRadioButton />
-                  <CustomSelectInput />
+                  <CustomCheckBox
+                    label="Paid"
+                    fillColor="rgba(255, 200, 58, 0.8)"
+                    onChange={data => {
+                      console.log('dd', data);
+                    }}
+                  />
+                  <CustomRadioButton
+                    label="Payment Type"
+                    value="2"
+                    options={[
+                      {
+                        id: '1',
+                        label: 'Option 1',
+                      },
+                      {
+                        id: '2',
+                        label: 'Option 2',
+                      },
+                    ]}
+                    onChange={data => {
+                      console.log('dd', data);
+                    }}
+                  />
+                  <CustomSelectInput
+                  label="Document Type"
+                    options={[
+                      { key: '1', value: 'Jammu & Kashmir' },
+                      { key: '2', value: 'Gujrat' },
+                      { key: '3', value: 'Maharashtra' },
+                      { key: '4', value: 'Goa' },
+                      { key: '5', value: 'Tamilnadu' },
+                      { key: '6', value: 'Karnataka' },
+                      { key: '7', value: 'Andhra Pradesh' },
+                      { key: '8', value: 'Keralam' },
+                    ]}
+                    onChange={data => {
+                      console.log('sele', data);
+                    }}
+                  />
                 </View>
                 <Spacer height={35} />
                 <View style={styles.btnContainer}>
