@@ -24,27 +24,10 @@ import CustomRadioButton from '@/components/CustomRadioButton';
 import CustomCheckBox from '@/components/CustomCheckBox';
 import { CustomSelectInput } from '@/components/CustomSelectInput';
 
-import { logIn, setError } from '@/redux/slices/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { add, setError } from '@/redux/slices/lends/lendsSlice';
 
-const schema = z.object({
-  ld_borrower_name: z.string().min(3, { message: 'Minimum3 chanracters' }),
-  ld_borrower_phoneno: z.string().min(8, { message: 'Minimum 8 characters' }),
-});
-
-type FormData = {
-  ld_borrower_name: string;
-  ld_borrower_phoneno: string;
-  ld_borrower_address: string;
-  ld_borrower_notes: string;
-  ld_nominee_name: string;
-  ld_nominee_phoneno: string;
-  ld_nominee_address: string;
-  ld_nominee_notes: string;
-  ld_lend_amount: string;
-  ld_interest_rate: string;
-  ld_total_weeks_or_month: string;
-};
+import { lendsSchema, lendsSchemaType } from '@/utils/schema';
 
 export default function AddLends() {
   const router = useRouter();
@@ -56,21 +39,29 @@ export default function AddLends() {
     handleSubmit,
     formState: { errors, isValid },
     reset,
+    watch,
   } = useForm({
     defaultValues: {
       ld_borrower_name: '',
       ld_borrower_phoneno: '',
       ld_borrower_address: '',
       ld_borrower_notes: '',
+      ld_is_nominee: false,
       ld_nominee_name: '',
       ld_nominee_phoneno: '',
       ld_nominee_address: '',
       ld_nominee_notes: '',
+      ld_is_surety: false,
+      ld_surety_type: '',
+      ld_surety_notes: '',
       ld_lend_amount: '0',
-      ld_interest_rate: '0',
+      ld_interest_rate: '',
+      ld_payment_mode: '1',
       ld_total_weeks_or_month: '0',
+      ld_start_date: '',
+      ld_payment_type: '',
     },
-    resolver: zodResolver(schema),
+    resolver: zodResolver(lendsSchema),
   });
 
   useEffect(() => {
@@ -79,17 +70,30 @@ export default function AddLends() {
     };
   }, []);
 
-  const onSubmit = (data: FormData) => {
-    // dispatch(
-    //   logIn({ email, password }, () => {
-    //     reset();
-    //     dispatch(setError(null));
-    //     router.replace('/dashboard');
-    //   })
-    // );
+  const onSubmit = (data: lendsSchemaType) => {
+    console.log(data);
+    dispatch(
+      add(data, () => {
+        reset();
+        dispatch(setError(null));
+        router.replace('/dashboard');
+      })
+    );
     console.log(data);
   };
 
+  const paymentModes = [
+    {
+      id: '1',
+      label: 'Week',
+    },
+    {
+      id: '2',
+      label: 'Month',
+    },
+  ];
+
+  console.log("---------- ERROR -------- \n", JSON.stringify(errors, null, 2))
   return (
     <KeyboardAvoidingView
       {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}
@@ -193,88 +197,6 @@ export default function AddLends() {
                     name="ld_borrower_notes"
                   />
                 </View>
-                <View style={styles.sectionContainer}>
-                  <View style={[styles.sectionTitleContainer]}>
-                    <Text style={[styles.sectionTitle]}>Nominee Details</Text>
-                    <Text style={{ color: '#a1a1a1', marginTop: 5 }}>
-                      Give the details of the primary nominee
-                    </Text>
-                  </View>
-                  <Controller
-                    control={control}
-                    render={({ field }) => (
-                      <Input
-                        {...field}
-                        placeholder="Enter name"
-                        label="Name"
-                        keyboardType="default"
-                        autoCapitalize="none"
-                        autoComplete="off"
-                        onBlur={field.onBlur}
-                        onChangeText={field.onChange}
-                        error={errors.ld_nominee_name?.message}
-                        borderLess
-                      />
-                    )}
-                    name="ld_nominee_name"
-                  />
-                  <Spacer height={20} />
-                  <Controller
-                    control={control}
-                    render={({ field }) => (
-                      <Input
-                        {...field}
-                        placeholder="Enter phone number"
-                        label="Phone number"
-                        autoCapitalize="none"
-                        onBlur={field.onBlur}
-                        onChangeText={field.onChange}
-                        error={errors.ld_nominee_phoneno?.message}
-                        borderLess
-                      />
-                    )}
-                    name="ld_nominee_phoneno"
-                  />
-                  <Spacer height={20} />
-                  <Controller
-                    control={control}
-                    render={({ field }) => (
-                      <Input
-                        {...field}
-                        placeholder="Enter address"
-                        label="Address"
-                        autoCapitalize="none"
-                        onBlur={field.onBlur}
-                        onChangeText={field.onChange}
-                        error={errors.ld_nominee_address?.message}
-                        borderLess
-                      />
-                    )}
-                    name="ld_nominee_address"
-                  />
-                  <Spacer height={20} />
-                  <Controller
-                    control={control}
-                    render={({ field }) => (
-                      <Input
-                        {...field}
-                        placeholder="Enter notes"
-                        label="Notes"
-                        keyboardType="default"
-                        autoCapitalize="none"
-                        autoComplete="off"
-                        onBlur={field.onBlur}
-                        onChangeText={field.onChange}
-                        error={errors.ld_nominee_notes?.message}
-                        borderLess
-                        multiline={true}
-                        numberOfLines={4}
-                        isTextBox
-                      />
-                    )}
-                    name="ld_nominee_notes"
-                  />
-                </View>
                 <View style={[styles.sectionContainer, { marginTop: 10 }]}>
                   <View style={[styles.sectionTitleContainer]}>
                     <Text style={[styles.sectionTitle]}>Lend Details</Text>
@@ -299,19 +221,63 @@ export default function AddLends() {
                   <Controller
                     control={control}
                     render={({ field }) => (
-                      <Input
-                        {...field}
+                      <CustomSelectInput
                         placeholder="Enter interest rate (eg: 2%)"
                         label="Interest Rate"
-                        keyboardType="numeric"
-                        onBlur={field.onBlur}
-                        onChangeText={field.onChange}
-                        error={errors.ld_interest_rate?.message}
-                        borderLess
+                        onChange={field.onChange}
+                        options={[]}
                       />
                     )}
                     name="ld_interest_rate"
                   />
+                  {errors.ld_interest_rate?.message ? (
+                    <Text style={styles.errorMessage}>{errors.ld_interest_rate?.message}</Text>
+                  ) : null}
+                  <Spacer height={20} />
+                  <Controller
+                    control={control}
+                    render={({ field }) => (
+                      <CustomSelectInput
+                        label="Payment Type"
+                        options={[
+                          {
+                            key: '1',
+                            value: 'Interest Only',
+                          },
+                          {
+                            key: '2',
+                            value: 'Principle with Interest',
+                          },
+                        ]}
+                        onChange={data => {
+                          field.onChange(data);
+                        }}
+                      />
+                    )}
+                    name="ld_payment_type"
+                  />
+                  {errors.ld_payment_type?.message ? (
+                    <Text style={styles.errorMessage}>{errors.ld_payment_type?.message}</Text>
+                  ) : null}
+                  <Spacer height={20} />
+                  <Controller
+                    control={control}
+                    render={({ field }) => (
+                      <CustomRadioButton
+                        label="Payment Mode"
+                        value={field.value}
+                        options={paymentModes}
+                        onChange={data => {
+                          field.onChange(data);
+                        }}
+                        disabled={field.disabled}
+                      />
+                    )}
+                    name="ld_payment_mode"
+                  />
+                  {errors.ld_payment_mode?.message ? (
+                    <Text style={styles.errorMessage}>{errors.ld_payment_mode?.message}</Text>
+                  ) : null}
                   <Spacer height={20} />
                   <Controller
                     control={control}
@@ -331,46 +297,182 @@ export default function AddLends() {
                   />
                 </View>
                 <View style={styles.sectionContainer}>
-                  <CustomCheckBox
-                    label="Paid"
-                    fillColor="rgba(255, 200, 58, 0.8)"
-                    onChange={data => {
-                      console.log('dd', data);
-                    }}
+                  <View style={[styles.sectionTitleContainer]}>
+                    <Text style={[styles.sectionTitle]}>Nominee Details</Text>
+                    <Text style={{ color: '#a1a1a1', marginTop: 5 }}>
+                      Give the details of the primary nominee
+                    </Text>
+                  </View>
+                  <Controller
+                    control={control}
+                    render={({ field }) => (
+                      <CustomCheckBox
+                        label="Nominee"
+                        fillColor="rgba(255, 200, 58, 0.8)"
+                        onChange={data => {
+                          field.onChange(data);
+                        }}
+                        isChecked={field.value}
+                      />
+                    )}
+                    name="ld_is_nominee"
                   />
-                  <CustomRadioButton
-                    label="Payment Type"
-                    value="2"
-                    options={[
-                      {
-                        id: '1',
-                        label: 'Option 1',
-                      },
-                      {
-                        id: '2',
-                        label: 'Option 2',
-                      },
-                    ]}
-                    onChange={data => {
-                      console.log('dd', data);
-                    }}
+                  {watch('ld_is_nominee') ? (
+                    <View>
+                      <Spacer height={20} />
+                      <Controller
+                        control={control}
+                        render={({ field }) => (
+                          <Input
+                            {...field}
+                            placeholder="Enter name"
+                            label="Name"
+                            keyboardType="default"
+                            autoCapitalize="none"
+                            autoComplete="off"
+                            onBlur={field.onBlur}
+                            onChangeText={field.onChange}
+                            error={errors.ld_nominee_name?.message}
+                            borderLess
+                          />
+                        )}
+                        name="ld_nominee_name"
+                      />
+                      <Spacer height={20} />
+                      <Controller
+                        control={control}
+                        render={({ field }) => (
+                          <Input
+                            {...field}
+                            placeholder="Enter phone number"
+                            label="Phone number"
+                            autoCapitalize="none"
+                            onBlur={field.onBlur}
+                            onChangeText={field.onChange}
+                            error={errors.ld_nominee_phoneno?.message}
+                            borderLess
+                          />
+                        )}
+                        name="ld_nominee_phoneno"
+                      />
+                      <Spacer height={20} />
+                      <Controller
+                        control={control}
+                        render={({ field }) => (
+                          <Input
+                            {...field}
+                            placeholder="Enter address"
+                            label="Address"
+                            autoCapitalize="none"
+                            onBlur={field.onBlur}
+                            onChangeText={field.onChange}
+                            error={errors.ld_nominee_address?.message}
+                            borderLess
+                            multiline={true}
+                            numberOfLines={4}
+                            isTextBox
+                          />
+                        )}
+                        name="ld_nominee_address"
+                      />
+                      <Spacer height={20} />
+                      <Controller
+                        control={control}
+                        render={({ field }) => (
+                          <Input
+                            {...field}
+                            placeholder="Enter notes"
+                            label="Notes"
+                            keyboardType="default"
+                            autoCapitalize="none"
+                            autoComplete="off"
+                            onBlur={field.onBlur}
+                            onChangeText={field.onChange}
+                            error={errors.ld_nominee_notes?.message}
+                            borderLess
+                            multiline={true}
+                            numberOfLines={4}
+                            isTextBox
+                          />
+                        )}
+                        name="ld_nominee_notes"
+                      />
+                    </View>
+                  ) : null}
+                </View>
+                <View style={styles.sectionContainer}>
+                  <View style={[styles.sectionTitleContainer]}>
+                    <Text style={[styles.sectionTitle]}>Surety Details</Text>
+                    <Text style={{ color: '#a1a1a1', marginTop: 5 }}>
+                      Give the details of the surety
+                    </Text>
+                  </View>
+                  <Controller
+                    control={control}
+                    render={({ field }) => (
+                      <CustomCheckBox
+                        label="Surety"
+                        fillColor="rgba(255, 200, 58, 0.8)"
+                        onChange={data => {
+                          field.onChange(data);
+                        }}
+                        isChecked={field.value}
+                      />
+                    )}
+                    name="ld_is_surety"
                   />
-                  <CustomSelectInput
-                  label="Document Type"
-                    options={[
-                      { key: '1', value: 'Jammu & Kashmir' },
-                      { key: '2', value: 'Gujrat' },
-                      { key: '3', value: 'Maharashtra' },
-                      { key: '4', value: 'Goa' },
-                      { key: '5', value: 'Tamilnadu' },
-                      { key: '6', value: 'Karnataka' },
-                      { key: '7', value: 'Andhra Pradesh' },
-                      { key: '8', value: 'Keralam' },
-                    ]}
-                    onChange={data => {
-                      console.log('sele', data);
-                    }}
-                  />
+                  {watch('ld_is_surety') ? (
+                    <View>
+                      <Spacer height={20} />
+                      <Controller
+                        control={control}
+                        render={({ field }) => (
+                          <CustomSelectInput
+                            label="Surety Type"
+                            options={[
+                              {
+                                key: '1',
+                                value: 'Document',
+                              },
+                              {
+                                key: '2',
+                                value: 'Gold',
+                              },
+                              {
+                                key: '3',
+                                value: 'Others',
+                              },
+                            ]}
+                            onChange={data => {
+                              field.onChange(data);
+                            }}
+                          />
+                        )}
+                        name="ld_surety_type"
+                      />
+                      <Spacer height={20} />
+                      <Controller
+                        control={control}
+                        render={({ field }) => (
+                          <Input
+                            {...field}
+                            placeholder="Enter notes"
+                            label="Notes"
+                            keyboardType="default"
+                            autoCapitalize="none"
+                            autoComplete="off"
+                            onBlur={field.onBlur}
+                            onChangeText={field.onChange}
+                            borderLess
+                            multiline={true}
+                            numberOfLines={4}
+                            isTextBox
+                          />
+                        )}
+                        name="ld_surety_notes"
+                      />
+                    </View>
+                  ) : null}
                 </View>
                 <Spacer height={35} />
                 <View style={styles.btnContainer}>
@@ -448,6 +550,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#f02d3a',
     fontFamily: 'Inter-500',
+    letterSpacing: 0.5,
+  },
+  errorMessage: {
+    fontSize: 12,
+    color: '#f02d3a',
+    bottom: 0,
+    position: 'absolute',
+    marginBottom: -20,
+    fontFamily: 'Inter-300',
     letterSpacing: 0.5,
   },
   label: {

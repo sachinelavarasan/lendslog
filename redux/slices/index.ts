@@ -1,12 +1,11 @@
 import { combineReducers } from "@reduxjs/toolkit";
 
 import { authReducer } from "./auth/authSlice";
-import { borrowerReducer } from "./borrowers/borrowersSlice";
+import { lendsReducer } from "./lends/lendsSlice";
 
 export const rootReducer = combineReducers({
   auth: authReducer,
-  borrower: borrowerReducer,
-
+  lends: lendsReducer,
 });
 
 export default rootReducer;
