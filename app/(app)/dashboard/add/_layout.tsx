@@ -4,7 +4,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -13,7 +12,6 @@ import {
 import { useRouter } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 
 import Input from '@/components/Input';
 import Spacer from '@/components/Spacer';
@@ -28,6 +26,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { add, setError } from '@/redux/slices/lends/lendsSlice';
 
 import { lendsSchema, lendsSchemaType } from '@/utils/schema';
+import { interestList, paymentTerms, suretyType } from '@/utils/common-data';
 
 export default function AddLends() {
   const router = useRouter();
@@ -52,13 +51,13 @@ export default function AddLends() {
       ld_nominee_address: '',
       ld_nominee_notes: '',
       ld_is_surety: false,
-      ld_surety_type: '',
+      ld_surety_type: 0,
       ld_surety_notes: '',
       ld_lend_amount: '',
-      ld_interest_rate: '',
-      ld_payment_mode: '',
+      ld_interest_rate: 0,
+      ld_payment_term: 0,
       ld_total_weeks_or_month: '',
-      ld_start_date: '',
+      // ld_start_date: '',
       // ld_payment_type: '',
     },
     resolver: zodResolver(lendsSchema),
@@ -74,24 +73,13 @@ export default function AddLends() {
     console.log(data);
     dispatch(
       add(data, () => {
-        reset();
+        // reset();
         dispatch(setError(null));
-        router.replace('/dashboard');
+        // router.replace('/dashboard');
       })
     );
     console.log(data);
   };
-
-  const paymentModes = [
-    {
-      id: '1',
-      label: 'Week',
-    },
-    {
-      id: '2',
-      label: 'Month',
-    },
-  ];
 
   console.log('---------- ERROR -------- \n', JSON.stringify(errors, null, 2));
   return (
@@ -115,7 +103,7 @@ export default function AddLends() {
                 <Text style={styles.label}>Add Lend Details</Text>
               </View>
               <View>
-                <View style={[styles.sectionContainer, { marginTop: 10 }]}>
+                <View style={[styles.sectionContainer, { marginTop: 25 }]}>
                   <View style={[styles.sectionTitleContainer]}>
                     <Text style={[styles.sectionTitle]}>Borrower Details</Text>
                   </View>
@@ -137,7 +125,7 @@ export default function AddLends() {
                     )}
                     name="ld_borrower_name"
                   />
-                  <Spacer height={20} />
+                  <Spacer height={21} />
                   <Controller
                     control={control}
                     render={({ field }) => (
@@ -154,7 +142,7 @@ export default function AddLends() {
                     )}
                     name="ld_borrower_phoneno"
                   />
-                  <Spacer height={20} />
+                  <Spacer height={21} />
                   <Controller
                     control={control}
                     render={({ field }) => (
@@ -174,7 +162,7 @@ export default function AddLends() {
                     )}
                     name="ld_borrower_address"
                   />
-                  <Spacer height={20} />
+                  <Spacer height={21} />
                   <Controller
                     control={control}
                     render={({ field }) => (
@@ -197,7 +185,7 @@ export default function AddLends() {
                     name="ld_borrower_notes"
                   />
                 </View>
-                <View style={[styles.sectionContainer, { marginTop: 10 }]}>
+                <View style={[styles.sectionContainer, { marginTop: 25 }]}>
                   <View style={[styles.sectionTitleContainer]}>
                     <Text style={[styles.sectionTitle]}>Lend Details</Text>
                   </View>
@@ -217,15 +205,17 @@ export default function AddLends() {
                     )}
                     name="ld_lend_amount"
                   />
-                  <Spacer height={20} />
+                  <Spacer height={21} />
                   <Controller
                     control={control}
                     render={({ field }) => (
                       <CustomSelectInput
                         placeholder="Choose interest rate"
                         label="Interest Rate"
-                        onChange={field.onChange}
-                        options={[]}
+                        onChange={data => {
+                          field.onChange(data);
+                        }}
+                        options={interestList}
                       />
                     )}
                     name="ld_interest_rate"
@@ -233,22 +223,13 @@ export default function AddLends() {
                   {errors.ld_interest_rate?.message ? (
                     <Text style={styles.errorMessage}>{errors.ld_interest_rate?.message}</Text>
                   ) : null}
-                  <Spacer height={20} />
-                  {/* <Controller
+                  {/* <Spacer height={21} />
+                  <Controller
                     control={control}
                     render={({ field }) => (
                       <CustomSelectInput
                         label="Payment Type"
-                        options={[
-                          {
-                            key: '1',
-                            value: 'Interest Only',
-                          },
-                          {
-                            key: '2',
-                            value: 'Principle with Interest',
-                          },
-                        ]}
+                        options={paymentTypes}
                         onChange={data => {
                           field.onChange(data);
                         }}
@@ -259,26 +240,26 @@ export default function AddLends() {
                   {errors.ld_payment_type?.message ? (
                     <Text style={styles.errorMessage}>{errors.ld_payment_type?.message}</Text>
                   ) : null} */}
-                  {/* <Spacer height={20} /> */}
+                  <Spacer height={21} />
                   <Controller
                     control={control}
                     render={({ field }) => (
                       <CustomRadioButton
-                        label="Payment Mode"
+                        label="Payment Term"
                         value={field.value}
-                        options={paymentModes}
+                        options={paymentTerms}
                         onChange={data => {
                           field.onChange(data);
                         }}
                         disabled={field.disabled}
                       />
                     )}
-                    name="ld_payment_mode"
+                    name="ld_payment_term"
                   />
-                  {errors.ld_payment_mode?.message ? (
-                    <Text style={styles.errorMessage}>{errors.ld_payment_mode?.message}</Text>
+                  {errors.ld_payment_term?.message ? (
+                    <Text style={styles.errorMessage}>{errors.ld_payment_term?.message}</Text>
                   ) : null}
-                  <Spacer height={20} />
+                  <Spacer height={10} />
                   <Controller
                     control={control}
                     render={({ field }) => (
@@ -296,7 +277,7 @@ export default function AddLends() {
                     name="ld_total_weeks_or_month"
                   />
                 </View>
-                <View style={styles.sectionContainer}>
+                <View style={[styles.sectionContainer, { marginTop: 25 }]}>
                   <View style={[styles.sectionTitleContainer]}>
                     <Text style={[styles.sectionTitle]}>Nominee Details</Text>
                     <Text style={{ color: '#a1a1a1', marginTop: 5 }}>
@@ -319,7 +300,7 @@ export default function AddLends() {
                   />
                   {watch('ld_is_nominee') ? (
                     <View>
-                      <Spacer height={20} />
+                      <Spacer height={21} />
                       <Controller
                         control={control}
                         render={({ field }) => (
@@ -338,7 +319,7 @@ export default function AddLends() {
                         )}
                         name="ld_nominee_name"
                       />
-                      <Spacer height={20} />
+                      <Spacer height={21} />
                       <Controller
                         control={control}
                         render={({ field }) => (
@@ -355,7 +336,7 @@ export default function AddLends() {
                         )}
                         name="ld_nominee_phoneno"
                       />
-                      <Spacer height={20} />
+                      <Spacer height={21} />
                       <Controller
                         control={control}
                         render={({ field }) => (
@@ -375,7 +356,7 @@ export default function AddLends() {
                         )}
                         name="ld_nominee_address"
                       />
-                      <Spacer height={20} />
+                      <Spacer height={21} />
                       <Controller
                         control={control}
                         render={({ field }) => (
@@ -400,7 +381,7 @@ export default function AddLends() {
                     </View>
                   ) : null}
                 </View>
-                <View style={styles.sectionContainer}>
+                <View style={[styles.sectionContainer, { marginTop: 25 }]}>
                   <View style={[styles.sectionTitleContainer]}>
                     <Text style={[styles.sectionTitle]}>Surety Details</Text>
                     <Text style={{ color: '#a1a1a1', marginTop: 5 }}>
@@ -423,26 +404,13 @@ export default function AddLends() {
                   />
                   {watch('ld_is_surety') ? (
                     <View>
-                      <Spacer height={20} />
+                      <Spacer height={21} />
                       <Controller
                         control={control}
                         render={({ field }) => (
                           <CustomSelectInput
                             label="Surety Type"
-                            options={[
-                              {
-                                key: '1',
-                                value: 'Document',
-                              },
-                              {
-                                key: '2',
-                                value: 'Gold',
-                              },
-                              {
-                                key: '3',
-                                value: 'Others',
-                              },
-                            ]}
+                            options={suretyType}
                             onChange={data => {
                               field.onChange(data);
                             }}
@@ -451,9 +419,11 @@ export default function AddLends() {
                         name="ld_surety_type"
                       />
                       {errors.ld_surety_type?.message ? (
-                        <Text style={styles.errorMessage}>{errors.ld_surety_type?.message}</Text>
+                        <Text style={[styles.errorMessage, { marginTop: 5 }]}>
+                          {errors.ld_surety_type?.message}
+                        </Text>
                       ) : null}
-                      <Spacer height={20} />
+                      <Spacer height={15} />
                       <Controller
                         control={control}
                         render={({ field }) => (

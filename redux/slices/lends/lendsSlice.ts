@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction, ThunkAction, UnknownAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
-import { z } from 'zod';
 
 import { RootState } from '@/redux/store';
 import * as lendsApi from '@/api/lends';
@@ -18,7 +17,7 @@ interface LendsState {
   log: Lends[];
   error: null;
   isLoading: false;
-  lends: null;
+  lends: lendsSchemaType[] | null;
 }
 
 const initialState: LendsState = {
@@ -83,7 +82,10 @@ export const {
 } = LendsSlice.actions;
 
 export const add =
-  (data: lendsSchemaType, callback: () => void): ThunkAction<void, RootState, unknown, UnknownAction> =>
+  (
+    data: lendsSchemaType,
+    callback: () => void
+  ): ThunkAction<void, RootState, unknown, UnknownAction> =>
   async dispatch => {
     dispatch(setIsLoading(true));
 
@@ -94,8 +96,30 @@ export const add =
         callback();
       }
     } catch (error: unknown) {
+      console.log('sadfsdfds');
       if (error instanceof AxiosError) {
         dispatch(setError(error?.response?.data?.error || 'Something went wrong.'));
+      }
+    } finally {
+      dispatch(setIsLoading(false));
+    }
+  };
+
+export const getAllLends =
+  (): ThunkAction<void, RootState, unknown, UnknownAction> =>
+  async dispatch => {
+    try {
+      dispatch(setIsLoading(true));
+      const response = await lendsApi.getAll();
+
+      const data = response.data;
+
+      if (data.length) {
+        dispatch(setLends(data));
+      }
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        dispatch(setError(error?.response?.data?.message || 'Something went wrong.'));
       }
     } finally {
       dispatch(setIsLoading(false));

@@ -3,9 +3,9 @@ import { phoneValidation } from './Validation';
 
 export const lendsSchema = z
   .object({
-    ld_borrower_name: z.string().trim().min(3, { message: 'Minimum 3 chanracters' }),
-    ld_borrower_phoneno: z.string().regex(phoneValidation, { message: 'invalid phone' }),
-    ld_borrower_address: z.string().trim().min(3, { message: 'Minimum 3 chanracters' }),
+    ld_borrower_name: z.string().trim().min(3, { message: 'Name should be minimum 3 characters' }),
+    ld_borrower_phoneno: z.string().regex(phoneValidation, { message: 'Invalid phone number' }),
+    ld_borrower_address: z.string().trim().min(3, { message: 'Address should be minimum 3 characters' }),
     ld_borrower_notes: z.string().trim().nullable(),
     // nominee
     ld_is_nominee: z.boolean().default(false),
@@ -15,31 +15,31 @@ export const lendsSchema = z
     ld_nominee_notes: z.string().nullable(),
     // surety
     ld_is_surety: z.boolean().default(false),
-    ld_surety_type: z.string().trim().optional(),
+    ld_surety_type: z.number().optional(),
     ld_surety_notes: z.string().trim().nullable(),
     // lends details
     ld_lend_amount: z.string().refine(val => /^\d+$/.test(val) && Number(val) > 0, {
-      message: 'Please enter valid enter amount',
+      message: 'Please enter the valid amount',
     }),
-    ld_interest_rate: z.string().nullable(),
+    ld_interest_rate: z.number().min(1, { message: 'Please choose interest rate' }),
     ld_total_weeks_or_month: z.string().refine(val => /^\d+$/.test(val) && Number(val) > 0, {
-      message: 'Weeks or month must be a number',
+      message: 'Please enter the number of weeks or months',
     }),
-    ld_payment_mode: z.string().min(1, { message: 'Must choose payment mode' }),
-    ld_start_date: z.string(),
-    // ld_payment_type: z.string().nullable(),
+    ld_payment_term: z.number().min(1, { message: 'Please choose payment mode' }),
+    // ld_payment_type: z.string().min(1, { message: 'Please choose payment type' }),
+    // ld_start_date: z.string(),
   })
   .superRefine((values, ctx) => {
     if (values.ld_is_nominee) {
       if (!values.ld_nominee_phoneno) {
         ctx.addIssue({
-          message: 'Nominee phone no cannot be empty',
+          message: 'Nominee phone number cannot be empty',
           code: z.ZodIssueCode.custom,
           path: ['ld_nominee_phoneno'],
         });
       } else if (!phoneValidation.test(values.ld_nominee_phoneno)) {
         ctx.addIssue({
-          message: 'Invalid phone no',
+          message: 'Invalid phone number',
           code: z.ZodIssueCode.custom,
           path: ['ld_nominee_phoneno'],
         });
@@ -54,7 +54,7 @@ export const lendsSchema = z
     if (values.ld_is_surety) {
       if (!values.ld_surety_type)
         ctx.addIssue({
-          message: 'Surety type cannot be empty',
+          message: 'Please select surety type',
           code: z.ZodIssueCode.custom,
           path: ['ld_surety_type'],
         });

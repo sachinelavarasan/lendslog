@@ -1,11 +1,11 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { RadioButton, RadioButtonProps } from 'react-native-radio-buttons-group';
+import { RadioButton } from 'react-native-radio-buttons-group';
 
 interface CustomRadioButtonProps {
-  options: RadioButtonProps[];
+  options: { id: any; label: string }[];
   onChange: (id: number | string) => void;
-  value: string;
+  value: number | string;
   label?: string;
   disabled?: boolean;
 }
@@ -17,8 +17,8 @@ export default function CustomRadioButton({
   label,
   disabled,
 }: CustomRadioButtonProps) {
-  const [selectedId, setSelectedId] = useState<string | undefined>(value);
-  function handlePress(id: string) {
+  const [selectedId, setSelectedId] = useState<string | number | undefined>(value);
+  function handlePress(id: string | number) {
     onChange(id);
     setSelectedId(id);
   }
