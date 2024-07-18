@@ -54,12 +54,12 @@ export default function AddLends() {
       ld_is_surety: false,
       ld_surety_type: '',
       ld_surety_notes: '',
-      ld_lend_amount: '0',
+      ld_lend_amount: '',
       ld_interest_rate: '',
-      ld_payment_mode: '1',
-      ld_total_weeks_or_month: '0',
+      ld_payment_mode: '',
+      ld_total_weeks_or_month: '',
       ld_start_date: '',
-      ld_payment_type: '',
+      // ld_payment_type: '',
     },
     resolver: zodResolver(lendsSchema),
   });
@@ -93,7 +93,7 @@ export default function AddLends() {
     },
   ];
 
-  console.log("---------- ERROR -------- \n", JSON.stringify(errors, null, 2))
+  console.log('---------- ERROR -------- \n', JSON.stringify(errors, null, 2));
   return (
     <KeyboardAvoidingView
       {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}
@@ -124,7 +124,7 @@ export default function AddLends() {
                     render={({ field }) => (
                       <Input
                         {...field}
-                        placeholder="Enter name"
+                        placeholder="Borrower Name"
                         label="Name"
                         keyboardType="default"
                         autoCapitalize="none"
@@ -143,7 +143,7 @@ export default function AddLends() {
                     render={({ field }) => (
                       <Input
                         {...field}
-                        placeholder="Enter phone number"
+                        placeholder="+91XXXXXXXXXX"
                         label="Phone number"
                         autoCapitalize="none"
                         onBlur={field.onBlur}
@@ -160,7 +160,7 @@ export default function AddLends() {
                     render={({ field }) => (
                       <Input
                         {...field}
-                        placeholder="Enter address"
+                        placeholder="Borrower address"
                         label="Address"
                         autoCapitalize="none"
                         onBlur={field.onBlur}
@@ -180,7 +180,7 @@ export default function AddLends() {
                     render={({ field }) => (
                       <Input
                         {...field}
-                        placeholder="Enter notes"
+                        placeholder="Borrow notes"
                         label="Notes"
                         keyboardType="default"
                         autoCapitalize="none"
@@ -206,7 +206,7 @@ export default function AddLends() {
                     render={({ field }) => (
                       <Input
                         {...field}
-                        placeholder="Enter lend amount"
+                        placeholder="Lend amount"
                         label="Lend Amount"
                         keyboardType="numeric"
                         onBlur={field.onBlur}
@@ -222,7 +222,7 @@ export default function AddLends() {
                     control={control}
                     render={({ field }) => (
                       <CustomSelectInput
-                        placeholder="Enter interest rate (eg: 2%)"
+                        placeholder="Choose interest rate"
                         label="Interest Rate"
                         onChange={field.onChange}
                         options={[]}
@@ -234,7 +234,7 @@ export default function AddLends() {
                     <Text style={styles.errorMessage}>{errors.ld_interest_rate?.message}</Text>
                   ) : null}
                   <Spacer height={20} />
-                  <Controller
+                  {/* <Controller
                     control={control}
                     render={({ field }) => (
                       <CustomSelectInput
@@ -258,8 +258,8 @@ export default function AddLends() {
                   />
                   {errors.ld_payment_type?.message ? (
                     <Text style={styles.errorMessage}>{errors.ld_payment_type?.message}</Text>
-                  ) : null}
-                  <Spacer height={20} />
+                  ) : null} */}
+                  {/* <Spacer height={20} /> */}
                   <Controller
                     control={control}
                     render={({ field }) => (
@@ -325,7 +325,7 @@ export default function AddLends() {
                         render={({ field }) => (
                           <Input
                             {...field}
-                            placeholder="Enter name"
+                            placeholder="Nominee name"
                             label="Name"
                             keyboardType="default"
                             autoCapitalize="none"
@@ -344,7 +344,7 @@ export default function AddLends() {
                         render={({ field }) => (
                           <Input
                             {...field}
-                            placeholder="Enter phone number"
+                            placeholder="+91XXXXXXXXXX"
                             label="Phone number"
                             autoCapitalize="none"
                             onBlur={field.onBlur}
@@ -361,7 +361,7 @@ export default function AddLends() {
                         render={({ field }) => (
                           <Input
                             {...field}
-                            placeholder="Enter address"
+                            placeholder="Nominee address"
                             label="Address"
                             autoCapitalize="none"
                             onBlur={field.onBlur}
@@ -381,7 +381,7 @@ export default function AddLends() {
                         render={({ field }) => (
                           <Input
                             {...field}
-                            placeholder="Enter notes"
+                            placeholder="About nominee"
                             label="Notes"
                             keyboardType="default"
                             autoCapitalize="none"
@@ -450,13 +450,16 @@ export default function AddLends() {
                         )}
                         name="ld_surety_type"
                       />
+                      {errors.ld_surety_type?.message ? (
+                        <Text style={styles.errorMessage}>{errors.ld_surety_type?.message}</Text>
+                      ) : null}
                       <Spacer height={20} />
                       <Controller
                         control={control}
                         render={({ field }) => (
                           <Input
                             {...field}
-                            placeholder="Enter notes"
+                            placeholder="About surety"
                             label="Notes"
                             keyboardType="default"
                             autoCapitalize="none"
@@ -555,9 +558,6 @@ const styles = StyleSheet.create({
   errorMessage: {
     fontSize: 12,
     color: '#f02d3a',
-    bottom: 0,
-    position: 'absolute',
-    marginBottom: -20,
     fontFamily: 'Inter-300',
     letterSpacing: 0.5,
   },
