@@ -8,7 +8,7 @@ import { ThemedView } from '@/components/ThemedView';
 const ROUTES = [
   {
     name: 'index',
-    title: 'Today',
+    title: 'All',
   },
   {
     name: 'week',

@@ -16,10 +16,10 @@ import DueCard from '@/components/DueCard';
 import HeaderWithCount from '@/components/HeaderWithCount';
 
 import { useAppSelector } from '@/redux/hooks';
-import { borrowerSelector } from '@/redux/slices/borrowers/borrowersSlice';
+import { lendsSelector } from '@/redux/slices/lends/lendsSlice';
 
 export default function HomeScreen() {
-  const { log } = useAppSelector(borrowerSelector);
+  const { log } = useAppSelector(lendsSelector);
   console.log('lendLog ========', log);
   // const router = useRouter();
  

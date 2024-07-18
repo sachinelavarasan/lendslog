@@ -22,7 +22,7 @@ const StartPage = () => {
     );
   }
   if(!isAuthenticateLoading && !user)
-  return <Redirect href="/dashboard" />;
+  return <Redirect href="/(auth)/login" />;
 
   if(!isAuthenticateLoading && user)
   return <Redirect href="dashboard" />;
