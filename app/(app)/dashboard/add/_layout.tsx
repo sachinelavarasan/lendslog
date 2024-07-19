@@ -27,6 +27,7 @@ import { add, setError } from '@/redux/slices/lends/lendsSlice';
 
 import { lendsSchema, lendsSchemaType } from '@/utils/schema';
 import { interestList, paymentTerms, suretyType } from '@/utils/common-data';
+import CustomDatePicker from '@/components/CustomDatePicker';
 
 export default function AddLends() {
   const router = useRouter();
@@ -57,7 +58,7 @@ export default function AddLends() {
       ld_interest_rate: 0,
       ld_payment_term: 0,
       ld_total_weeks_or_month: '',
-      // ld_start_date: '',
+      ld_start_date: '',
       // ld_payment_type: '',
     },
     resolver: zodResolver(lendsSchema),
@@ -276,6 +277,15 @@ export default function AddLends() {
                     )}
                     name="ld_total_weeks_or_month"
                   />
+                  <Spacer height={25} />
+                  <Controller
+                    control={control}
+                    render={({ field }) => (
+                      <CustomDatePicker onDateChange={(data)=>field.onChange(data)} value={field.value} label="Payment Start Date" placeholder="DD-MM-YYYY" error={errors.ld_start_date?.message} />
+                    )}
+                    name="ld_start_date"
+                  />
+                            
                 </View>
                 <View style={[styles.sectionContainer, { marginTop: 25 }]}>
                   <View style={[styles.sectionTitleContainer]}>
