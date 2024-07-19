@@ -58,7 +58,7 @@ export default function AddLends() {
       ld_interest_rate: 0,
       ld_payment_term: 0,
       ld_total_weeks_or_month: '',
-      ld_start_date: '2024-05-12',
+      ld_start_date: '',
       // ld_payment_type: '',
     },
     resolver: zodResolver(lendsSchema),
@@ -277,7 +277,7 @@ export default function AddLends() {
                     )}
                     name="ld_total_weeks_or_month"
                   />
-                  <Spacer height={22} />
+                  <Spacer height={25} />
                   <Controller
                     control={control}
                     render={({ field }) => (

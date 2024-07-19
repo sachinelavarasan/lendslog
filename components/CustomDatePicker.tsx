@@ -52,7 +52,7 @@ export default function CustomDatePicker({
       </Pressable>
       {error ? <Text style={styles.error}>{error}</Text> : null}
       {datePickerVisible && (
-        <View style={{ bottom: -12 }}>
+        <View style={{ bottom: 10 }}>
           <DatePicker
             onDateChange={date => handleConfirm(date)}
             options={{
@@ -64,7 +64,7 @@ export default function CustomDatePicker({
               textSecondaryColor: '#FFCA3A',
               borderColor: '#3A3A54',
             }}
-            // current="2024-07-19"
+            current={selectedDate}
             minimumDate="2020-02-17"
             selected={selectedDate}
             mode="calendar"
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   error: {
     fontSize: 12,
     color: '#f02d3a',
-    marginBottom: -10,
+    marginTop: 5,
     fontFamily: 'Inter-300',
     letterSpacing: 0.5,
   },
