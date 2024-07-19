@@ -28,7 +28,7 @@ export const lendsSchema = z
     ld_total_weeks_or_month: z.string().refine(val => /^\d+$/.test(val) && Number(val) > 0, {
       message: 'Please enter the number of weeks or months',
     }),
-    ld_payment_term: z.number().min(1, { message: 'Please choose payment mode' }),
+    ld_payment_term: z.number().min(1, { message: 'Please choose payment term' }),
     // ld_payment_type: z.string().min(1, { message: 'Please choose payment type' }),
     ld_start_date: z.string().min(3, { message: 'Please select start date' }),
   })

@@ -52,7 +52,7 @@ export default function CustomDatePicker({
       </Pressable>
       {error ? <Text style={styles.error}>{error}</Text> : null}
       {datePickerVisible && (
-        <View style={{ bottom: 10 }}>
+        <View style={{ bottom: -10 }}>
           <DatePicker
             onDateChange={date => handleConfirm(date)}
             options={{

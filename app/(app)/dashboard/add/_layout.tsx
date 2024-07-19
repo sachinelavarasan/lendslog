@@ -30,7 +30,6 @@ import { interestList, paymentTerms, suretyType } from '@/utils/common-data';
 import CustomDatePicker from '@/components/CustomDatePicker';
 
 export default function AddLends() {
-  const router = useRouter();
   const dispatch = useAppDispatch();
   const { isLoading, error } = useAppSelector(state => state.auth);
 
@@ -79,7 +78,6 @@ export default function AddLends() {
         // router.replace('/dashboard');
       })
     );
-    console.log(data);
   };
 
   console.log('---------- ERROR -------- \n', JSON.stringify(errors, null, 2));
