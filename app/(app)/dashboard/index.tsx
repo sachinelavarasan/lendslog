@@ -17,6 +17,7 @@ import HeaderWithCount from '@/components/HeaderWithCount';
 
 import { useAppSelector } from '@/redux/hooks';
 import { lendsSelector } from '@/redux/slices/lends/lendsSlice';
+import CustomDatePicker  from '@/components/CustomDatePicker';
 
 export default function HomeScreen() {
   const { log } = useAppSelector(lendsSelector);
@@ -53,6 +54,7 @@ export default function HomeScreen() {
     <SafeAreaViewComponent>
       <ThemedView style={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 20 }}>
         <View style={{ paddingTop: Platform.OS === 'android' ? 10 : 5 }}>
+          <CustomDatePicker/>
           <HeaderWithCount title="Today due users list" count={10} countText='users'/>
           <FlatList
             bounces={false}
