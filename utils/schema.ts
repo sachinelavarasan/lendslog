@@ -5,7 +5,10 @@ export const lendsSchema = z
   .object({
     ld_borrower_name: z.string().trim().min(3, { message: 'Name should be minimum 3 characters' }),
     ld_borrower_phoneno: z.string().regex(phoneValidation, { message: 'Invalid phone number' }),
-    ld_borrower_address: z.string().trim().min(3, { message: 'Address should be minimum 3 characters' }),
+    ld_borrower_address: z
+      .string()
+      .trim()
+      .min(3, { message: 'Address should be minimum 3 characters' }),
     ld_borrower_notes: z.string().trim().nullable(),
     // nominee
     ld_is_nominee: z.boolean().default(false),
@@ -27,7 +30,7 @@ export const lendsSchema = z
     }),
     ld_payment_term: z.number().min(1, { message: 'Please choose payment mode' }),
     // ld_payment_type: z.string().min(1, { message: 'Please choose payment type' }),
-    // ld_start_date: z.string(),
+    ld_start_date: z.string().min(3, { message: 'Please select start date' }),
   })
   .superRefine((values, ctx) => {
     if (values.ld_is_nominee) {

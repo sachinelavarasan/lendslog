@@ -1,15 +1,23 @@
 import React, { useState } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
-import DatePicker, { getFormatedDate, getToday } from 'react-native-modern-datepicker';
+import DatePicker, { getFormatedDate } from 'react-native-modern-datepicker';
 
 export default function CustomDatePicker({
+  onDateChange,
   value = '',
   borderLess = true,
+  label,
+  placeholder,
+  error,
 }: {
+  onDateChange: (date: string) => void;
   value?: string;
   borderLess?: boolean;
+  label?: string;
+  placeholder?: string;
+  error?: string;
 }) {
-  const [selectedDate, setSelectedDate] = useState(value || formatDate(getToday()));
+  const [selectedDate, setSelectedDate] = useState(value);
   const [datePickerVisible, setDatePickerVisible] = useState(false);
 
   const toggleDatePicker = () => {
@@ -19,24 +27,32 @@ export default function CustomDatePicker({
   const handleConfirm = (date: string) => {
     if (date) {
       setSelectedDate(formatDate(date));
+      onDateChange(formatDate(date));
     }
     toggleDatePicker();
   };
   function formatDate(date: string) {
+    if(!date) return '';
     const selectedDate = date.split('/').join('-');
-    return getFormatedDate(new Date(selectedDate), 'DD-MM-YYYY');
+    return getFormatedDate(new Date(selectedDate), 'YYYY-MM-DD');
   }
   return (
-    <View style={{ position: 'relative', zIndex: 3 }}>
+    <View>
+      {label ? <Text style={styles.label}>{label}</Text> : null}
       <Pressable
         onPress={() => {
           toggleDatePicker();
         }}
         style={[styles.inputContainer, borderLess ? styles.borderNone : null, styles.innerView]}>
-        <Text style={styles.input}>{selectedDate}</Text>
+        {selectedDate ? (
+          <Text style={styles.input}>{getFormatedDate(new Date(selectedDate), 'DD-MM-YYYY')}</Text>
+        ) : (
+          <Text style={[styles.input, styles.placeholder]}>{placeholder}</Text>
+        )}
       </Pressable>
+      {error ? <Text style={styles.error}>{error}</Text> : null}
       {datePickerVisible && (
-        <View style={{ position: 'absolute', height: '100%', width: '100%', bottom: -55 }}>
+        <View style={{ bottom: -12 }}>
           <DatePicker
             onDateChange={date => handleConfirm(date)}
             options={{
@@ -48,7 +64,7 @@ export default function CustomDatePicker({
               textSecondaryColor: '#FFCA3A',
               borderColor: '#3A3A54',
             }}
-            current={getToday()}
+            // current="2024-07-19"
             minimumDate="2020-02-17"
             selected={selectedDate}
             mode="calendar"
@@ -88,9 +104,7 @@ const styles = StyleSheet.create({
   error: {
     fontSize: 12,
     color: '#f02d3a',
-    bottom: 0,
-    position: 'absolute',
-    marginBottom: -20,
+    marginBottom: -10,
     fontFamily: 'Inter-300',
     letterSpacing: 0.5,
   },
@@ -100,5 +114,8 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 15,
+  },
+  placeholder: {
+    color: '#999999',
   },
 });

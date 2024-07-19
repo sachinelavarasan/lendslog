@@ -54,7 +54,6 @@ export default function HomeScreen() {
     <SafeAreaViewComponent>
       <ThemedView style={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 20 }}>
         <View style={{ paddingTop: Platform.OS === 'android' ? 10 : 5 }}>
-          <CustomDatePicker/>
           <HeaderWithCount title="Today due users list" count={10} countText='users'/>
           <FlatList
             bounces={false}
