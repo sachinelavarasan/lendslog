@@ -31,7 +31,7 @@ import CustomDatePicker from '@/components/CustomDatePicker';
 
 export default function AddLends() {
   const dispatch = useAppDispatch();
-  const { isLoading, error } = useAppSelector(state => state.auth);
+  const { isLoading, error } = useAppSelector(state => state.lends);
 
   const {
     control,
@@ -459,7 +459,7 @@ export default function AddLends() {
                 <View style={styles.btnContainer}>
                   <TouchableOpacity
                     style={[styles.button, !isValid || isLoading ? styles.disable : {}]}
-                    // disabled={!isValid || isLoading}
+                    disabled={!isValid || isLoading}
                     onPress={handleSubmit(onSubmit)}>
                     {isLoading ? (
                       <ActivityIndicator animating color={'#14141D'} style={styles.loader} />
@@ -516,7 +516,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-600',
   },
   disable: {
-    opacity: 0.7,
+    opacity: 0.4,
   },
   textDisable: { opacity: 0 },
   errorContainer: {

@@ -16,7 +16,7 @@ export interface Lends {
 interface LendsState {
   log: Lends[];
   error: null;
-  isLoading: false;
+  isLoading: boolean;
   lends: lendsSchemaType[] | null;
 }
 

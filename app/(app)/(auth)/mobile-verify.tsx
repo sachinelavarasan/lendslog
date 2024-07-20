@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   disable: {
-    opacity: 0.6,
+    opacity: 0.4,
   },
   textDisable: { opacity: 0 },
   errorContainer: {

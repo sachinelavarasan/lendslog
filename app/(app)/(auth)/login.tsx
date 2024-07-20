@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-600',
   },
   disable: {
-    opacity: 0.7,
+    opacity: 0.4,
   },
   textDisable: { opacity: 0 },
   errorContainer: {
