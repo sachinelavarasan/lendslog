@@ -21,7 +21,6 @@ import CustomDatePicker  from '@/components/CustomDatePicker';
 
 export default function HomeScreen() {
   const { log } = useAppSelector(lendsSelector);
-  console.log('lendLog ========', log);
   // const router = useRouter();
  
   // const data = [
@@ -61,7 +60,7 @@ export default function HomeScreen() {
             showsVerticalScrollIndicator={false}
             data={[...log]}
             renderItem={({ item }: any) => {
-              return <DueCard data={item} />;
+              return <DueCard data={item} />
             }}
             keyExtractor={(item: any, index: number) => item.name + index}
           />

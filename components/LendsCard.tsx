@@ -1,14 +1,21 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-interface IDueCardProps {
-  data: {
-    name: string;
-    type: number;
-    amount: number;
-  };
+
+export interface LendsCardProps {
+  ld_borrower_name: string;
+  ld_payment_term: number;
+  ld_lend_amount: number | string;
+  ld_principal_repayment: number;
+  ld_start_date: string;
 }
 
-const DueCard = ({ data }: IDueCardProps) => {
+const LendsCard = ({
+  ld_borrower_name,
+  ld_payment_term,
+  ld_lend_amount,
+  ld_principal_repayment,
+  ld_start_date,
+}: LendsCardProps) => {
   return (
     <View
       style={{
@@ -16,7 +23,7 @@ const DueCard = ({ data }: IDueCardProps) => {
         width: '100%',
         borderRadius: 10,
         marginTop: 10,
-        padding: 10,
+        padding: 20,
         shadowColor: '#000',
         shadowOffset: { width: 4, height: 4 },
         shadowOpacity: 0.3,
@@ -30,13 +37,13 @@ const DueCard = ({ data }: IDueCardProps) => {
           justifyContent: 'space-between',
           alignItems: 'center',
         }}>
-        <Text style={styles.name}>{data.name}</Text>
+        <Text style={styles.name}>{ld_borrower_name}</Text>
         <View
           style={[
             styles.chip,
             {
               backgroundColor:
-                data.type === 1 ? 'rgba(255,200,58,0.6)' : 'rgba(0,176,176,0.7)',
+                ld_payment_term === 1 ? 'rgba(255,200,58,0.6)' : 'rgba(0,176,176,0.7)',
             },
           ]}>
           <Text
@@ -45,18 +52,26 @@ const DueCard = ({ data }: IDueCardProps) => {
               fontSize: 12,
               fontFamily: 'Inter-600',
             }}>
-            {data.type == 1 ? "Week": "Month"}
+            {ld_payment_term == 1 ? 'Week' : 'Month'}
           </Text>
         </View>
       </View>
       <Text style={styles.subText}>
-        Due amount : <Text style={[styles.subText, { fontWeight: 700 }]}>{data.amount}</Text>
+        Borrowed amount :<Text style={[styles.subText, { fontWeight: 700 }]}>{ld_lend_amount}</Text>
+      </Text>
+      <Text style={styles.subText}>
+        To be paid :
+        <Text style={[styles.subText, { fontWeight: 700 }]}>{ld_principal_repayment}</Text>
+      </Text>
+      <Text style={styles.subText}>
+        Installment started on :
+        <Text style={[styles.subText, { fontWeight: 700 }]}>{ld_start_date}</Text>
       </Text>
     </View>
   );
 };
 
-export default DueCard;
+export default LendsCard;
 
 const styles = StyleSheet.create({
   chip: {

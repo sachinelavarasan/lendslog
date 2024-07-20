@@ -17,14 +17,18 @@ interface LendsState {
   log: Lends[];
   error: null;
   isLoading: boolean;
-  lends: lendsSchemaType[] | null;
+  allLends: lendsSchemaType[];
+  weekLends: lendsSchemaType[];
+  monthLends: lendsSchemaType[];
 }
 
 const initialState: LendsState = {
   log: [],
   error: null,
   isLoading: false,
-  lends: null,
+  allLends: [],
+  weekLends: [],
+  monthLends: [],
 };
 
 export const LendsSlice = createSlice({
@@ -62,8 +66,14 @@ export const LendsSlice = createSlice({
     setIsLoading(state, action) {
       state.isLoading = action.payload;
     },
-    setLends(state, action) {
-      state.lends = action.payload;
+    setAllLends(state, action) {
+      state.allLends = action.payload;
+    },
+    setWeekLends(state, action) {
+      state.weekLends = action.payload;
+    },
+    setMonthLends(state, action) {
+      state.monthLends = action.payload;
     },
     // clearLend(state) {
     //   state.lends = null;
@@ -77,7 +87,9 @@ export const {
   deleteLends,
   setError,
   setIsLoading,
-  setLends,
+  setAllLends,
+  setWeekLends,
+  setMonthLends
   // clearLend,
 } = LendsSlice.actions;
 
@@ -96,7 +108,6 @@ export const add =
         callback();
       }
     } catch (error: unknown) {
-      console.log('sadfsdfds');
       if (error instanceof AxiosError) {
         dispatch(setError(error?.response?.data?.error || 'Something went wrong.'));
       }
@@ -106,16 +117,21 @@ export const add =
   };
 
 export const getAllLends =
-  (): ThunkAction<void, RootState, unknown, UnknownAction> =>
-  async dispatch => {
+  (): ThunkAction<void, RootState, unknown, UnknownAction> => async dispatch => {
     try {
       dispatch(setIsLoading(true));
       const response = await lendsApi.getAll();
 
-      const data = response.data;
+      const { allLends, weekLends, monthLends } = response.data;
 
-      if (data.length) {
-        dispatch(setLends(data));
+      if (allLends.length) {
+        dispatch(setAllLends(allLends));
+      }
+      if (weekLends.length) {
+        dispatch(setWeekLends(weekLends));
+      }
+      if (monthLends.length) {
+        dispatch(setMonthLends(monthLends));
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {

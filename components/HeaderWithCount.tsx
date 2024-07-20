@@ -18,12 +18,12 @@ const HeaderWithCount = ({ title, count, countText }: HeaderWithCountProps) => {
         justifyContent: 'space-between',
       }}>
       <Text style={[styles.header]}>{title}</Text>
-      {count && (
+      {count && count > 0 ? (
         <View style={styles.countSpan}>
-          <Text style={[styles.count]}>{count}</Text>
+          <Text style={[styles.count]}>{String(count).padStart(2, '0')}</Text>
           <Text style={styles.countText}>{countText}</Text>
         </View>
-      )}
+      ) : null}
     </View>
   );
 };
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
   },
   count: {
-    fontSize: 30,
+    fontSize: 24,
     color: 'rgba(255,200,58,0.78)',
     padding: 2,
   },
