@@ -26,6 +26,10 @@ export default function month() {
                 ld_lend_amount={item.ld_lend_amount}
                 ld_principal_repayment={item.ld_principal_repayment}
                 ld_start_date={item.ld_start_date}
+                ld_paid_amount= {item.ld_paid_amount}
+                ld_pending_amount= {item.ld_pending_amount}
+                ld_paid_weeks= {item.ld_paid_weeks}
+                ld_pending_weeks= {item.ld_pending_weeks}
               />
             );
           }}
