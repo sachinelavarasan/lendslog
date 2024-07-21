@@ -11,14 +11,14 @@ export default function week() {
   const { weekLends } = useAppSelector(state => state.lends);
   return (
     <ThemedView style={{ flex: 1 }}>
-      <HeaderWithCount title="Week lends list" count={weekLends.length} countText="lends" />
+      <HeaderWithCount title="Week lends" count={weekLends.length} countText="lends" />
       <View>
         <FlatList
           bounces={false}
           style={{ marginBottom: 20, paddingBottom: 20 }}
           showsVerticalScrollIndicator={false}
           data={weekLends}
-          renderItem={({item}: any) => {
+          renderItem={({ item }: any) => {
             return (
               <LendsCard
                 ld_borrower_name={item.ld_borrower_name}

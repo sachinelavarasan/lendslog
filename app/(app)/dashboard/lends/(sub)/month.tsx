@@ -11,7 +11,7 @@ export default function month() {
   const { monthLends } = useAppSelector(state => state.lends);
   return (
     <ThemedView style={{ flex: 1 }}>
-      <HeaderWithCount title="Month lends list" count={monthLends.length} countText="lends" />
+      <HeaderWithCount title="Month lends" count={monthLends.length} countText="lends" />
       <View>
         <FlatList
           bounces={false}

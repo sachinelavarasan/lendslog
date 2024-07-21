@@ -4,7 +4,7 @@ export default {
     "slug": "lendslog",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/app-splash-screen-icon.png",
+    "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
