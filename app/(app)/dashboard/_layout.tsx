@@ -97,9 +97,6 @@ function MyTabBar({ state, descriptors, navigation }: any) {
 
         const animatedStyle = useAnimatedStyle(() => {
           return {
-            // width: width.value,
-            // backgroundColor: isFocused ? '#FFCA3A' : 'transparent',
-            // borderRadius: isFocused ? 90 : 0,
             borderTopColor: borderColor.value,
           };
         });

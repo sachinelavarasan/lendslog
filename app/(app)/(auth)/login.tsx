@@ -21,14 +21,18 @@ import SafeAreaViewComponent from '@/components/SafeAreaView';
 
 import { logIn, setError } from '@/redux/slices/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { phoneValidation } from '@/utils/Validation';
 
 const schema = z.object({
-  email: z.string().email({ message: 'Invalid Email' }),
+  phone: z
+  .string()
+  .min(1, { message: 'Must have at least 1 character' })
+  .regex(phoneValidation, { message: 'invalid phone' }),
   password: z.string().min(8, { message: 'Minimum 8 characters' }),
 });
 
 type FormData = {
-  email: string;
+  phone: string;
   password: string;
 };
 
@@ -44,7 +48,7 @@ export default function SignIn() {
     reset,
   } = useForm({
     defaultValues: {
-      email: 'janani@gmail.com',
+      phone: '+917904859928',
       password: '12345678',
     },
     resolver: zodResolver(schema),
@@ -56,9 +60,9 @@ export default function SignIn() {
     };
   }, []);
 
-  const onSubmit = ({ email, password }: FormData) => {
+  const onSubmit = ({ phone, password }: FormData) => {
     dispatch(
-      logIn({ email, password }, () => {
+      logIn({ phone, password }, () => {
         reset();
         dispatch(setError(null));
         router.replace('/dashboard');
@@ -98,18 +102,18 @@ export default function SignIn() {
                   render={({ field }) => (
                     <Input
                       {...field}
-                      placeholder="Enter Email"
+                      placeholder="Enter phone number"
                       label="Email"
-                      keyboardType="email-address"
+                      keyboardType="numbers-and-punctuation"
                       autoCapitalize="none"
                       autoComplete="off"
                       onBlur={field.onBlur}
                       onChangeText={field.onChange}
-                      error={errors.email?.message}
+                      error={errors.phone?.message}
                       borderLess
                     />
                   )}
-                  name="email"
+                  name="phone"
                 />
                 <Spacer height={20} />
                 <Controller

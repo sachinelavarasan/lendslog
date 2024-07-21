@@ -23,10 +23,11 @@ import { phoneValidation } from '@/utils/Validation';
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setError, signUp } from '@/redux/slices/auth/authSlice';
+import { setAsyncValue } from '@/utils/functions';
 
 const schema = z.object({
   name: z.string().min(3, { message: 'Minimum 3 characters' }),
-  email: z.string().email({ message: 'Invalid Email' }),
+  // email: z.string().email({ message: 'Invalid Email' }),
   password: z.string().min(8, { message: 'Minimum 8 characters' }),
   phone: z
     .string()
@@ -36,7 +37,7 @@ const schema = z.object({
 
 type FormData = {
   name: string;
-  email: string;
+  // email: string;
   phone: string;
   password: string;
 };
@@ -53,9 +54,9 @@ const Register = () => {
     reset,
   } = useForm({
     defaultValues: {
-      name: 'janani',
-      email: 'janani@gmail.com',
-      phone: '+918838401180',
+      name: 'Elavarasan',
+      // email: 'janani@gmail.com',
+      phone: '+917904859928',
       password: '12345678',
     },
     resolver: zodResolver(schema),
@@ -68,11 +69,12 @@ const Register = () => {
   }, []);
 
   const register = async (data: FormData) => {
+    setAsyncValue('@signup-user', JSON.stringify(data));
     dispatch(
       signUp(data, () => {
         reset();
         dispatch(setError(null));
-        router.replace('/(auth)/login');
+        router.navigate('/(auth)/mobile-verify');
       })
     );
   };
@@ -123,7 +125,7 @@ const Register = () => {
                   name="name"
                 />
                 <Spacer height={20} />
-                <Controller
+                {/* <Controller
                   control={control}
                   render={({ field }) => (
                     <Input
@@ -141,7 +143,7 @@ const Register = () => {
                   )}
                   name="email"
                 />
-                <Spacer height={20} />
+                <Spacer height={20} /> */}
                 <Controller
                   control={control}
                   render={({ field }) => (
@@ -149,7 +151,7 @@ const Register = () => {
                       {...field}
                       placeholder="+91XXXXXXXXXX"
                       label="Phone no"
-                      keyboardType="numeric"
+                      keyboardType="numbers-and-punctuation"
                       autoCapitalize="none"
                       autoComplete="off"
                       onBlur={field.onBlur}

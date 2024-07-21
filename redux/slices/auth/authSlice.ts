@@ -11,6 +11,7 @@ interface authState {
   success: null;
   isLoading: boolean;
   otpLoading: boolean;
+  otpVerifyLoading: boolean;
   user: null; // user type
   isAuthenticateLoading: boolean;
 }
@@ -19,6 +20,7 @@ const initialState: authState = {
   success: null,
   isLoading: false,
   otpLoading: false,
+  otpVerifyLoading: false,
   user: null,
   isAuthenticateLoading: false,
 };
@@ -35,6 +37,9 @@ const authSlice = createSlice({
     },
     setOtpLoading(state, action) {
       state.otpLoading = action.payload;
+    },
+    setOtpVerifyLoading(state, action) {
+      state.otpVerifyLoading = action.payload;
     },
     setSuccess(state, action) {
       state.success = action.payload;
@@ -59,11 +64,12 @@ export const {
   clearUser,
   setOtpLoading,
   setSuccess,
+  setOtpVerifyLoading
 } = authSlice.actions;
 
 export const logIn =
   (
-    data: { email: string; password: string },
+    data: { phone: string; password: string },
     callback: () => void
   ): ThunkAction<void, RootState, unknown, UnknownAction> =>
   async dispatch => {
@@ -94,7 +100,7 @@ export const logIn =
 
 export const signUp =
   (
-    data: { name: string; password: string; email: string },
+    data: { name: string; password: string; phone: string },
     callback: () => void
   ): ThunkAction<void, RootState, unknown, UnknownAction> =>
   async dispatch => {
@@ -166,7 +172,7 @@ export const sendOtp =
       const { message } = response.data;
       dispatch(setSuccess(message));
 
-      await AsyncStorage.setItem('@phone', JSON.stringify(data.phone));
+      await AsyncStorage.setItem('@signup-user', JSON.stringify(data.phone));
       if (callback) {
         callback();
       }
@@ -184,10 +190,10 @@ export const verifyOtp =
     callback?: () => void): ThunkAction<void, RootState, unknown, UnknownAction> =>
   async dispatch => {
     try {
-      dispatch(setOtpLoading(true));
+      dispatch(setOtpVerifyLoading(true));
       await authApi.verifyOtp(data);
 
-      await AsyncStorage.removeItem('@phone');
+      await AsyncStorage.removeItem('@signup-user');
       if (callback) {
         callback();
       }
@@ -196,10 +202,7 @@ export const verifyOtp =
         dispatch(setError(error?.response?.data?.error || 'Something went wrong.'));
       }
     } finally {
-      if (callback) {
-        callback();
-      }
-      dispatch(setOtpLoading(false));
+      dispatch(setOtpVerifyLoading(false));
     }
   };
 

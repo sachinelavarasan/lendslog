@@ -1,12 +1,12 @@
 import axios from "../instance";
 
-export const logIn = (data: { email: string; password: string }) =>
+export const logIn = (data: { phone: string; password: string }) =>
   axios.post("/auth/login", data);
 
 export const signUp = (data: {
   name: string;
   password: string;
-  email: string;
+  phone: string;
 }) => axios.post("/auth/signup", data);
 
 export const sendOtp = (data: {
