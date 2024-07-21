@@ -1,4 +1,4 @@
-{
+export default {
   "expo": {
     "name": "lendslog",
     "slug": "lendslog",
@@ -16,7 +16,7 @@
       "supportsTablet": true
     },
     "android": {
-      "googleServicesFile": "./google-services.json",
+      "googleServicesFile": process.env.GOOGLE_SERVICES_JSON,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#0D0D12"
