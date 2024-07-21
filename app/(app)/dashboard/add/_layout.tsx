@@ -80,7 +80,7 @@ export default function AddLends() {
     );
   };
 
-  console.log('---------- ERROR -------- \n', JSON.stringify(errors, null, 2));
+  // console.log('---------- ERROR -------- \n', JSON.stringify(errors, null, 2));
   return (
     <KeyboardAvoidingView
       {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}
