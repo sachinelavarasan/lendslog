@@ -33,6 +33,7 @@ export default function RootLayout() {
   useEffect(()=>{
     // Handle user clicking on a notification and open the screen
     const handleNotificationClick = async (response:any) => {
+      console.log("🚀 ~ messaging ~ handleNotificationClick:", response)
       const screen = response?.notification?.request?.content?.data?.screen;
       console.log(response?.notification?.request?.content?.data);
       if (screen) {
@@ -48,7 +49,7 @@ export default function RootLayout() {
 
     // Handle user opening the app from a notification (when the app is in the background)
     messaging().onNotificationOpenedApp((remoteMessage) => {
-      console.log("first", remoteMessage)
+      console.log("🚀 ~ messaging ~ onNotificationOpenedApp:", remoteMessage)
       console.log(
         "Notification caused app to open from background state:",
         remoteMessage?.data?.screen,
@@ -63,6 +64,7 @@ export default function RootLayout() {
     messaging()
       .getInitialNotification()
       .then((remoteMessage) => {
+        console.log("🚀 ~ .then ~ getInitialNotification:", remoteMessage)
         if (remoteMessage) {
           console.log(
             "Notification caused app to open from quit state:",
@@ -92,6 +94,7 @@ export default function RootLayout() {
 
     // Handle push notifications when the app is in the foreground
     const handlePushNotification = async (remoteMessage:any) => {
+      console.log(remoteMessage);
       const notification = {
         title: remoteMessage?.notification?.title,
         body: remoteMessage?.notification?.body,

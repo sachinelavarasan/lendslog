@@ -10,14 +10,16 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { getAllLends } from '@/redux/slices/lends/lendsSlice';
 import { lendsSchemaType } from '@/utils/schema';
 
-export default function index(props: any) {
+export default function index() {
   const dispatch = useAppDispatch();
   const { allLends } = useAppSelector(state => state.lends);
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    dispatch(getAllLends());
-  }, [props, isFocused]);
+    if (isFocused) {
+      dispatch(getAllLends());
+    }
+  }, [isFocused]);
 
   return (
     <ThemedView style={{ flex: 1 }}>
