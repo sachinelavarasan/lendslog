@@ -10,24 +10,35 @@ import {
   Button,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import OTPTextInput from 'react-native-otp-textinput';
 import SafeAreaViewComponent from '@/components/SafeAreaView';
 import Spacer from '@/components/Spacer';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { otpValidation } from '@/utils/Validation';
-import { deviceHeight, deviceWidth } from '@/utils/functions';
-import { setError, verifyOtp } from '@/redux/slices/auth/authSlice';
+import { deviceHeight, deviceWidth, getAsyncValue } from '@/utils/functions';
+import { setError, verifyOtp, sendOtp } from '@/redux/slices/auth/authSlice';
 import { useRouter } from 'expo-router';
+import { useIsFocused } from '@react-navigation/native';
 
 const MobileVerify = () => {
+  const [otp, setOtp] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
+  const [isModalVisible, setModalVisible] = useState(false);
+
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { otpLoading, error } = useAppSelector(state => state.auth);
-  const [otp, setOtp] = useState<string>('');
-  const [isModalVisible, setModalVisible] = useState(false);
+  const isFocused = useIsFocused();
+  const { error , otpVerifyLoading } = useAppSelector(state => state.auth);
+
   const width = deviceWidth();
   const height = deviceHeight();
+
+  useEffect(() => {
+    if (isFocused) {
+      sendOtpMob();
+    }
+  }, [isFocused]);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -37,14 +48,26 @@ const MobileVerify = () => {
     setOtp(data);
   };
 
-  const verify = () => {
+  const verify = async () => {
     dispatch(
-      verifyOtp({ code: otp, phone: '+917904859928' }, () => {
+      verifyOtp({ code: otp, phone }, () => {
         dispatch(setError(null));
         toggleModal();
       })
     );
   };
+  const sendOtpMob = async () => {
+    const data = await getAsyncValue('@signup-user');
+    if (data.phone) {
+      setPhone(data.phone);
+      dispatch(
+        sendOtp({ phone: data.phone }, () => {
+          dispatch(setError(null));
+        })
+      );
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}
@@ -58,7 +81,7 @@ const MobileVerify = () => {
           <Spacer height={100} />
           <Text style={styles.header}>Enter OTP Code</Text>
           <Text style={styles.subtext}>
-            Enter the 6-digit code that has been sent to +91 882343245
+            Enter the 6-digit code that has been sent to {phone}
           </Text>
           <Spacer height={30} />
           <OTPTextInput
@@ -79,13 +102,13 @@ const MobileVerify = () => {
           <Spacer height={50} />
 
           <TouchableOpacity
-            style={[styles.button, otpLoading || !otpValidation(otp) ? styles.disable : {}]}
+            style={[styles.button, otpVerifyLoading || !otpValidation(otp) ? styles.disable : {}]}
             onPress={verify}
-            disabled={otpLoading || !otpValidation(otp)}>
-            {otpLoading ? (
+            disabled={otpVerifyLoading || !otpValidation(otp)}>
+            {otpVerifyLoading ? (
               <ActivityIndicator animating color={'#14141D'} style={styles.loader} />
             ) : null}
-            <Text style={[styles.title, otpLoading ? styles.textDisable : {}]}>Verify</Text>
+            <Text style={[styles.title, otpVerifyLoading ? styles.textDisable : {}]}>Verify</Text>
           </TouchableOpacity>
           <Modal
             isVisible={isModalVisible}

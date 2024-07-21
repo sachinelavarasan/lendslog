@@ -17,11 +17,11 @@ import HeaderWithCount from '@/components/HeaderWithCount';
 
 import { useAppSelector } from '@/redux/hooks';
 import { lendsSelector } from '@/redux/slices/lends/lendsSlice';
-import CustomDatePicker  from '@/components/CustomDatePicker';
+
 
 export default function HomeScreen() {
   const { log } = useAppSelector(lendsSelector);
-  // const router = useRouter();
+
  
   // const data = [
   //   {
