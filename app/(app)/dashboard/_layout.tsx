@@ -23,11 +23,24 @@ const ROUTES: {
     // icon: require('@/assets/icons/Today.png'),
     icon: 'calendar',
   },
+  
+  {
+    name: 'notification',
+    title: 'Notify',
+    // icon: require('@/assets/icons/week-month-icon.png'),
+    icon: 'notifications',
+  },
   {
     name: 'add',
     title: 'Add',
     // icon: require('@/assets/icons/add.png'),
     icon: 'plus',
+  },
+  {
+    name: 'profile',
+    title: 'Profile',
+    // icon: require('@/assets/icons/week-month-icon.png'),
+    icon: 'user-alt',
   },
   {
     name: 'lends',
@@ -132,7 +145,7 @@ function MyTabBar({ state, descriptors, navigation }: any) {
                 animatedStyle,
               ]}>
               {/* <Image source={options.tabBarIcon} /> */}
-              {['lends','add'].includes(route.name) ? (
+              {['lends','add','profile'].includes(route.name) ? (
                 <FontAwesome5
                   name={options.tabBarIcon}
                   size={24}
