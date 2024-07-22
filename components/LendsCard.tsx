@@ -8,11 +8,12 @@ export interface LendsCardProps {
   ld_lend_amount: number | string;
   ld_principal_repayment: number;
   ld_start_date: string;
-  ld_paid_amount: number;
-  ld_pending_amount: number;
+  // ld_paid_amount: number;
+  // ld_pending_amount: number;
   ld_paid_weeks: number;
   ld_pending_weeks: number;
-  ld_is_current_month_paid?: boolean;
+  ld_total_weeks_or_month: number;
+  ld_interest_amount: number;
 }
 
 const LendsCard = ({
@@ -21,11 +22,12 @@ const LendsCard = ({
   ld_lend_amount,
   ld_principal_repayment,
   ld_start_date,
-  ld_paid_amount,
-  ld_pending_amount,
+  // ld_paid_amount,
+  // ld_pending_amount,
   ld_paid_weeks,
   ld_pending_weeks,
-  ld_is_current_month_paid,
+  ld_total_weeks_or_month,
+  ld_interest_amount,
 }: LendsCardProps) => {
   return (
     <View
@@ -33,7 +35,7 @@ const LendsCard = ({
         backgroundColor: '#14141D',
         width: '100%',
         borderRadius: 10,
-        marginTop: 10,
+        marginTop: 20,
         padding: 20,
         shadowColor: '#000',
         shadowOffset: { width: 4, height: 4 },
@@ -73,16 +75,18 @@ const LendsCard = ({
       </View>
       <View style={styles.subTextContainer}>
         <Text style={[styles.subText, { marginRight: 6 }]}>To be paid :</Text>
-        <Text style={[styles.subText, { fontWeight: 700 }]}>{ld_principal_repayment}</Text>
+        <Text style={[styles.subText, { fontWeight: 700 }]}>
+          {(Number(ld_principal_repayment) + Number(ld_interest_amount)).toFixed(2)}
+        </Text>
       </View>
-      <View style={styles.subTextContainer}>
+      {/* <View style={styles.subTextContainer}>
         <Text style={[styles.subText, { marginRight: 6 }]}>Paid amount :</Text>
         <Text style={[styles.subText, { fontWeight: 700 }]}>{ld_paid_amount}</Text>
       </View>
       <View style={styles.subTextContainer}>
         <Text style={[styles.subText, { marginRight: 6 }]}>Pending amount :</Text>
         <Text style={[styles.subText, { fontWeight: 700 }]}>{ld_pending_amount}</Text>
-      </View>
+      </View> */}
       <View style={styles.subTextContainer}>
         <Text style={[styles.subText, { marginRight: 6 }]}>Installment started on :</Text>
         <Text style={[styles.subText, { fontWeight: 700 }]}>{ld_start_date}</Text>
@@ -93,7 +97,7 @@ const LendsCard = ({
             Paid weeks :
           </Text>
           <Text style={[styles.subText, { fontWeight: 700, color: 'rgba(255, 200, 58, 0.84)' }]}>
-            {ld_paid_weeks}
+            {ld_paid_weeks}/{ld_total_weeks_or_month}
           </Text>
         </View>
         <View style={styles.weekSubContainer}>
@@ -101,23 +105,18 @@ const LendsCard = ({
             Pending weeks :
           </Text>
           <Text style={[styles.subText, { fontWeight: 700, color: 'rgba(0, 176, 176, 1)' }]}>
-            {ld_pending_weeks}
+            {ld_pending_weeks}/{ld_total_weeks_or_month}
           </Text>
         </View>
       </View>
       <View style={styles.lastContainer}>
-        <CustomCheckBox
-          label="Paid"
-          fillColor="rgba(255, 200, 58, 0.8)"
-          onChange={data => {
-            // field.onChange(data);
-          }}
-          isChecked={true}
-        />
+        {ld_paid_weeks == ld_total_weeks_or_month ? (
+          <Text style={styles.closedStyle}>Closed</Text>
+        ) : (
+          <Text style={styles.pendingStyle}>Pending</Text>
+        )}
         <Pressable
-          onPress={() => {
-            console.log("sajhdjhaskdhsahdkhsak")
-          }}
+          onPress={() => {}}
           // style={[styles.inputContainer, borderLess ? styles.borderNone : null, styles.innerView]}
         >
           <Image
@@ -175,9 +174,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    height: 36,
-    width: 36,
-    marginLeft: -34,
+    height: 18,
+    width: 18,
+    marginRight: -5,
   },
   lastContainer: {
     width: '100%',
@@ -185,6 +184,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 14,
+  },
+  closedStyle: {
+    backgroundColor: 'rgba(111, 255, 98, 0.09)',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 4,
+    color: '#96FF71',
+    fontSize: 14,
+    fontFamily: 'Inter-500',
+  },
+  pendingStyle: {
+    backgroundColor: 'rgba(255, 87, 87, 0.16)',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 4,
+    color: '#F75353',
+    fontSize: 14,
+    fontFamily: 'Inter-500',
   },
 });
