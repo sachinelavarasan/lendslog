@@ -28,17 +28,17 @@ const ROUTES: {
     activeIcon: require('@/assets/icons/add-active.png'),
   },
   {
-    name: 'profile',
-    title: 'Profile',
-    icon: require('@/assets/icons/user.png'),
-    activeIcon: require('@/assets/icons/user-active.png'),
-  },
-  {
     name: 'lends',
     title: 'Lends',
     icon: require('@/assets/icons/lends.png'),
     activeIcon: require('@/assets/icons/lends-active.png'),
   },
+  {
+    name: 'profile',
+    title: 'Profile',
+    icon: require('@/assets/icons/user.png'),
+    activeIcon: require('@/assets/icons/user-active.png'),
+  } 
 ];
 
 export default function TabLayout() {
