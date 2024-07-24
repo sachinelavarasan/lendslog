@@ -12,7 +12,7 @@ const ROUTES: {
   {
     name: 'index',
     title: 'Today',
-    icon: require('@/assets/icons/today.png'),
+    icon: require('@/assets/icons/today-inactive.png'),
     activeIcon: require('@/assets/icons/today-active.png'),
   },
   {

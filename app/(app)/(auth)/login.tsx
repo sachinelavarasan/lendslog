@@ -103,7 +103,7 @@ export default function SignIn() {
                     <Input
                       {...field}
                       placeholder="Enter phone number"
-                      label="Email"
+                      label="Phone Number"
                       keyboardType="numbers-and-punctuation"
                       autoCapitalize="none"
                       autoComplete="off"
