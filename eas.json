@@ -13,6 +13,9 @@
     "preview": {
       "android": {
         "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://lendslog-api.vercel.app"
       }
     },
     "preview2": {

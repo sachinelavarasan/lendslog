@@ -2,6 +2,7 @@ import React from 'react';
 import { Tabs } from 'expo-router';
 import { View, Dimensions, Image } from 'react-native';
 import BottomTab from '@/components/BottomTabBar';
+import SafeAreaViewComponent from '@/components/SafeAreaView';
 
 const ROUTES: {
   name: string;
@@ -42,14 +43,9 @@ const ROUTES: {
 ];
 
 export default function TabLayout() {
-  const { width, height } = Dimensions.get('window');
 
   return (
-    <View
-      style={{
-        width,
-        height,
-      }}>
+    <SafeAreaViewComponent>
       <Tabs
         screenOptions={{
           headerShown: false,
@@ -68,6 +64,6 @@ export default function TabLayout() {
           />
         ))}
       </Tabs>
-    </View>
+    </SafeAreaViewComponent>
   );
 }
