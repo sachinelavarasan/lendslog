@@ -1,5 +1,5 @@
 import { FontAwesome } from '@expo/vector-icons';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 
@@ -9,17 +9,23 @@ interface CustomSelectInputProps {
   label: string;
   placeholder?: string;
   onChange: (id: number | string) => void;
+  value: string | number;
 }
 
 export const CustomSelectInput = ({
   options,
   label,
   onChange,
-  defaultOption,
-  placeholder
+  placeholder,
+  value,
 }: CustomSelectInputProps) => {
-  const [selected, setSelected] = useState('');
+  const [selected, setSelected] = useState(value);
+  const [defaultOption, setDefaultOption] = useState<{ key: any; value: any } | undefined>();
 
+  useEffect(() => {
+    const curr = options.find(opt => opt.key === selected);
+    setDefaultOption(curr);
+  }, [selected, value]);
 
   return (
     <View style={styles.selectBoxContainer}>

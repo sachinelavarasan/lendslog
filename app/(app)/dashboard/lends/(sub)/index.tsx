@@ -15,7 +15,6 @@ export default function index() {
   const dispatch = useAppDispatch();
   const { allLends } = useAppSelector(state => state.lends);
   const isFocused = useIsFocused();
-  console.log(allLends);
 
   useEffect(() => {
     if (isFocused) {
@@ -35,6 +34,7 @@ export default function index() {
           renderItem={({ item }: any) => {
             return (
               <LendsCard
+                ld_id={item.ld_id}
                 ld_borrower_name={item.ld_borrower_name}
                 ld_payment_term={item.ld_payment_term}
                 ld_lend_amount={item.ld_lend_amount}

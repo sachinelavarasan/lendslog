@@ -17,10 +17,11 @@ import HeaderWithCount from '@/components/HeaderWithCount';
 
 import { useAppSelector } from '@/redux/hooks';
 import { lendsSelector } from '@/redux/slices/lends/lendsSlice';
+import { IinstallmentTimelines } from '@/utils/types/lends';
 
 
 export default function HomeScreen() {
-  const { log } = useAppSelector(lendsSelector);
+  const { timelines } = useAppSelector(lendsSelector);
 
  
   // const data = [
@@ -58,9 +59,9 @@ export default function HomeScreen() {
             bounces={false}
             style={{ marginBottom: 20, paddingBottom: 20 }}
             showsVerticalScrollIndicator={false}
-            data={[...log]}
-            renderItem={({ item }: any) => {
-              return <DueCard data={item} />
+            data={timelines}
+            renderItem={({ item }: {item: IinstallmentTimelines}) => {
+              return <DueCard {...item} />
             }}
             keyExtractor={(item: any, index: number) => item.name + index}
           />
