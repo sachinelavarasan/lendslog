@@ -1,8 +1,10 @@
 import React from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import CustomCheckBox from './CustomCheckBox';
+import { Link } from 'expo-router';
 
 export interface LendsCardProps {
+  ld_id: number;
   ld_borrower_name: string;
   ld_payment_term: number;
   ld_lend_amount: number | string;
@@ -17,6 +19,7 @@ export interface LendsCardProps {
 }
 
 const LendsCard = ({
+  ld_id,
   ld_borrower_name,
   ld_payment_term,
   ld_lend_amount,
@@ -115,16 +118,20 @@ const LendsCard = ({
         ) : (
           <Text style={styles.pendingStyle}>Pending</Text>
         )}
-        <Pressable
-          onPress={() => {}}
-          // style={[styles.inputContainer, borderLess ? styles.borderNone : null, styles.innerView]}
-        >
-          <Image
-            source={require('@/assets/icons/next.png')}
-            style={styles.image}
-            resizeMode="contain"
-          />
-        </Pressable>
+        <Link
+          href={{
+            pathname: '/dashboard/lends/[id]',
+            params: { id: ld_id },
+          }}
+          asChild>
+          <Pressable>
+            <Image
+              source={require('@/assets/icons/next.png')}
+              style={styles.image}
+              resizeMode="contain"
+            />
+          </Pressable>
+        </Link>
       </View>
     </View>
   );
