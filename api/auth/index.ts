@@ -1,5 +1,7 @@
 import axios from "../instance";
 
+import { userSchemaType } from "@/utils/schema";
+
 export const logIn = (data: { phone: string; password: string }) =>
   axios.post("/auth/login", data);
 
@@ -19,3 +21,5 @@ export const verifyOtp = (data: {
 }) => axios.post("/auth/verify-otp", data);
 
 export const fetchProfile = () => axios.get("/auth/me");
+
+export const editProfile = (data: userSchemaType ) => axios.put("/auth/edit-profile", data);

@@ -23,12 +23,18 @@ const Input = forwardRef(function MyInput(
   props: ExtraInputProps & TextInputProps,
   ref: React.Ref<TextInput>
 ) {
-  const { label, borderLess, isTextBox, isPassword, error, isTitle, ...otherProps } = props;
+  const { label, borderLess, isTextBox, isPassword, error, isTitle, editable, ...otherProps } =
+    props;
   const [show, setShow] = useState(false);
   return (
     <View>
       {label ? <Text style={styles.label}>{label}</Text> : null}
-      <View style={[styles.inputContainer, borderLess ? styles.borderNone : null]}>
+      <View
+        style={[
+          styles.inputContainer,
+          borderLess ? styles.borderNone : null,
+          !editable ? { opacity: 0.5 } : null,
+        ]}>
         <View style={styles.innerView}>
           <TextInput
             ref={ref}
@@ -47,6 +53,7 @@ const Input = forwardRef(function MyInput(
             placeholderTextColor={'#999999'}
             selectionColor="#fdfdfd"
             cursorColor="#fff"
+            editable={editable}
           />
           {isPassword ? (
             <TouchableOpacity onPress={() => setShow(state => !state)}>
@@ -82,7 +89,7 @@ const styles = StyleSheet.create({
     height: 130,
     paddingVertical: Platform.OS === 'android' ? 12 : 16,
     paddingHorizontal: 20,
-    textAlignVertical: "top"
+    textAlignVertical: 'top',
   },
   innerView: {
     flexDirection: 'row',

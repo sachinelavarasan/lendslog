@@ -17,11 +17,11 @@ console.error = (...args: any) => {
 
 export default function RootLayout() {
   return (
-    <FirebaseProvider>
+    // <FirebaseProvider>
       <Provider store={store}>
         <Slot />
         <NetworkInfoModal/>
       </Provider>
-    </FirebaseProvider>
+    // </FirebaseProvider>
   );
 }

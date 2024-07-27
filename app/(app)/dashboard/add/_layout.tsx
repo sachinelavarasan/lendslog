@@ -4,6 +4,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -91,8 +92,8 @@ export default function AddLends() {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps={'always'}>
           <ThemedView
-            style={{ flex: 1, paddingTop: Platform.OS === 'ios' ? 13 : 35, paddingHorizontal: 10 }}>
-            <View style={styles.formContainer}>
+            style={{ flex: 1,  paddingTop: StatusBar.currentHeight, paddingHorizontal: 10 }}>
+             <View style={styles.formContainer}>
               {error && (
                 <View style={styles.errorContainer}>
                   <Text style={styles.error}>{error}</Text>
@@ -489,6 +490,7 @@ const styles = StyleSheet.create({
   formContainer: {
     justifyContent: 'center',
     paddingHorizontal: 15,
+    marginTop: 10
   },
   sectionContainer: {
     marginTop: 20,
