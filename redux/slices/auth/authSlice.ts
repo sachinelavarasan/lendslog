@@ -211,7 +211,7 @@ export const verifyOtp =
 export const updateProfile =
   (
     data: userSchemaType,
-    callback: () => void
+    callback: (user: userSchemaType) => void
   ): ThunkAction<void, RootState, unknown, UnknownAction> =>
   async dispatch => {
     dispatch(setIsLoading(true));
@@ -224,7 +224,7 @@ export const updateProfile =
       dispatch(setUser(user));
 
       if (callback) {
-        callback();
+        callback(user);
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {

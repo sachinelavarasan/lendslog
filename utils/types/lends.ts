@@ -11,3 +11,15 @@ export type LendsTypes = {
   ld_interest_rate: string;
   ld_total_weeks_or_month: string;
 };
+
+export interface IinstallmentTimelines {
+  it_id: number,
+  it_lend_id: number, // lends id
+  it_installment_date: string,
+  it_installement_status: number,
+  it_created_at: string,
+  it_updated_at: string,
+  it_is_deleted: number,
+  it_term_amount: number,
+  it_order: number,
+};

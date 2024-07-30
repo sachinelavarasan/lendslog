@@ -14,6 +14,7 @@ import {
 
 import SafeAreaViewComponent from '@/components/SafeAreaView';
 import { ThemedView } from '@/components/ThemedView';
+import PopupMenu from '@/components/PopupMenu';
 
 import ProfileForm from './ProfileForm';
 
@@ -25,9 +26,16 @@ export default function Profile() {
   const dispatch = useAppDispatch();
   const [isClicked, setIsClicked] = useState(false);
   const router = useRouter();
-  // const onPress = () => {
 
-  // };
+  const menuActions = [
+    { id: 1, title: 'Edit', action: () => setIsClicked(true), icon: require('@/assets/icons/edit.png') },
+    {
+      id: 2,
+      title: 'Logout',
+      action: () => dispatch(logout(() => router.replace('(auth)/login'))),
+      icon: require('@/assets/icons/logout.png'),
+    },
+  ];
 
   return (
     <KeyboardAvoidingView
@@ -43,32 +51,14 @@ export default function Profile() {
             <View style={styles.mainContainer}>
               <View style={styles.actionsContainer}>
                 <TouchableOpacity
-                  accessibilityRole="button"
-                  // accessibilityState={isFocused ? { selected: true } : {}}
-                  // accessibilityLabel={options.tabBarAccessibilityLabel}
-                  // testID={options.tabBarTestID}
+                  accessibilityRole="button" 
                   onPress={() => {
                     router.back();
                   }}
-                  // onLongPress={onLongPress}
-                  // key={route.key}
-                  // style={[
-                  //   {
-                  //     flex: 1,
-                  //     alignItems: 'center',
-                  //     justifyContent: 'center',
-                  //     marginBottom: 10,
-                  //   },
-                  // ]}
                 >
                   <Image source={require('@/assets/icons/back.png')} />
                 </TouchableOpacity>
-                <TouchableOpacity
-                  accessibilityRole="button"
-                  onPress={() => setIsClicked(state => !state)}
-                  style={[[isClicked ? styles.isSelected : null, { padding: 5 }]]}>
-                  <Image source={require('@/assets/icons/3-dot.png')} />
-                </TouchableOpacity>
+                {menuActions.length ? <PopupMenu actions={menuActions} /> : null}
               </View>
               <View
                 style={[
@@ -78,14 +68,8 @@ export default function Profile() {
                 <Text style={styles.profileText}>{user?.us_name[0]}</Text>
               </View>
               <View style={{ width: '100%' }}>
-                <ProfileForm isEdit={isClicked} setIsClicked={setIsClicked}/>
+                <ProfileForm isEdit={isClicked} setIsClicked={setIsClicked} />
               </View>
-              <TouchableOpacity
-                accessibilityRole="button"
-                onPress={() => dispatch(logout(() => router.replace('(auth)/login')))}
-                style={[[isClicked ? styles.isSelected : null, { padding: 5 }]]}>
-                <Text style={{ color: '#fff' }}>LOGOUT</Text>
-              </TouchableOpacity>
             </View>
           </ThemedView>
         </ScrollView>
@@ -119,8 +103,4 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   profileText: { color: '#ffffff', fontSize: 50 },
-  isSelected: {
-    backgroundColor: '#14141D',
-    borderRadius: 30,
-  },
 });

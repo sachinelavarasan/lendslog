@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import {
   ActivityIndicator,
@@ -37,7 +37,7 @@ export default function ProfileForm({
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
     reset,
     watch,
   } = useForm({
@@ -54,25 +54,27 @@ export default function ProfileForm({
     resolver: zodResolver(userSchema),
   });
 
-  const resetData = () => {
-    reset({
-      us_name: user?.us_name,
-      us_username: user?.us_username,
-      us_phone_no: user?.us_phone_no,
-      us_address: user?.us_address,
-      us_gender: user?.us_gender,
-      us_state: user?.us_state,
-      us_district: user?.us_district,
-      us_pincode: user?.us_pincode,
-    });
-  };
- 
+  const resetData = useCallback(
+    (user: userSchemaType) => {
+      reset({
+        us_name: user?.us_name,
+        us_username: user?.us_username,
+        us_phone_no: user?.us_phone_no,
+        us_address: user?.us_address,
+        us_gender: user?.us_gender,
+        us_state: user?.us_state,
+        us_district: user?.us_district,
+        us_pincode: user?.us_pincode,
+      });
+    },
+    [user]
+  );
 
   useEffect(() => {
-    if (isFocused) {
-      resetData();
+    if (isFocused && user) {
+      resetData(user);
     }
-    
+
     return () => {
       dispatch(setError(null));
     };
@@ -81,9 +83,9 @@ export default function ProfileForm({
   const onSubmit = (data: userSchemaType) => {
     console.log(data);
     dispatch(
-      updateProfile(data, () => {
-        resetData();
-        setIsClicked((state:any) => !state);
+      updateProfile(data, (user: userSchemaType) => {
+        resetData(user);
+        setIsClicked((state: any) => !state);
         dispatch(setError(null));
         // router.replace('/dashboard');
       })
@@ -167,7 +169,7 @@ export default function ProfileForm({
                 onChange={data => {
                   field.onChange(data);
                 }}
-                // disabled={field.disabled}
+                disabled={!isEdit}
               />
             )}
             name="us_gender"
@@ -258,8 +260,8 @@ export default function ProfileForm({
         <Spacer height={35} />
         <View style={styles.btnContainer}>
           <TouchableOpacity
-            style={[styles.button, isLoading ? styles.disable : {}]}
-            disabled={isLoading}
+            style={[styles.button, !isDirty || isLoading ? styles.disable : {}]}
+            disabled={!isDirty || isLoading}
             onPress={handleSubmit(onSubmit)}>
             {isLoading ? (
               <ActivityIndicator animating color={'#14141D'} style={styles.loader} />
