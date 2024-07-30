@@ -1,6 +1,7 @@
-import { IinstallmentTimelines } from '@/utils/types/lends';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+
+import { IinstallmentTimelines } from '@/utils/types/lends';
 
 const DueCard = ({
   it_id,

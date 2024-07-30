@@ -1,6 +1,5 @@
 import React from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import CustomCheckBox from './CustomCheckBox';
 import { Link } from 'expo-router';
 
 export interface LendsCardProps {

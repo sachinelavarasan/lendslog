@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { RadioButton } from 'react-native-radio-buttons-group';
 
@@ -18,7 +18,12 @@ export default function CustomRadioButton({
   disabled,
 }: CustomRadioButtonProps) {
   const [selectedId, setSelectedId] = useState<string | number | undefined>(value);
-  console.log("selectedId", value)
+  useEffect(() => {
+    if (value) {
+      setSelectedId(value);
+    }
+  }, [value]);
+  
   function handlePress(id: string | number) {
     onChange(id);
     setSelectedId(id);
@@ -48,7 +53,6 @@ export default function CustomRadioButton({
             color="#FFCA3A"
             containerStyle={{ marginHorizontal: 0 }}
             disabled={disabled}
-          
           />
         ))}
       </View>

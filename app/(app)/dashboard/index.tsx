@@ -1,11 +1,6 @@
-import { useEffect } from 'react';
-// import { useRouter } from 'expo-router';
 import {
-  StyleSheet,
   StatusBar,
-  Text,
   View,
-  TouchableOpacity,
   FlatList,
   Platform,
 } from 'react-native';
@@ -23,33 +18,6 @@ import { IinstallmentTimelines } from '@/utils/types/lends';
 export default function HomeScreen() {
   const { timelines } = useAppSelector(lendsSelector);
 
- 
-  // const data = [
-  //   {
-  //     name: 'John Paul',
-  //     type: 'Month',
-  //     amt: Math.floor(Math.random() * 10000),
-  //   },
-  //   {
-  //     name: 'Elavarsan',
-  //     type: 'Week',
-  //     amt: Math.floor(Math.random() * 10000),
-  //   },
-  //   {
-  //     name: 'Janani',
-  //     type: 'Week',
-  //     amt: Math.floor(Math.random() * 10000),
-  //   },
-  //   {
-  //     name: 'Nobody',
-  //     type: 'Month',
-  //     amt: Math.floor(Math.random() * 10000),
-  //   },
-  // ];
-
-  // const goBack = () => {
-  //   router.back();
-  // };
   return (
     <SafeAreaViewComponent>
       <ThemedView style={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 20 }}>
@@ -70,24 +38,3 @@ export default function HomeScreen() {
     </SafeAreaViewComponent>
   );
 }
-
-// const styles = StyleSheet.create({
-//   titleContainer: {
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     gap: 8,
-//   },
-//   stepContainer: {
-//     gap: 8,
-//     marginBottom: 8,
-//   },
-//   button: {
-//     alignItems: 'center',
-//     flexDirection: 'row',
-//     justifyContent: 'center',
-//     backgroundColor: '#FFCA3A',
-//     borderRadius: 15,
-//     paddingVertical: 15,
-//     paddingHorizontal: 25,
-//   },
-// });
