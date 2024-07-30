@@ -3,8 +3,6 @@ import { z } from 'zod';
 import { phoneValidation, pincodeValidation } from './Validation';
 import { IinstallmentTimelines } from './types/lends';
 
-import { IinstallmentTimelines } from './types/lends';
-
 export const lendsSchema = z
   .object({
     ld_borrower_name: z.string().trim().min(3, { message: 'Name should be minimum 3 characters' }),
@@ -127,67 +125,6 @@ export type EditLendsSchemaType = z.infer<typeof EditLendsSchema> & {
   ld_id?: number;
   installmentTimelines?: IinstallmentTimelines[];
 };
-
-export const EditLendsSchema = z
-  .object({
-    ld_borrower_name: z.string().trim().min(3, { message: 'Name should be minimum 3 characters' }),
-    ld_borrower_phoneno: z.string().regex(phoneValidation, { message: 'Invalid phone number' }),
-    ld_borrower_address: z
-      .string()
-      .trim()
-      .min(3, { message: 'Address should be minimum 3 characters' }),
-    ld_borrower_notes: z.string().trim().nullable().optional(),
-    // nominee
-    ld_is_nominee: z.boolean().default(false),
-    ld_nominee_name: z.string().trim().nullable(),
-    ld_nominee_phoneno: z.string().nullable(),
-    ld_nominee_address: z.string().nullable(),
-    ld_nominee_notes: z.string().nullable().optional(),
-    // surety
-    ld_is_surety: z.boolean().default(false),
-    ld_surety_type: z.number().optional(),
-    ld_surety_notes: z.string().trim().nullable(),
-  })
-  .superRefine((values, ctx) => {
-    if (values.ld_is_nominee) {
-      if (!values.ld_nominee_phoneno) {
-        ctx.addIssue({
-          message: 'Nominee phone number cannot be empty',
-          code: z.ZodIssueCode.custom,
-          path: ['ld_nominee_phoneno'],
-        });
-      } else if (!phoneValidation.test(values.ld_nominee_phoneno)) {
-        ctx.addIssue({
-          message: 'Invalid phone number',
-          code: z.ZodIssueCode.custom,
-          path: ['ld_nominee_phoneno'],
-        });
-      }
-      if (!values.ld_nominee_name)
-        ctx.addIssue({
-          message: 'Nominee name cannot be empty',
-          code: z.ZodIssueCode.custom,
-          path: ['ld_nominee_name'],
-        });
-    }
-    if (values.ld_is_surety) {
-      if (!values.ld_surety_type)
-        ctx.addIssue({
-          message: 'Please select surety type',
-          code: z.ZodIssueCode.custom,
-          path: ['ld_surety_type'],
-        });
-    }
-  });
-export type lendsSchemaType = z.infer<typeof lendsSchema> & {
-  ld_id?: number;
-  installmentTimelines?: IinstallmentTimelines[];
-};
-export type EditLendsSchemaType = z.infer<typeof EditLendsSchema> & {
-  ld_id?: number;
-  installmentTimelines?: IinstallmentTimelines[];
-};
-
 
 // User
 export const userSchema = z.object({
