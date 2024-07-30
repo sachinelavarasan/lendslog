@@ -57,3 +57,18 @@ export const suretyType = [
     value: 'Others',
   },
 ];
+
+export const genders = [
+  {
+    id: 1,
+    label: 'Female',
+  },
+  {
+    id: 2,
+    label: 'Male',
+  },
+  {
+    id: 3,
+    label: 'Others',
+  },
+];

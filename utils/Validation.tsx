@@ -7,5 +7,8 @@ const phoneValidation = new RegExp(
 const otpValidation= (otp: string) => new RegExp(
   /^\d{6}$/
 ).test(otp);
+const pincodeValidation = new RegExp(
+  /^\d{6}$/
+);
 
-export { isEmail, phoneValidation, otpValidation };
+export { isEmail, phoneValidation, otpValidation , pincodeValidation};

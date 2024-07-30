@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { phoneValidation } from './Validation';
+
+import { phoneValidation, pincodeValidation } from './Validation';
 import { IinstallmentTimelines } from './types/lends';
 
 export const lendsSchema = z
@@ -64,6 +65,8 @@ export const lendsSchema = z
         });
     }
   });
+export type lendsSchemaType = z.infer<typeof lendsSchema>;
+
 export const EditLendsSchema = z
   .object({
     ld_borrower_name: z.string().trim().min(3, { message: 'Name should be minimum 3 characters' }),
@@ -123,3 +126,20 @@ export type EditLendsSchemaType = z.infer<typeof EditLendsSchema> & {
   ld_id?: number;
   installmentTimelines?: IinstallmentTimelines[];
 };
+
+
+// User
+export const userSchema = z.object({
+  us_name: z.string().trim().min(3, { message: 'Name should be minimum 3 characters' }),
+  us_username: z.string().trim().min(3, { message: 'Username should be minimum 3 characters' }),
+  us_phone_no: z.string().regex(phoneValidation, { message: 'Invalid phone number' }),
+  us_email: z.string().email({ message: 'Invalid Email' }).optional(),
+  us_address: z.string().trim(),
+  us_gender: z.number().optional(),
+  us_state: z.string().trim(),
+  us_district: z
+    .string()
+    .trim().optional(),
+  us_pincode: z.string().regex(pincodeValidation, { message: 'Invalid pincode number' }).optional(),
+});
+export type userSchemaType = z.infer<typeof userSchema>;

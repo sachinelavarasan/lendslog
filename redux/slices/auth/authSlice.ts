@@ -5,6 +5,7 @@ import { ThunkAction } from 'redux-thunk';
 import * as authApi from '@/api/auth';
 import { RootState } from '@/redux/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { userSchemaType } from '@/utils/schema';
 
 interface authState {
   error: null;
@@ -12,7 +13,7 @@ interface authState {
   isLoading: boolean;
   otpLoading: boolean;
   otpVerifyLoading: boolean;
-  user: null; // user type
+  user: userSchemaType | null; 
   isAuthenticateLoading: boolean;
 }
 const initialState: authState = {
@@ -64,7 +65,7 @@ export const {
   clearUser,
   setOtpLoading,
   setSuccess,
-  setOtpVerifyLoading
+  setOtpVerifyLoading,
 } = authSlice.actions;
 
 export const logIn =
@@ -186,8 +187,9 @@ export const sendOtp =
   };
 export const verifyOtp =
   (
-    data: { phone: string, code: string },
-    callback?: () => void): ThunkAction<void, RootState, unknown, UnknownAction> =>
+    data: { phone: string; code: string },
+    callback?: () => void
+  ): ThunkAction<void, RootState, unknown, UnknownAction> =>
   async dispatch => {
     try {
       dispatch(setOtpVerifyLoading(true));
@@ -206,6 +208,32 @@ export const verifyOtp =
     }
   };
 
+export const updateProfile =
+  (
+    data: userSchemaType,
+    callback: () => void
+  ): ThunkAction<void, RootState, unknown, UnknownAction> =>
+  async dispatch => {
+    dispatch(setIsLoading(true));
+
+    try {
+      console.log("first", data)
+      const response = await authApi.editProfile(data);
+
+      const { user } = response.data;
+      dispatch(setUser(user));
+
+      if (callback) {
+        callback();
+      }
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        dispatch(setError(error?.response?.data?.error || 'Something went wrong.'));
+      }
+    } finally {
+      dispatch(setIsLoading(false));
+    }
+  };
 export const authSelector = (state: { auth: authState }) => state.auth;
 
 export const authReducer = authSlice.reducer;

@@ -18,6 +18,7 @@ export default function CustomRadioButton({
   disabled,
 }: CustomRadioButtonProps) {
   const [selectedId, setSelectedId] = useState<string | number | undefined>(value);
+  console.log("selectedId", value)
   function handlePress(id: string | number) {
     onChange(id);
     setSelectedId(id);
@@ -41,12 +42,13 @@ export default function CustomRadioButton({
             {...button}
             key={button.id}
             labelStyle={styles.labelStyle}
-            selected={button.id === selectedId}
+            selected={button.id == selectedId}
             onPress={handlePress}
             borderColor="#FFCA3A"
             color="#FFCA3A"
             containerStyle={{ marginHorizontal: 0 }}
             disabled={disabled}
+          
           />
         ))}
       </View>
