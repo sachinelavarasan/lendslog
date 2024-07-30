@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { FontAwesome } from '@expo/vector-icons';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
+import { FontAwesome } from '@expo/vector-icons';
 
 interface CustomSelectInputProps {
   options: { key: any; value: any }[];
