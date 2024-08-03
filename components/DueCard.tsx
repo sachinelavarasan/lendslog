@@ -41,7 +41,7 @@ const DueCard = ({
         </Text>
       </View>
       <Text style={styles.subText}>
-        Due amount : <Text style={[styles.subText, { fontWeight: 700 }]}>{it_term_amount}</Text>
+        Due amount : <Text style={[styles.subText, { fontFamily: 'Inter-700' }]}>{it_term_amount}</Text>
       </Text>
     </View>
   );

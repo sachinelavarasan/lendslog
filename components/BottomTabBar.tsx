@@ -89,12 +89,12 @@ export default function BottomTab({ state, descriptors, navigation }: any) {
                 },
                 animatedStyle,
               ]}>
-              {route.name === 'notification' ? (
+              {/* {route.name === 'notification' ? (
                 <Image
                   style={{ position: 'absolute', right: 18, top: 6 }}
                   source={require('@/assets/icons/notification-unread.png')}
                 />
-              ) : null}
+              ) : null} */}
               <options.tabBarIcon focused={isFocused} />
             </Animated.View>
             <Text

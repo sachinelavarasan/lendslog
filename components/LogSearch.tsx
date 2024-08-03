@@ -6,7 +6,7 @@ import SearchBar from '@/components/SearchBar';
 export default function Lends() {
   const [searchPhrase, setSearchPhrase] = useState('');
   return (
-    <View style={{ marginTop: Platform.OS == 'android' ? 25 : 10 }}>
+    <View style={{ marginTop: Platform.OS == 'android' ? 25 : 5 }}>
       <SearchBar
         searchPhrase={searchPhrase}
         onChange={(e: any) => {

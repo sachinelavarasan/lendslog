@@ -35,7 +35,6 @@ export default function CustomRadioButton({
         <Text
           style={[
             { fontSize: 16, color: '#c7c7c7', marginVertical: 3, fontFamily: 'Inter-400' },
-            disabled && { opacity: 0.5 },
           ]}>
           {label}
         </Text>

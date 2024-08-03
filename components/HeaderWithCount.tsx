@@ -5,9 +5,10 @@ interface HeaderWithCountProps {
   title: string;
   count?: number;
   countText?: string;
+  subTitle?: boolean;
 }
 
-const HeaderWithCount = ({ title, count, countText }: HeaderWithCountProps) => {
+const HeaderWithCount = ({ title, count, countText, subTitle }: HeaderWithCountProps) => {
   return (
     <View
       style={{
@@ -17,11 +18,11 @@ const HeaderWithCount = ({ title, count, countText }: HeaderWithCountProps) => {
         marginTop: 10,
         justifyContent: 'space-between',
       }}>
-      <Text style={[styles.header]}>{title}</Text>
+      <Text style={subTitle ? styles.subTitle : styles.header}>{title}</Text>
       {count && count > 0 ? (
         <View style={styles.countSpan}>
           <Text style={[styles.count]}>{String(count).padStart(2, '0')}</Text>
-          <Text style={styles.countText}>{countText}</Text>
+          {countText ? <Text style={styles.countText}>{countText}</Text> : null}
         </View>
       ) : null}
     </View>
@@ -56,5 +57,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Inter-500',
     marginLeft: 3,
+  },
+  subTitle: {
+    fontSize: 20,
+    color: '#c7c7c7',
+    fontFamily: 'Inter-500',
   },
 });

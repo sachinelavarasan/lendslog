@@ -73,32 +73,32 @@ const LendsCard = ({
       </View>
       <View style={styles.subTextContainer}>
         <Text style={[styles.subText, { marginRight: 6 }]}>Borrowed amount :</Text>
-        <Text style={[styles.subText, { fontWeight: 700 }]}>{ld_lend_amount}</Text>
+        <Text style={[styles.subText, { fontFamily: 'Inter-700' }]}>{ld_lend_amount}</Text>
       </View>
       <View style={styles.subTextContainer}>
         <Text style={[styles.subText, { marginRight: 6 }]}>To be paid :</Text>
-        <Text style={[styles.subText, { fontWeight: 700 }]}>
+        <Text style={[styles.subText, { fontFamily: 'Inter-700' }]}>
           {(Number(ld_principal_repayment) + Number(ld_interest_amount)).toFixed(2)}
         </Text>
       </View>
       {/* <View style={styles.subTextContainer}>
         <Text style={[styles.subText, { marginRight: 6 }]}>Paid amount :</Text>
-        <Text style={[styles.subText, { fontWeight: 700 }]}>{ld_paid_amount}</Text>
+        <Text style={[styles.subText, { fontFamily: 'Inter-700' }]}>{ld_paid_amount}</Text>
       </View>
       <View style={styles.subTextContainer}>
         <Text style={[styles.subText, { marginRight: 6 }]}>Pending amount :</Text>
-        <Text style={[styles.subText, { fontWeight: 700 }]}>{ld_pending_amount}</Text>
+        <Text style={[styles.subText, { fontFamily: 'Inter-700' }]}>{ld_pending_amount}</Text>
       </View> */}
       <View style={styles.subTextContainer}>
         <Text style={[styles.subText, { marginRight: 6 }]}>Installment started on :</Text>
-        <Text style={[styles.subText, { fontWeight: 700 }]}>{ld_start_date}</Text>
+        <Text style={[styles.subText, { fontFamily: 'Inter-700' }]}>{ld_start_date}</Text>
       </View>
       <View style={styles.weeksStyles}>
         <View style={styles.weekSubContainer}>
           <Text style={[styles.subText, { marginRight: 6, color: 'rgba(255, 200, 58, 0.84)' }]}>
             Paid weeks :
           </Text>
-          <Text style={[styles.subText, { fontWeight: 700, color: 'rgba(255, 200, 58, 0.84)' }]}>
+          <Text style={[styles.subText, { fontFamily: 'Inter-700', color: 'rgba(255, 200, 58, 0.84)' }]}>
             {ld_paid_weeks}/{ld_total_weeks_or_month}
           </Text>
         </View>
@@ -106,7 +106,7 @@ const LendsCard = ({
           <Text style={[styles.subText, { marginRight: 6, color: 'rgba(0, 176, 176, 1)' }]}>
             Pending weeks :
           </Text>
-          <Text style={[styles.subText, { fontWeight: 700, color: 'rgba(0, 176, 176, 1)' }]}>
+          <Text style={[styles.subText, { fontFamily: 'Inter-700', color: 'rgba(0, 176, 176, 1)' }]}>
             {ld_pending_weeks}/{ld_total_weeks_or_month}
           </Text>
         </View>

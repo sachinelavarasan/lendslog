@@ -5,7 +5,7 @@ import { RootState } from '@/redux/store';
 import * as lendsApi from '@/api/lends';
 
 import { EditLendsSchemaType, lendsSchemaType } from '@/utils/schema';
-import { IinstallmentTimelines } from '@/utils/types/lends';
+import { IinstallmentTimelines, TodayLends, INotifications } from '@/utils/types/lends';
 
 export interface Lends {
   name: string;
@@ -22,6 +22,9 @@ interface LendsState {
   weekLends: lendsSchemaType[];
   monthLends: lendsSchemaType[];
   currentLend: lendsSchemaType | null;
+  todayLends: TodayLends[];
+  todayNotifications: INotifications[];
+  olderNotifications: INotifications[];
 }
 
 const initialState: LendsState = {
@@ -32,6 +35,9 @@ const initialState: LendsState = {
   weekLends: [],
   monthLends: [],
   currentLend: null,
+  todayLends: [],
+  todayNotifications: [],
+  olderNotifications: [],
 };
 
 export const LendsSlice = createSlice({
@@ -99,9 +105,18 @@ export const LendsSlice = createSlice({
         });
       }
     },
+    setTodayLends(state, action) {
+      state.todayLends = action.payload;
+    },
     // clearLend(state) {
     //   state.lends = null;
-    // },
+    // },'   
+     setTodayNotifications(state, action) {
+      state.todayNotifications = action.payload;
+    },
+    setOlderNotifications(state, action) {
+      state.olderNotifications = action.payload;
+    },
   },
 });
 
@@ -117,6 +132,9 @@ export const {
   // clearLend,
   setCurrentLend,
   setEditLend,
+  setTodayLends,
+  setTodayNotifications,
+  setOlderNotifications
 } = LendsSlice.actions;
 
 export const add =
@@ -145,7 +163,7 @@ export const edit =
   (
     data: EditLendsSchemaType,
     ld_id: number,
-    callback: (lend:any) => void
+    callback: (lend: any) => void
   ): ThunkAction<void, RootState, unknown, UnknownAction> =>
   async dispatch => {
     dispatch(setIsLoading(true));
@@ -190,6 +208,51 @@ export const getAllLends =
       }
       if (monthLends.length) {
         dispatch(setMonthLends(monthLends));
+      }
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        dispatch(setError(error?.response?.data?.message || 'Something went wrong.'));
+      }
+    } finally {
+      dispatch(setIsLoading(false));
+    }
+  };
+
+export const getTodayLends =
+  (): ThunkAction<void, RootState, unknown, UnknownAction> => async dispatch => {
+    try {
+      dispatch(setIsLoading(true));
+      const response = await lendsApi.getTodayLends();
+
+      const { todayLends } = response.data;
+
+      if (todayLends.length) {
+        dispatch(setTodayLends(todayLends));
+      }
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        dispatch(setError(error?.response?.data?.message || 'Something went wrong.'));
+      }
+    } finally {
+      dispatch(setIsLoading(false));
+    }
+  };
+
+
+
+  export const getAllNotifications =
+  (): ThunkAction<void, RootState, unknown, UnknownAction> => async dispatch => {
+    try {
+      dispatch(setIsLoading(true));
+      const response = await lendsApi.getAllNotification();
+
+      const { todayNotifications, olderNotifications } = response.data;
+
+      if (todayNotifications.length) {
+        dispatch(setTodayNotifications(todayNotifications));
+      }
+      if (olderNotifications.length) {
+        dispatch(setOlderNotifications(olderNotifications));
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {

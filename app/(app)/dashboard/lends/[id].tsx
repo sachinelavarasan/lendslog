@@ -3,6 +3,7 @@ import CustomDatePicker from '@/components/CustomDatePicker';
 import CustomRadioButton from '@/components/CustomRadioButton';
 import { CustomSelectInput } from '@/components/CustomSelectInput';
 import DueCard from '@/components/DueCard';
+import HeaderWithCount from '@/components/HeaderWithCount';
 import Input from '@/components/Input';
 import SafeAreaViewComponent from '@/components/SafeAreaView';
 import Spacer from '@/components/Spacer';
@@ -28,6 +29,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 
 export default function DetailsScreen() {
@@ -132,10 +134,12 @@ export default function DetailsScreen() {
       {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}
       style={{ flex: 1 }}>
       <SafeAreaViewComponent>
-          <ScrollView
-            bounces={false}
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps={'always'}>
+        <ScrollView
+          bounces={false}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps={'always'}>
+          <ThemedView
+            style={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 10 }}>
             <View style={styles.formContainer}>
               {error && (
                 <View style={styles.errorContainer}>
@@ -144,6 +148,24 @@ export default function DetailsScreen() {
               )}
               <View style={styles.header}>
                 <Text style={styles.label}>Edit Lend Details</Text>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    marginTop: 12,
+                    alignItems: 'flex-start',
+                    gap: 6,
+                  }}>
+                  <Image source={require('@/assets/icons/info.png')} />
+                  <Text
+                    style={{
+                      fontFamily: 'Inter-300',
+                      color: '#c7c7c7',
+                      fontSize: 14,
+                    }}>
+                    Scroll down to see the full list of the current lends installement
+                  </Text>
+                </View>
               </View>
               <View>
                 <View style={[styles.sectionContainer, { marginTop: 25 }]}>
@@ -414,7 +436,22 @@ export default function DetailsScreen() {
                 </View>
               </View>
             </View>
-            <Spacer height={20} />
+            <Spacer height={25} />
+            <View
+              style={{
+                marginHorizontal: 15,
+                marginVertical: 10,
+                borderTopWidth: 0.2,
+                borderTopColor: '#ffffff',
+                paddingTop: 10,
+              }}>
+              <HeaderWithCount
+                title="Installments List"
+                subTitle
+                count={currentLend.installmentTimelines?.length}
+                countText="installments"
+              />
+            </View>
             <FlatList
               bounces={false}
               style={{ marginBottom: 20, paddingBottom: 20 }}
@@ -428,7 +465,8 @@ export default function DetailsScreen() {
               }}
               keyExtractor={(item: IinstallmentTimelines, index: number) => item.it_id + 'log'}
             />
-          </ScrollView>
+          </ThemedView>
+        </ScrollView>
       </SafeAreaViewComponent>
     </KeyboardAvoidingView>
   );
@@ -447,6 +485,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     paddingHorizontal: 15,
+    marginTop: 10,
   },
   sectionContainer: {
     marginTop: 20,
