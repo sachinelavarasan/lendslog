@@ -3,6 +3,7 @@ import { Tabs } from 'expo-router';
 import { View, Dimensions, Image } from 'react-native';
 import BottomTab from '@/components/BottomTabBar';
 import SafeAreaViewComponent from '@/components/SafeAreaView';
+import { FirebaseProvider } from '@/contexts/firebase-context';
 
 const ROUTES: {
   name: string;
@@ -39,31 +40,32 @@ const ROUTES: {
     title: 'Profile',
     icon: require('@/assets/icons/user.png'),
     activeIcon: require('@/assets/icons/user-active.png'),
-  } 
+  },
 ];
 
 export default function TabLayout() {
-
   return (
-    <SafeAreaViewComponent>
-      <Tabs
-        screenOptions={{
-          headerShown: false,
-          tabBarShowLabel: false,
-        }}
-        tabBar={props => <BottomTab {...props} />}>
-        {ROUTES.map(item => (
-          <Tabs.Screen
-            key={item.name}
-            name={item.name}
-            options={{
-              title: item.title,
-              tabBarIcon: ({ focused }) =>
-                focused ? <Image source={item.activeIcon} /> : <Image source={item.icon} />,
-            }}
-          />
-        ))}
-      </Tabs>
-    </SafeAreaViewComponent>
+    <FirebaseProvider>
+      <SafeAreaViewComponent>
+        <Tabs
+          screenOptions={{
+            headerShown: false,
+            tabBarShowLabel: false,
+          }}
+          tabBar={props => <BottomTab {...props} />}>
+          {ROUTES.map(item => (
+            <Tabs.Screen
+              key={item.name}
+              name={item.name}
+              options={{
+                title: item.title,
+                tabBarIcon: ({ focused }) =>
+                  focused ? <Image source={item.activeIcon} /> : <Image source={item.icon} />,
+              }}
+            />
+          ))}
+        </Tabs>
+      </SafeAreaViewComponent>
+    </FirebaseProvider>
   );
 }

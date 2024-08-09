@@ -22,6 +22,7 @@ import SafeAreaViewComponent from '@/components/SafeAreaView';
 import { logIn, setError } from '@/redux/slices/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { phoneValidation } from '@/utils/Validation';
+import { useIsFocused } from '@react-navigation/native';
 
 const schema = z.object({
   phone: z
@@ -39,6 +40,7 @@ type FormData = {
 export default function SignIn() {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const isFocused = useIsFocused();
   const { isLoading, error } = useAppSelector(state => state.auth);
 
   const {
@@ -58,7 +60,7 @@ export default function SignIn() {
     return () => {
       dispatch(setError(null));
     };
-  }, []);
+  }, [isFocused]);
 
   const onSubmit = ({ phone, password }: FormData) => {
     dispatch(

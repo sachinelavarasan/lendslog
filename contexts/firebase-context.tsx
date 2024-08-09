@@ -10,9 +10,7 @@ type Props = { children: React.ReactNode };
 
 export const FirebaseProvider: React.FC<Props> = ({ children }) => {
   const router = useRouter();
-  useEffect(() => {
-    requestUserPermission();
-  }, []);
+  
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
       shouldShowAlert: true,
@@ -104,7 +102,7 @@ export const FirebaseProvider: React.FC<Props> = ({ children }) => {
       unsubscribe();
       notificationClickSubscription.remove();
     };
-  }, []);
+  }, [router]);
 
   return <FirebaseContext.Provider value={null}>{children}</FirebaseContext.Provider>;
 };

@@ -24,6 +24,7 @@ import { phoneValidation } from '@/utils/Validation';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setError, signUp } from '@/redux/slices/auth/authSlice';
 import { setAsyncValue } from '@/utils/functions';
+import { useIsFocused } from '@react-navigation/native';
 
 const schema = z.object({
   name: z.string().min(3, { message: 'Minimum 3 characters' }),
@@ -45,6 +46,7 @@ type FormData = {
 const Register = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const isFocused = useIsFocused();
   const { isLoading, error } = useAppSelector(state => state.auth);
 
   const {
@@ -66,7 +68,7 @@ const Register = () => {
     return () => {
       dispatch(setError(null));
     };
-  }, []);
+  }, [isFocused]);
 
   const register = async (data: FormData) => {
     setAsyncValue('@signup-user', JSON.stringify(data));

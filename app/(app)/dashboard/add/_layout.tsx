@@ -13,6 +13,7 @@ import {
 import { useRouter } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useIsFocused } from '@react-navigation/native';
 
 import Input from '@/components/Input';
 import Spacer from '@/components/Spacer';
@@ -32,6 +33,7 @@ import CustomDatePicker from '@/components/CustomDatePicker';
 
 export default function AddLends() {
   const dispatch = useAppDispatch();
+  const isFocused = useIsFocused();
   const router = useRouter();
   const { isLoading, error } = useAppSelector(state => state.lends);
 
@@ -69,7 +71,7 @@ export default function AddLends() {
     return () => {
       dispatch(setError(null));
     };
-  }, []);
+  }, [isFocused]);
 
   const onSubmit = (data: lendsSchemaType) => {
     dispatch(
