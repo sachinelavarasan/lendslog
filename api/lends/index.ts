@@ -10,7 +10,7 @@ export const deleteLend = (id: number) => axios.delete(`/lends/${id}`);
 export const payInstallment = (it_ids: number[], ld_id: number) =>
   axios.put(`/lends/${ld_id}/installment`, it_ids);
 
-export const getAll = () => axios.get('/lends/all');
+export const getAll = (search?: string) => axios.get(`/lends/all?search=${search || ''}`);
 export const getTodayLends = () => axios.get('/lends/today-installments');
 
 // notification

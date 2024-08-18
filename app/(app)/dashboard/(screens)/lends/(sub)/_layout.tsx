@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { StatusBar, StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 
-import Lends from '@/components/LogSearch';
+import SearchLend from '@/components/LogSearch';
 import { MaterialTopTabs } from '@/components/MaterialTopTabs';
 import SafeAreaViewComponent from '@/components/SafeAreaView';
 import { ThemedView } from '@/components/ThemedView';
-import { getAllLends, setError } from '@/redux/slices/lends/lendsSlice';
+import { setError } from '@/redux/slices/lends/lendsSlice';
 import { useAppDispatch } from '@/redux/hooks';
 import { useIsFocused } from '@react-navigation/native';
 
@@ -117,7 +117,7 @@ export default function Layout() {
   return (
     <SafeAreaViewComponent>
       <ThemedView style={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 20 }}>
-        <Lends />
+        <SearchLend />
         <MaterialTopTabs
          initialRouteName='index'
           screenOptions={{

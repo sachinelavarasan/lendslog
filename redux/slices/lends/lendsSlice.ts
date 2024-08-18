@@ -219,22 +219,18 @@ export const deleteLend =
   };
 
 export const getAllLends =
-  (): ThunkAction<void, RootState, unknown, UnknownAction> => async dispatch => {
+  (search?:string): ThunkAction<void, RootState, unknown, UnknownAction> => async dispatch => {
     try {
       dispatch(setIsLoading(true));
-      const response = await lendsApi.getAll();
+      const response = await lendsApi.getAll(search);
 
       const { allLends, weekLends, monthLends } = response.data;
 
-      if (allLends.length) {
         dispatch(setAllLends(allLends));
-      }
-      if (weekLends.length) {
+
         dispatch(setWeekLends(weekLends));
-      }
-      if (monthLends.length) {
+
         dispatch(setMonthLends(monthLends));
-      }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         dispatch(setError(error?.response?.data?.message || 'Something went wrong.'));
