@@ -108,5 +108,5 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginBottom: 20,
   },
-  profileText: { color: '#ffffff', fontSize: 50 },
+  profileText: { color: '#ffffff', fontSize: 50, fontFamily: 'Inter-800', },
 });

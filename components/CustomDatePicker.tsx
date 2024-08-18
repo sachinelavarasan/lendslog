@@ -112,9 +112,9 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     backgroundColor: '#1C1C29',
   },
-  titleText: {
-    fontSize: 15,
-  },
+  // titleText: {
+  //   fontSize: 15,
+  // },
   placeholder: {
     color: '#999999',
   },

@@ -130,5 +130,6 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 15,
+    fontFamily: 'Inter-500',
   },
 });

@@ -80,12 +80,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     textAlign: 'center',
     lineHeight: 24,
-    marginTop: 16
+    marginTop: 16,
+    fontFamily: 'Inter-700',
   },
   subTitle:{
     color: '#C7C7C7',
     fontSize: 16,
     textAlign: 'center',
     lineHeight: 24,
+    fontFamily: 'Inter-500',
   }
 });

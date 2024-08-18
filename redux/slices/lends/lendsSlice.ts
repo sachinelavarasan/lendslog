@@ -289,15 +289,13 @@ export const getAllNotifications =
 
 export const payInstallment =
   (
-    it_id: number,
+    it_ids: number[],
     ld_id: number,
     callback: () => void
   ): ThunkAction<void, RootState, unknown, UnknownAction> =>
   async dispatch => {
-    dispatch(setIsLoading(true));
-
     try {
-      const response = await lendsApi.payInstallment(it_id, ld_id);
+      const response = await lendsApi.payInstallment(it_ids, ld_id);
       const { todayLends } = response.data;
 
       if (todayLends.length) {
@@ -312,8 +310,6 @@ export const payInstallment =
       if (error instanceof AxiosError) {
         dispatch(setError(error?.response?.data?.error || 'Something went wrong.'));
       }
-    } finally {
-      dispatch(setIsLoading(false));
     }
   };
 

@@ -6,25 +6,53 @@ import DueCard from '@/components/DueCard';
 import HeaderWithCount from '@/components/HeaderWithCount';
 import { IinstallmentTimelines } from '@/utils/types/lends';
 import Spacer from './Spacer';
+import { deviceWidth } from '@/utils/functions';
 
 const InstallmentsListModal = ({ installmentTimelines = [] }: any) => {
   const [isVisible, setIsVisible] = useState(false);
   return (
     <>
-      <TouchableOpacity
-        onPress={() => {
-          setIsVisible(!isVisible);
+      <View
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexDirection: 'row',
+          width: deviceWidth() - 50,
+          paddingTop: 12,
         }}>
-        <Text
+        <View
           style={{
-            color: '#c7c7c7',
-            fontSize: 14,
-            fontFamily: 'Inter-500',
-            textDecorationLine:'underline'
+            display: 'flex',
+            columnGap: 4,
+            alignItems: 'center',
+            flexDirection: 'row',
           }}>
-          View
-        </Text>
-      </TouchableOpacity>
+          <Image source={require('@/assets/icons/info.png')} style={{ width: 18, height: 18 }} />
+          <Text style={{ color: '#ffffff', fontFamily: 'Inter-600', fontSize: 14, marginLeft: 2 }}>
+            To view installment details, click here{' '}
+          </Text>
+        </View>
+        <View>
+          <TouchableOpacity
+            onPress={() => {
+              setIsVisible(!isVisible);
+            }}>
+            <Text
+              style={{
+                color: '#c7c7c7',
+                fontSize: 14,
+                fontFamily: 'Inter-500',
+                backgroundColor: '#323448',
+                paddingHorizontal: 8,
+                paddingVertical: 2,
+                borderRadius: 4,
+              }}>
+              View
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
       <Modal
         isVisible={isVisible}
         hasBackdrop={true}
@@ -32,7 +60,7 @@ const InstallmentsListModal = ({ installmentTimelines = [] }: any) => {
         animationIn="fadeIn"
         animationOut="fadeOut"
         backdropColor="#060609"
-        backdropOpacity={0.9}
+        backdropOpacity={1}
         hideModalContentWhileAnimating={true}
         useNativeDriver={true}>
         <View

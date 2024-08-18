@@ -139,6 +139,7 @@ const MobileVerify = () => {
                     fontSize: 20,
                     textAlign: 'center',
                     lineHeight: 24,
+                    fontFamily: 'Inter-500',
                   }}>
                   Your mobile number has been verified successfully.
                 </Text>
@@ -196,6 +197,7 @@ const styles = StyleSheet.create({
     color: '#FFCA3A',
     padding: 0,
     fontSize: 28,
+    fontFamily: 'Inter-600',
     lineHeight: 33,
     verticalAlign: 'middle',
   },

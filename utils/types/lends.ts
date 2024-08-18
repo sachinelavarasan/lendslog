@@ -31,7 +31,6 @@ export interface TodayLends {
   it_term_amount: number;
   total_pending_amount: string;
   pending_installments: PendingInstallments[];
-  onCheck?: any;
 }
 
 export interface PendingInstallments {

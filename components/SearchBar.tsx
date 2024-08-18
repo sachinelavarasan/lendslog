@@ -124,6 +124,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     width: '70%',
     color: '#FFF',
+    fontFamily: 'Inter-400',
   },
   actions: {
     flexDirection: 'row',

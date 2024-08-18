@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Toast from 'react-native-toast-message';
+
+import CustomCheckBox from './CustomCheckBox';
 
 import { TodayLends } from '@/utils/types/lends';
-import CustomCheckBox from './CustomCheckBox';
+
+import { useAppDispatch } from '@/redux/hooks';
+import { payInstallment } from '@/redux/slices/lends/lendsSlice';
 
 const TodayLendCard = ({
   ld_borrower_name,
@@ -11,10 +16,22 @@ const TodayLendCard = ({
   total_pending_amount,
   ld_borrower_phoneno,
   ld_id,
-  onCheck,
 }: TodayLends) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isChecked, setIsChecked] = useState(0);
+  const [isChecked, setIsChecked] = useState<number[]>([]);
+  const dispatch = useAppDispatch();
+
+  const onUpdate = () => {
+    dispatch(
+      payInstallment(isChecked, ld_id, () => {
+        Toast.show({
+          type: 'success',
+          text1: 'Installment pending paid status updated successfully',
+        });
+      })
+    );
+  };
+
   return (
     <View
       style={{
@@ -62,17 +79,17 @@ const TodayLendCard = ({
           {pending_installments.map((item, index) => (
             <View key={`${item.it_id}` + `${index}`} style={{ marginTop: 4 }}>
               <View style={styles.structure}>
-                <View style={{width: "50%"}}>
-                <CustomCheckBox
-                  label={item.it_installment_date}
-                  fillColor="rgba(255, 200, 58, 0.8)"
-                  onChange={() => {
-                    setIsChecked(item.it_id);
-                    onCheck({ it_id: item.it_id, ld_id: ld_id });
-                  }}
-                  isChecked={isChecked == item.it_id}
-                  size={20}
-                />
+                <View style={{ width: '50%' }}>
+                  <CustomCheckBox
+                    label={item.it_installment_date}
+                    fillColor="rgba(255, 200, 58, 0.8)"
+                    onChange={() => {
+                      setIsChecked(state => [...state, item.it_id]);
+                      // onPress({ it_id: item.it_id, ld_id: ld_id });
+                    }}
+                    isChecked={isChecked.includes(item.it_id)}
+                    size={20}
+                  />
                 </View>
                 <Text style={[styles.subText, { fontFamily: 'Inter-700' }]}>
                   {item.it_term_amount}
@@ -80,6 +97,7 @@ const TodayLendCard = ({
               </View>
             </View>
           ))}
+
           <View
             style={[
               styles.structure,
@@ -90,6 +108,28 @@ const TodayLendCard = ({
               {total_pending_amount}
             </Text>
           </View>
+          {isChecked.length ? (
+            <TouchableOpacity
+              style={styles.updateInstallment}
+              disabled={!isChecked.length}
+              onPress={() => {
+                Alert.alert('Delete Lend', 'Are you sure you want to delete this lend record ?', [
+                  {
+                    text: 'Cancel',
+                    style: 'cancel',
+                  },
+                  {
+                    text: 'Update',
+                    style: 'default',
+                    onPress: () => {
+                      onUpdate();
+                    },
+                  },
+                ]);
+              }}>
+              <Text style={styles.update}>Update</Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
       ) : null}
     </View>
@@ -125,5 +165,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  updateInstallment: {
+    backgroundColor: '#FFCA3A',
+    borderRadius: 4,
+    padding: 8,
+    opacity: 0.8,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 14,
+  },
+  update: {
+    color: '#1C1C29',
+    fontSize: 14,
+    fontFamily: 'Inter-700',
   },
 });

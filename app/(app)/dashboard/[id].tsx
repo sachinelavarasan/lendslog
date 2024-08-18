@@ -171,7 +171,11 @@ export default function DetailsScreen(props: any) {
                   <Text style={styles.error}>{error}</Text>
                 </View>
               )}
+
               <View style={styles.header}>
+                <TouchableOpacity onPress={goBack}>
+                  <Image source={require('@/assets/icons/back.png')} />
+                </TouchableOpacity>
                 <View
                   style={{
                     display: 'flex',
@@ -179,14 +183,10 @@ export default function DetailsScreen(props: any) {
                     alignItems: 'center',
                     gap: 6,
                   }}>
-                  <TouchableOpacity onPress={goBack}>
-                    <Image source={require('@/assets/icons/back.png')} />
-                  </TouchableOpacity>
                   <Text style={styles.label}>Lend Details</Text>
                 </View>
                 <View
                   style={{ display: 'flex', flexDirection: 'row', gap: 20, alignItems: 'center' }}>
-                  <InstallmentsListModal installmentTimelines={currentLend?.installmentTimelines} />
                   <TouchableOpacity
                     onPress={() => {
                       Alert.alert(
@@ -211,6 +211,9 @@ export default function DetailsScreen(props: any) {
                   </TouchableOpacity>
                 </View>
               </View>
+              <Text style={{width:"100%"}}>
+                <InstallmentsListModal installmentTimelines={currentLend?.installmentTimelines} />
+              </Text>
               <View>
                 <View style={[styles.sectionContainer, { marginTop: 25 }]}>
                   <View style={[styles.sectionTitleContainer]}>

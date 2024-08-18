@@ -95,9 +95,7 @@ const LendsCard = ({
       </View>
       <View style={styles.weeksStyles}>
         <View style={styles.weekSubContainer}>
-          <Text style={[styles.subText, { marginRight: 6, color: '#77ffc4' }]}>
-            Paid weeks :
-          </Text>
+          <Text style={[styles.subText, { marginRight: 6, color: '#77ffc4' }]}>Paid weeks :</Text>
           <Text style={[styles.subText, { fontFamily: 'Inter-700', color: '#77ffc4' }]}>
             {ld_paid_weeks}/{ld_total_weeks_or_month}
           </Text>
@@ -125,7 +123,7 @@ const LendsCard = ({
           asChild>
           <Pressable>
             <Image
-              source={require('@/assets/icons/next.png')}
+              source={require('@/assets/icons/back.png')}
               style={styles.image}
               resizeMode="contain"
             />
@@ -180,9 +178,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    height: 18,
-    width: 18,
-    marginRight: -5,
+    transform: [{ rotateY: '180deg' }],
   },
   lastContainer: {
     width: '100%',

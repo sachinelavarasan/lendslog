@@ -26,17 +26,6 @@ export default function HomeScreen() {
     }
   }, [isFocused]);
 
-  const onPress = ({ it_id, ld_id }: { it_id: number; ld_id: number }) => {
-    dispatch(
-      payInstallment(it_id, ld_id, () => {
-        Toast.show({
-          type: 'success',
-          text1: 'Installment pending paid status updated successfully',
-        });
-      })
-    );
-  };
-
   if (isLoading) {
     return (
       <ThemedView
@@ -80,7 +69,7 @@ export default function HomeScreen() {
             scrollEnabled={true}
             ItemSeparatorComponent={() => <Spacer height={12} />}
             renderItem={({ item }: { item: TodayLends }) => {
-              return <TodayLendCard {...item} onCheck={onPress} />;
+              return <TodayLendCard {...item} />;
             }}
             keyExtractor={(item: any, index: number) => item.ld_id + index}
             ListFooterComponent={() => <Spacer height={60} />}
