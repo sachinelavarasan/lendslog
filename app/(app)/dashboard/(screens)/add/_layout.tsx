@@ -96,8 +96,7 @@ export default function AddLends() {
       <SafeAreaViewComponent>
         <ScrollView
           bounces={false}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps={'always'}>
+          showsVerticalScrollIndicator={false}>
           <ThemedView
             style={{ flex: 1,  paddingTop: StatusBar.currentHeight, paddingHorizontal: 10 }}>
              <View style={styles.formContainer}>
@@ -469,7 +468,7 @@ export default function AddLends() {
                 <View style={styles.btnContainer}>
                   <TouchableOpacity
                     style={[styles.button, !isValid || isLoading ? styles.disable : {}]}
-                    disabled={!isValid || isLoading}
+                    // disabled={!isValid || isLoading}
                     onPress={handleSubmit(onSubmit)}>
                     {isLoading ? (
                       <ActivityIndicator animating color={'#1C1C29'} style={styles.loader} />

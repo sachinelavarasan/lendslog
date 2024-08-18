@@ -59,19 +59,11 @@ export default function Profile() {
       <SafeAreaViewComponent>
         <ScrollView
           bounces={false}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps={'always'}>
+          showsVerticalScrollIndicator={false}>
           <ThemedView
             style={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 10 }}>
             <View style={styles.mainContainer}>
               <View style={styles.actionsContainer}>
-                <TouchableOpacity
-                  accessibilityRole="button"
-                  onPress={() => {
-                    router.back();
-                  }}>
-                  <Image source={require('@/assets/icons/back.png')} />
-                </TouchableOpacity>
                 {menuActions.length ? <PopupMenu actions={menuActions} /> : null}
               </View>
               <View
@@ -101,7 +93,7 @@ const styles = StyleSheet.create({
     width: '100%',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     flexDirection: 'row',
     paddingHorizontal: 15,
   },
@@ -113,7 +105,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 120,
-    marginTop: 60,
+    marginTop: 30,
     marginBottom: 20,
   },
   profileText: { color: '#ffffff', fontSize: 50 },

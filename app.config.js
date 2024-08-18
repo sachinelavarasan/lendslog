@@ -1,6 +1,6 @@
 export default {
   "expo": {
-    "name": "lendslog",
+    "name": "LendsLog",
     "slug": "lendslog",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,7 +8,7 @@ export default {
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/app-splash-screen-icon.png",
+      "image": "./assets/images/app-splash-screen.png",
       "resizeMode": "contain",
       "backgroundColor": "#060609"
     },

@@ -58,14 +58,14 @@ export default function ProfileForm({
   const resetData = useCallback(
     (user: userSchemaType) => {
       reset({
-        us_name: user?.us_name,
-        us_username: user?.us_username,
-        us_phone_no: user?.us_phone_no,
-        us_address: user?.us_address,
-        us_gender: user?.us_gender,
-        us_state: user?.us_state,
-        us_district: user?.us_district,
-        us_pincode: user?.us_pincode,
+        us_name: user?.us_name || '',
+        us_username: user?.us_username || '',
+        us_phone_no: user?.us_phone_no || '',
+        us_address: user?.us_address || '',
+        us_gender: user?.us_gender || 0,
+        us_state: user?.us_state || '',
+        us_district: user?.us_district || '',
+        us_pincode: user?.us_pincode || '',
       });
     },
     [user]
@@ -157,7 +157,7 @@ export default function ProfileForm({
                 onChangeText={field.onChange}
                 error={errors.us_phone_no?.message}
                 borderLess
-                editable={isEdit}
+                editable={false}
               />
             )}
             name="us_phone_no"

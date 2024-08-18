@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useIsFocused } from '@react-navigation/native';
 import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
-import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import {
   View,
@@ -15,6 +15,7 @@ import {
   Platform,
   TouchableOpacity,
   Image,
+  Alert,
 } from 'react-native';
 import Toast from 'react-native-toast-message';
 
@@ -28,15 +29,16 @@ import Spacer from '@/components/Spacer';
 import { ThemedView } from '@/components/ThemedView';
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { edit, setCurrentLend, setError } from '@/redux/slices/lends/lendsSlice';
+import { deleteLend, edit, setCurrentLend, setError } from '@/redux/slices/lends/lendsSlice';
 
 import { suretyType } from '@/utils/common-data';
 import { EditLendsSchemaType, EditLendsSchema, lendsSchemaType } from '@/utils/schema';
 import { IinstallmentTimelines } from '@/utils/types/lends';
+import InstallmentsListModal from '@/components/InstallmentsListModal';
 
-export default function DetailsScreen(props:any) {
+export default function DetailsScreen(props: any) {
   const { id } = useLocalSearchParams();
-  const navigation = useNavigation();
+
   const [loading, setLoading] = useState(true);
   const isFocused = useIsFocused();
   const dispatch = useAppDispatch();
@@ -109,13 +111,20 @@ export default function DetailsScreen(props:any) {
       dispatch(
         edit(data, currentLend?.ld_id, lend => {
           Toast.show({
-            type: 'success', 
+            type: 'success',
             text1: 'Lend added successfully!',
           });
           dispatch(setError(null));
           resetForm(lend);
         })
       );
+  };
+  const goBack = () => {
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.navigate('/dashboard/(screens)/lends');
+    }
   };
 
   if (loading) {
@@ -134,16 +143,26 @@ export default function DetailsScreen(props:any) {
       </ThemedView>
     );
   }
+  const onDelete = () => {
+    if (currentLend?.ld_id)
+      dispatch(
+        deleteLend(currentLend?.ld_id, Number(currentLend?.ld_total_weeks_or_month), () => {
+          goBack();
+          Toast.show({
+            type: 'error',
+            text1: 'Lend deleted successfully!',
+          });
+          dispatch(setError(null));
+        })
+      );
+  };
 
   return (
     <KeyboardAvoidingView
       {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}
       style={{ flex: 1 }}>
       <SafeAreaViewComponent>
-        <ScrollView
-          bounces={false}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps={'always'}>
+        <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
           <ThemedView
             style={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 10 }}>
             <View style={styles.formContainer}>
@@ -153,28 +172,43 @@ export default function DetailsScreen(props:any) {
                 </View>
               )}
               <View style={styles.header}>
-                <Text style={styles.label} onPress={()=>{
-                  if(router.canGoBack()){
-                    router.back();
-                  }
-                }}>Edit Lend Details</Text>
                 <View
                   style={{
                     display: 'flex',
                     flexDirection: 'row',
-                    marginTop: 12,
-                    alignItems: 'flex-start',
+                    alignItems: 'center',
                     gap: 6,
                   }}>
-                  <Image source={require('@/assets/icons/info.png')} />
-                  <Text
-                    style={{
-                      fontFamily: 'Inter-300',
-                      color: '#c7c7c7',
-                      fontSize: 14,
+                  <TouchableOpacity onPress={goBack}>
+                    <Image source={require('@/assets/icons/back.png')} />
+                  </TouchableOpacity>
+                  <Text style={styles.label}>Lend Details</Text>
+                </View>
+                <View
+                  style={{ display: 'flex', flexDirection: 'row', gap: 20, alignItems: 'center' }}>
+                  <InstallmentsListModal installmentTimelines={currentLend?.installmentTimelines} />
+                  <TouchableOpacity
+                    onPress={() => {
+                      Alert.alert(
+                        'Delete Lend',
+                        'Are you sure you want to delete this lend record ?',
+                        [
+                          {
+                            text: 'Cancel',
+                            style: 'cancel',
+                          },
+                          {
+                            text: 'Delete',
+                            style: 'default',
+                            onPress: () => {
+                              onDelete();
+                            },
+                          },
+                        ]
+                      );
                     }}>
-                    Scroll down to see the full list of the current lends installement
-                  </Text>
+                    <Image source={require('@/assets/icons/trash.png')} />
+                  </TouchableOpacity>
                 </View>
               </View>
               <View>
@@ -446,35 +480,6 @@ export default function DetailsScreen(props:any) {
                 </View>
               </View>
             </View>
-            <Spacer height={25} />
-            <View
-              style={{
-                marginHorizontal: 15,
-                marginVertical: 10,
-                borderTopWidth: 0.2,
-                borderTopColor: '#ffffff',
-                paddingTop: 10,
-              }}>
-              <HeaderWithCount
-                title="Installments List"
-                subTitle
-                count={currentLend.installmentTimelines?.length}
-                countText="installments"
-              />
-            </View>
-            <FlatList
-              bounces={false}
-              style={{ marginBottom: 20, paddingBottom: 20 }}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ paddingHorizontal: 15 }}
-              scrollEnabled={false}
-              ItemSeparatorComponent={() => <Spacer height={10} />}
-              data={currentLend.installmentTimelines}
-              renderItem={({ item }: { item: IinstallmentTimelines }) => {
-                return <DueCard {...item} />;
-              }}
-              keyExtractor={(item: IinstallmentTimelines, index: number) => item.it_id + 'log'}
-            />
           </ThemedView>
         </ScrollView>
       </SafeAreaViewComponent>
@@ -490,8 +495,10 @@ const styles = StyleSheet.create({
   },
   header: {
     display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    columnGap: 10,
   },
   formContainer: {
     paddingHorizontal: 15,
@@ -556,7 +563,7 @@ const styles = StyleSheet.create({
     color: '#b7b6c1',
     marginBottom: 2,
     fontFamily: 'Inter-700',
-    textDecorationLine: "underline"
+    textDecorationLine: 'underline',
   },
   sectionTitleContainer: {
     marginBottom: 10,

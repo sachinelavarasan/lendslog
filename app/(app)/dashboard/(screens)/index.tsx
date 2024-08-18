@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { StatusBar, View, FlatList, Platform } from 'react-native';
+import { StatusBar, View, FlatList, Platform, ActivityIndicator } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 
@@ -26,6 +26,30 @@ export default function HomeScreen() {
     }
   }, [isFocused]);
 
+  const onPress = ({ it_id, ld_id }: { it_id: number; ld_id: number }) => {
+    dispatch(
+      payInstallment(it_id, ld_id, () => {
+        Toast.show({
+          type: 'success',
+          text1: 'Installment pending paid status updated successfully',
+        });
+      })
+    );
+  };
+
+  if (isLoading) {
+    return (
+      <ThemedView
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <ActivityIndicator size="large" color="#FFCA3A" />
+      </ThemedView>
+    );
+  }
+
   // Empty state
   if (!isLoading && !todayLends.length) {
     return (
@@ -42,17 +66,6 @@ export default function HomeScreen() {
       </ThemedView>
     );
   }
-
-  const onPress = ({ it_id, ld_id }: { it_id: number; ld_id: number }) => {
-    dispatch(
-      payInstallment(it_id, ld_id, () => {
-        Toast.show({
-          type: 'success', 
-          text1: 'Installment pending paid status updated successfully',
-        });
-      })
-    );
-  };
 
   return (
     <SafeAreaViewComponent>

@@ -1,9 +1,13 @@
+import { useEffect } from 'react';
 import { StatusBar, StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 
 import Lends from '@/components/LogSearch';
 import { MaterialTopTabs } from '@/components/MaterialTopTabs';
 import SafeAreaViewComponent from '@/components/SafeAreaView';
 import { ThemedView } from '@/components/ThemedView';
+import { getAllLends, setError } from '@/redux/slices/lends/lendsSlice';
+import { useAppDispatch } from '@/redux/hooks';
+import { useIsFocused } from '@react-navigation/native';
 
 const ROUTES = [
   {
@@ -101,27 +105,37 @@ function MyTabBar({ state, descriptors, navigation }: any) {
 }
 
 export default function Layout() {
+  const dispatch = useAppDispatch();
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    return () => {
+      dispatch(setError(null));
+    };
+  }, [isFocused]);
+
   return (
-      <SafeAreaViewComponent>
-        <ThemedView style={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 20 }}>
-          <Lends />
-          <MaterialTopTabs
-            screenOptions={{
-              tabBarShowLabel: false,
-            }}
-            tabBar={props => <MyTabBar {...props} />}>
-            {ROUTES.map(item => (
-              <MaterialTopTabs.Screen
-                key={item.name}
-                name={item.name}
-                options={{
-                  title: item.title,
-                }}
-              />
-            ))}
-          </MaterialTopTabs>
-        </ThemedView>
-      </SafeAreaViewComponent>
+    <SafeAreaViewComponent>
+      <ThemedView style={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 20 }}>
+        <Lends />
+        <MaterialTopTabs
+         initialRouteName='index'
+          screenOptions={{
+            tabBarShowLabel: false,
+          }}
+          tabBar={props => <MyTabBar {...props} />}>
+          {ROUTES.map(item => (
+            <MaterialTopTabs.Screen
+              key={item.name}
+              name={item.name}
+              options={{
+                title: item.title,
+              }}
+            />
+          ))}
+        </MaterialTopTabs>
+      </ThemedView>
+    </SafeAreaViewComponent>
   );
 }
 

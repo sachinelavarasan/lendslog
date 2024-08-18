@@ -56,10 +56,14 @@ export const LendsSlice = createSlice({
         }
       });
     },
-    deleteLends: (state, action: PayloadAction<{ id: number }>) => {
-      state.timelines = state.timelines.filter(
-        timeline => timeline.it_lend_id !== action.payload.id
-      );
+    deleteLends: (state, action: PayloadAction<{ id: number; term_type: number }>) => {
+      state.allLends = state.allLends.filter(lend => lend.ld_id !== action.payload.id);
+      state.todayLends = state.todayLends.filter(lend => lend.ld_id !== action.payload.id);
+      if (action.payload.term_type === 1) {
+        state.weekLends = state.weekLends.filter(lend => lend.ld_id !== action.payload.id);
+      } else {
+        state.monthLends = state.monthLends.filter(lend => lend.ld_id !== action.payload.id);
+      }
     },
     setError(state, action) {
       state.error = action.payload;
@@ -190,6 +194,27 @@ export const edit =
       }
     } finally {
       dispatch(setIsLoading(false));
+    }
+  };
+export const deleteLend =
+  (
+    ld_id: number,
+    term: number,
+    callback: () => void
+  ): ThunkAction<void, RootState, unknown, UnknownAction> =>
+  async dispatch => {
+    try {
+      await lendsApi.deleteLend(ld_id);
+      dispatch(setCurrentLend(null));
+      dispatch(deleteLends({ id: ld_id, term_type: term }));
+
+      if (callback) {
+        callback();
+      }
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        dispatch(setError(error?.response?.data?.error || 'Something went wrong.'));
+      }
     }
   };
 

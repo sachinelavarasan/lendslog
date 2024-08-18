@@ -17,9 +17,9 @@ const DueCard = ({
   return (
     <View
       style={{
-        backgroundColor: '#1C1C29',
+        backgroundColor: '#323448',
         width: '100%',
-        borderRadius: 10,
+        borderRadius: 6,
         padding: 10,
         shadowColor: '#000',
         shadowOffset: { width: 4, height: 4 },
@@ -32,16 +32,19 @@ const DueCard = ({
           display: 'flex',
           flexDirection: 'row',
           justifyContent: 'space-between',
-          alignItems: 'center',
+          alignItems: 'flex-start',
         }}>
-        <Text style={styles.name}>{it_installment_date}</Text>
+        <Text style={styles.subText}>
+          Date of Payment : <Text style={styles.name}>{it_installment_date}</Text>
+        </Text>
 
         <Text style={[it_installement_status === 1 ? styles.pendingStyle : styles.paidStyle]}>
           {it_installement_status === 1 ? 'Pending' : 'Paid'}
         </Text>
       </View>
       <Text style={styles.subText}>
-        Due amount : <Text style={[styles.subText, { fontFamily: 'Inter-700' }]}>{it_term_amount}</Text>
+        Due amount :{' '}
+        <Text style={styles.name}>{it_term_amount}</Text>
       </Text>
     </View>
   );
@@ -53,11 +56,11 @@ const styles = StyleSheet.create({
   chip: {
     paddingVertical: 4,
     paddingHorizontal: 8,
-    borderRadius: 12,
+    borderRadius: 6,
   },
   name: {
     color: '#FFFFFF',
-    fontSize: 18,
+    fontSize: 14,
     fontFamily: 'Inter-700',
     maxWidth: 250,
   },
@@ -65,7 +68,6 @@ const styles = StyleSheet.create({
     color: '#C7C7C7',
     fontSize: 14,
     fontFamily: 'Inter-400',
-    marginTop: 8,
   },
   paidStyle: {
     backgroundColor: 'rgba(111, 255, 98, 0.09)',

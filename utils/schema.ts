@@ -129,16 +129,20 @@ export type EditLendsSchemaType = z.infer<typeof EditLendsSchema> & {
 // User
 export const userSchema = z.object({
   us_name: z.string().trim().min(3, { message: 'Name should be minimum 3 characters' }),
-  us_username: z.string().trim().min(3, { message: 'Username should be minimum 3 characters' }),
+  us_username: z.string().trim().optional(),
   us_phone_no: z.string().regex(phoneValidation, { message: 'Invalid phone number' }),
   us_email: z.string().email({ message: 'Invalid Email' }).optional(),
-  us_address: z.string().trim(),
+  us_address: z.string().trim().optional(),
   us_gender: z.number().optional(),
-  us_state: z.string().trim(),
+  us_state: z.string().trim().optional(),
   us_district: z
     .string()
     .trim().optional(),
-  us_pincode: z.string().regex(pincodeValidation, { message: 'Invalid pincode number' }).optional(),
+    us_pincode: z.string().refine(value => {
+      if (value === undefined || value === '') return true; // Optional case
+      return pincodeValidation.test(value); // Apply regex if value is present
+    }, { message: 'Invalid pincode number' })
+  // us_pincode: z.string().regex(pincodeValidation, { message: 'Invalid pincode number' }).optional(),
 });
 
 export type userSchemaType = z.infer<typeof userSchema>;
