@@ -113,7 +113,7 @@ const TodayLendCard = ({
               style={styles.updateInstallment}
               disabled={!isChecked.length}
               onPress={() => {
-                Alert.alert('Delete Lend', 'Are you sure you want to delete this lend record ?', [
+                Alert.alert('Update Installments', `Updating this will change the selected installment's status from pending to paid.`,[
                   {
                     text: 'Cancel',
                     style: 'cancel',

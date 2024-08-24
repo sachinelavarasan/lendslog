@@ -121,6 +121,19 @@ export const LendsSlice = createSlice({
     setOlderNotifications(state, action) {
       state.olderNotifications = action.payload;
     },
+    updateCurrentLendInstallments(state, action) {
+      if (state.currentLend && state.currentLend.installmentTimelines) {
+        let currentLend = state.currentLend;
+        let installmentTimelines = currentLend.installmentTimelines?.map((item) => {
+          if (action.payload.includes(item.it_id)) {
+            item.it_installement_status = 2;
+          }
+          return item;
+        });
+        currentLend.installmentTimelines = installmentTimelines;
+        state.currentLend = currentLend;
+      }
+    },
   },
 });
 
@@ -139,6 +152,7 @@ export const {
   setTodayLends,
   setTodayNotifications,
   setOlderNotifications,
+  updateCurrentLendInstallments,
 } = LendsSlice.actions;
 
 export const add =
@@ -220,18 +234,19 @@ export const deleteLend =
   };
 
 export const getAllLends =
-  (search?:string): ThunkAction<void, RootState, unknown, UnknownAction> => async dispatch => {
+  (search?: string): ThunkAction<void, RootState, unknown, UnknownAction> =>
+  async dispatch => {
     try {
       dispatch(setIsLoading(true));
       const response = await lendsApi.getAll(search);
 
       const { allLends, weekLends, monthLends } = response.data;
 
-        dispatch(setAllLends(allLends));
+      dispatch(setAllLends(allLends));
 
-        dispatch(setWeekLends(weekLends));
+      dispatch(setWeekLends(weekLends));
 
-        dispatch(setMonthLends(monthLends));
+      dispatch(setMonthLends(monthLends));
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         dispatch(setError(error?.response?.data?.message || 'Something went wrong.'));
@@ -300,6 +315,28 @@ export const payInstallment =
       } else {
         dispatch(setTodayLends([]));
       }
+      if (callback) {
+        callback();
+      }
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        dispatch(setError(error?.response?.data?.error || 'Something went wrong.'));
+      }
+    }
+  };
+
+export const updateInstallment =
+  (
+    it_ids: number[],
+    ld_id: number,
+    callback: () => void
+  ): ThunkAction<void, RootState, unknown, UnknownAction> =>
+  async dispatch => {
+    try {
+      await lendsApi.payInstallment(it_ids, ld_id);
+
+      dispatch(updateCurrentLendInstallments(it_ids))
+
       if (callback) {
         callback();
       }

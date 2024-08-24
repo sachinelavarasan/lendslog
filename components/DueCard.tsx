@@ -1,7 +1,11 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { IinstallmentTimelines } from '@/utils/types/lends';
+import CustomCheckBox from './CustomCheckBox';
+import { useAppDispatch } from '@/redux/hooks';
+import { updateInstallment } from '@/redux/slices/lends/lendsSlice';
+import Toast from 'react-native-toast-message';
 
 const DueCard = ({
   it_id,
@@ -14,6 +18,20 @@ const DueCard = ({
   it_is_deleted,
   it_term_amount,
 }: IinstallmentTimelines) => {
+  const [isChecked, setIsChecked] = useState<number>(0);
+  const dispatch = useAppDispatch();
+  const onUpdate = () => {
+    console.log(isChecked)
+    dispatch(
+      updateInstallment([isChecked], it_lend_id, () => {
+        Toast.show({
+          type: 'success',
+          text1: 'Installment pending paid status updated successfully',
+        });
+        setIsChecked(0)
+      })
+    );
+  };
   return (
     <View
       style={{
@@ -26,26 +44,68 @@ const DueCard = ({
         shadowOpacity: 0.3,
         shadowRadius: 2,
         elevation: -4,
+        display: 'flex',
+        flexDirection: 'row',
       }}>
+      {it_installement_status == 1 ? (
+        <View>
+          <CustomCheckBox
+            // label={it_installment_date}
+            fillColor="rgba(255, 200, 58, 0.8)"
+            onChange={checked => {
+              if (checked) {
+                setIsChecked(it_id);
+              } else {
+                setIsChecked(0);
+              }
+            }}
+            isChecked={isChecked === it_id}
+            size={20}
+          />
+        </View>
+      ) : null}
       <View
         style={{
           display: 'flex',
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'flex-start',
+          width: it_installement_status == 2 ? '100%' : '90%',
         }}>
-        <Text style={styles.subText}>
-          Date of Payment : <Text style={styles.name}>{it_installment_date}</Text>
-        </Text>
-
+        <View>
+          <Text style={styles.subText}>
+            Date of Payment : <Text style={styles.name}>{it_installment_date}</Text>
+          </Text>
+          <Text style={styles.subText}>
+            Due amount : <Text style={styles.name}>{it_term_amount}</Text>
+          </Text>
+          {isChecked == it_id ? (
+            <TouchableOpacity
+              style={styles.updateInstallment}
+              disabled={!isChecked}
+              onPress={() => {
+                Alert.alert('Update Installment', 'Are you sure you want to update this installment payment status ?', [
+                  {
+                    text: 'Cancel',
+                    style: 'cancel',
+                  },
+                  {
+                    text: 'Update',
+                    style: 'default',
+                    onPress: () => {
+                      onUpdate();
+                    },
+                  },
+                ]);
+              }}>
+              <Text style={styles.update}>Update</Text>
+            </TouchableOpacity>
+          ) : null}
+        </View>
         <Text style={[it_installement_status === 1 ? styles.pendingStyle : styles.paidStyle]}>
           {it_installement_status === 1 ? 'Pending' : 'Paid'}
         </Text>
       </View>
-      <Text style={styles.subText}>
-        Due amount :{' '}
-        <Text style={styles.name}>{it_term_amount}</Text>
-      </Text>
     </View>
   );
 };
@@ -86,5 +146,20 @@ const styles = StyleSheet.create({
     color: '#F75353',
     fontSize: 12,
     fontFamily: 'Inter-500',
+  },
+  updateInstallment: {
+    backgroundColor: '#FFCA3A',
+    borderRadius: 4,
+    padding: 8,
+    opacity: 0.8,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 14,
+  },
+  update: {
+    color: '#1C1C29',
+    fontSize: 14,
+    fontFamily: 'Inter-700',
   },
 });
