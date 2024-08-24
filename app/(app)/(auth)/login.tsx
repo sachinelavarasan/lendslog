@@ -50,8 +50,8 @@ export default function SignIn() {
     reset,
   } = useForm({
     defaultValues: {
-      phone: '+917904859928',
-      password: '12345678',
+      phone: '',
+      password: '',
     },
     resolver: zodResolver(schema),
   });
@@ -105,7 +105,7 @@ export default function SignIn() {
                   render={({ field }) => (
                     <Input
                       {...field}
-                      placeholder="Enter phone number"
+                      placeholder="+91XXXXXXXXXX"
                       label="Phone Number"
                       keyboardType="numbers-and-punctuation"
                       autoCapitalize="none"
@@ -148,14 +148,14 @@ export default function SignIn() {
                     <Text style={[styles.title, isLoading ? styles.textDisable : {}]}>Sign In</Text>
                   </TouchableOpacity>
                 </View>
-                <Spacer height={50} />
+                {/* <Spacer height={50} />
                 <AuthLink
                   linkText="Sign Up"
                   description="Doesn't have an account? "
                   onPress={() => {
                     router.replace('/sign-up');
                   }}
-                />
+                /> */}
                 <Spacer height={50} />
               </View>
             </View>

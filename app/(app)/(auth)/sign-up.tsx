@@ -56,10 +56,10 @@ const Register = () => {
     reset,
   } = useForm({
     defaultValues: {
-      name: 'Elavarasan',
+      name: '',
       // email: 'janani@gmail.com',
-      phone: '+917904859928',
-      password: '12345678',
+      phone: '',
+      password: '',
     },
     resolver: zodResolver(schema),
   });
