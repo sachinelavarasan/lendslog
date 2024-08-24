@@ -79,7 +79,7 @@ export default function Notifications() {
                     />
                   );
                 }}
-                keyExtractor={(item: any, index: number) => item.nt_id + index}
+                keyExtractor={(item: any, index: number) => item.nt_id}
               />
               <Spacer height={15} />
             </>
@@ -97,7 +97,7 @@ export default function Notifications() {
                 renderItem={({ item }: { item: INotifications }) => {
                   return <NotificationCard notification={item} type="older" />;
                 }}
-                keyExtractor={(item: any, index: number) => item.nt_id + index}
+                keyExtractor={(item: any, index: number) => item.nt_id}
                 ListFooterComponent={() => <Spacer height={60} />}
               />
             </>

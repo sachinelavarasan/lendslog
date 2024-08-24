@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -68,22 +68,47 @@ export default function AddLends() {
     resolver: zodResolver(lendsSchema),
   });
 
+  const principal = watch('ld_lend_amount');
+  const interest_rate = watch('ld_interest_rate');
+  const time = watch('ld_total_weeks_or_month');
+
   useEffect(() => {
     return () => {
       dispatch(setError(null));
     };
   }, [isFocused]);
 
+  const interestCalculation = useMemo(() => {
+    if (principal && interest_rate && time) {
+      const temp_amount: number = Number(Number(principal) * (interest_rate / 100)) * 10;
+
+      const interest_amount: number = (temp_amount - Number(principal)) / Number(time);
+
+      const principal_repayment: number = Number(temp_amount / Number(time)) - interest_amount;
+
+      return Math.round(principal_repayment + interest_amount);
+    }
+    return null;
+  }, [principal, interest_rate, time]);
+
   const onSubmit = (data: lendsSchemaType) => {
     dispatch(
-      add(data, () => {
+      add(data, (error) => {
+        if (error){
+          Toast.show({
+            type: 'error',
+            text1: error,
+          });
+          return;
+        }
+
         Toast.show({
-          type: 'success', 
+          type: 'success',
           text1: 'Lend added successfully!',
         });
         reset();
         dispatch(setError(null));
-        router.replace('/dashboard/lends');
+        // router.replace('/dashboard/lends');
       })
     );
   };
@@ -94,12 +119,10 @@ export default function AddLends() {
       {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}
       style={{ flex: 1 }}>
       <SafeAreaViewComponent>
-        <ScrollView
-          bounces={false}
-          showsVerticalScrollIndicator={false}>
+        <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
           <ThemedView
-            style={{ flex: 1,  paddingTop: StatusBar.currentHeight, paddingHorizontal: 10 }}>
-             <View style={styles.formContainer}>
+            style={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 10 }}>
+            <View style={styles.formContainer}>
               {error && (
                 <View style={styles.errorContainer}>
                   <Text style={styles.error}>{error}</Text>
@@ -284,14 +307,25 @@ export default function AddLends() {
                     name="ld_total_weeks_or_month"
                   />
                   <Spacer height={25} />
+                  {interestCalculation ? (
+                    <>
+                      <Text style={styles.interest}>Interest Amount : {interestCalculation}</Text>
+                      <Spacer height={25} />
+                    </>
+                  ) : null}
                   <Controller
                     control={control}
                     render={({ field }) => (
-                      <CustomDatePicker onDateChange={(data)=>field.onChange(data)} value={field.value} label="Payment Start Date" placeholder="DD-MM-YYYY" error={errors.ld_start_date?.message} />
+                      <CustomDatePicker
+                        onDateChange={data => field.onChange(data)}
+                        value={field.value}
+                        label="Payment Start Date"
+                        placeholder="DD-MM-YYYY"
+                        error={errors.ld_start_date?.message}
+                      />
                     )}
                     name="ld_start_date"
                   />
-                            
                 </View>
                 <View style={[styles.sectionContainer, { marginTop: 25 }]}>
                   <View style={[styles.sectionTitleContainer]}>
@@ -498,7 +532,7 @@ const styles = StyleSheet.create({
   formContainer: {
     justifyContent: 'center',
     paddingHorizontal: 15,
-    marginTop: 10
+    marginTop: 10,
   },
   sectionContainer: {
     marginTop: 20,
@@ -559,9 +593,19 @@ const styles = StyleSheet.create({
     color: '#b7b6c1',
     marginBottom: 2,
     fontFamily: 'Inter-700',
-    textDecorationLine: 'underline'
+    textDecorationLine: 'underline',
   },
   sectionTitleContainer: {
     marginBottom: 10,
+  },
+  interest: {
+    backgroundColor: '#323448',
+    paddingHorizontal: 20,
+    paddingVertical: 6,
+    borderRadius:6,
+    color: '#c7c7c7',
+    fontFamily:'Inter-600',
+    textAlign:'center'
+
   },
 });

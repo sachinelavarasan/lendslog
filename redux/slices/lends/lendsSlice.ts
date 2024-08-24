@@ -144,7 +144,7 @@ export const {
 export const add =
   (
     data: lendsSchemaType,
-    callback: () => void
+    callback: (error?: string) => void
   ): ThunkAction<void, RootState, unknown, UnknownAction> =>
   async dispatch => {
     dispatch(setIsLoading(true));
@@ -158,6 +158,7 @@ export const add =
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         dispatch(setError(error?.response?.data?.error || 'Something went wrong.'));
+        callback('Something went wrong');
       }
     } finally {
       dispatch(setIsLoading(false));
