@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { StatusBar, View, FlatList, Platform, ActivityIndicator } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import Toast from 'react-native-toast-message';
 
 import { ThemedView } from '@/components/ThemedView';
 import SafeAreaViewComponent from '@/components/SafeAreaView';
@@ -11,7 +10,7 @@ import Spacer from '@/components/Spacer';
 import Emptystate from '@/components/Emptystate';
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { getTodayLends, lendsSelector, payInstallment } from '@/redux/slices/lends/lendsSlice';
+import { getTodayLends, lendsSelector } from '@/redux/slices/lends/lendsSlice';
 
 import { TodayLends } from '@/utils/types/lends';
 

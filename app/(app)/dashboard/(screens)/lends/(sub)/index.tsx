@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Text, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { ActivityIndicator, FlatList, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
 import HeaderWithCount from '@/components/HeaderWithCount';
 import { ThemedView } from '@/components/ThemedView';
-import LendsCard, { LendsCardProps } from '@/components/LendsCard';
+import LendsCard from '@/components/LendsCard';
+import Emptystate from '@/components/Emptystate';
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { getAllLends, setAllLends } from '@/redux/slices/lends/lendsSlice';
-import { lendsSchemaType } from '@/utils/schema';
-import Spacer from '@/components/Spacer';
-import Emptystate from '@/components/Emptystate';
+import { getAllLends } from '@/redux/slices/lends/lendsSlice';
 
 export default function index() {
   const dispatch = useAppDispatch();

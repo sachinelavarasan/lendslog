@@ -4,8 +4,10 @@ import Modal from 'react-native-modal';
 
 import DueCard from '@/components/DueCard';
 import HeaderWithCount from '@/components/HeaderWithCount';
-import { IinstallmentTimelines } from '@/utils/types/lends';
+
 import Spacer from './Spacer';
+
+import { IinstallmentTimelines } from '@/utils/types/lends';
 import { deviceWidth } from '@/utils/functions';
 
 const InstallmentsListModal = ({ installmentTimelines = [] }: any) => {
@@ -30,10 +32,26 @@ const InstallmentsListModal = ({ installmentTimelines = [] }: any) => {
           }}>
           <Image source={require('@/assets/icons/info.png')} style={{ width: 18, height: 18 }} />
           <Text style={{ color: '#ffffff', fontFamily: 'Inter-600', fontSize: 14, marginLeft: 2 }}>
-            To view installment details, click here{' '}
+            To view installment details,
           </Text>
+          <TouchableOpacity
+            onPress={() => {
+              setIsVisible(!isVisible);
+            }}
+            style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+            <Text
+              style={{
+                fontSize: 14,
+                fontFamily: 'Inter-500',
+                borderRadius: 4,
+                textDecorationLine: "underline",
+                color: "#FFCA3A",
+              }}>
+              Click here
+            </Text>
+          </TouchableOpacity>
         </View>
-        <View>
+        {/* <View>
           <TouchableOpacity
             onPress={() => {
               setIsVisible(!isVisible);
@@ -51,7 +69,7 @@ const InstallmentsListModal = ({ installmentTimelines = [] }: any) => {
               View
             </Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
       <Modal
         isVisible={isVisible}

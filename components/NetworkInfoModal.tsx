@@ -1,9 +1,10 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useEffect, useState } from 'react';
-
 import NetInfo from '@react-native-community/netinfo';
 import Modal from 'react-native-modal';
+
 import Spacer from '@/components/Spacer';
+
 import { deviceWidth, deviceHeight } from '@/utils/functions';
 
 const NetworkInfoModal = () => {

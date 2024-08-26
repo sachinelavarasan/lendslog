@@ -1,13 +1,15 @@
 import { useEffect } from 'react';
+import { useIsFocused } from '@react-navigation/native';
 import { StatusBar, StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 
 import SearchLend from '@/components/LogSearch';
 import { MaterialTopTabs } from '@/components/MaterialTopTabs';
 import SafeAreaViewComponent from '@/components/SafeAreaView';
 import { ThemedView } from '@/components/ThemedView';
+
 import { setError } from '@/redux/slices/lends/lendsSlice';
 import { useAppDispatch } from '@/redux/hooks';
-import { useIsFocused } from '@react-navigation/native';
+
 
 const ROUTES = [
   {

@@ -1,10 +1,11 @@
 import { createSlice, UnknownAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import { ThunkAction } from 'redux-thunk';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import * as authApi from '@/api/auth';
 import { RootState } from '@/redux/store';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { userSchemaType } from '@/utils/schema';
 
 interface authState {

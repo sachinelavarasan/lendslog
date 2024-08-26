@@ -13,16 +13,17 @@ import { useRouter } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useIsFocused } from '@react-navigation/native';
 
 import Input from '@/components/Input';
 import Spacer from '@/components/Spacer';
-import AuthLink from '@/components/AuthLink';
 import SafeAreaViewComponent from '@/components/SafeAreaView';
 
 import { enableNotificationToken, logIn, setError } from '@/redux/slices/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+
 import { phoneValidation } from '@/utils/Validation';
-import { useIsFocused } from '@react-navigation/native';
+
 
 const schema = z.object({
   phone: z

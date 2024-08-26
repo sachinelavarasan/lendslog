@@ -7,19 +7,21 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Button,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { useEffect, useState } from 'react';
 import OTPTextInput from 'react-native-otp-textinput';
-import SafeAreaViewComponent from '@/components/SafeAreaView';
-import Spacer from '@/components/Spacer';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { otpValidation } from '@/utils/Validation';
-import { deviceHeight, deviceWidth, getAsyncValue } from '@/utils/functions';
-import { setError, verifyOtp, sendOtp } from '@/redux/slices/auth/authSlice';
 import { useRouter } from 'expo-router';
 import { useIsFocused } from '@react-navigation/native';
+
+import SafeAreaViewComponent from '@/components/SafeAreaView';
+import Spacer from '@/components/Spacer';
+
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { setError, verifyOtp, sendOtp } from '@/redux/slices/auth/authSlice';
+
+import { otpValidation } from '@/utils/Validation';
+import { deviceHeight, deviceWidth, getAsyncValue } from '@/utils/functions';
 
 const MobileVerify = () => {
   const [otp, setOtp] = useState<string>('');

@@ -3,6 +3,7 @@ import { Platform, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
 import SearchBar from '@/components/SearchBar';
+
 import { useAppDispatch } from '@/redux/hooks';
 import { getAllLends } from '@/redux/slices/lends/lendsSlice';
 

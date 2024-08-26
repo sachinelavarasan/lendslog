@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { Image, Platform, StyleSheet, Text, View } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -10,6 +10,7 @@ interface CustomSelectInputProps {
   placeholder?: string;
   onChange: (id: number | string) => void;
   value: string | number;
+  isRequired?: boolean;
 }
 
 export const CustomSelectInput = ({
@@ -18,6 +19,7 @@ export const CustomSelectInput = ({
   onChange,
   placeholder,
   value,
+  isRequired=false
 }: CustomSelectInputProps) => {
   const [selected, setSelected] = useState(value);
   const [defaultOption, setDefaultOption] = useState<{ key: any; value: any } | undefined>();
@@ -29,7 +31,19 @@ export const CustomSelectInput = ({
 
   return (
     <View style={styles.selectBoxContainer}>
-      {label && <Text style={styles.labelStyles}>{label}</Text>}
+      {label ? (
+        <View style={{ display: 'flex', flexDirection: 'row' }}>
+          <Text style={styles.labelStyles}>{label}</Text>
+          {isRequired ? (
+            <View style={{ marginLeft: 5, marginTop: 5 }}>
+              <Image
+                source={require('@/assets/icons/required.png')}
+                style={{ width: 8, height: 8 }}
+              />
+            </View>
+          ) : null}
+        </View>
+      ) : null}
       <SelectList
         onSelect={() => onChange(selected)}
         setSelected={setSelected}

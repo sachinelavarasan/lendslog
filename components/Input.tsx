@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
   Platform,
+  Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -17,18 +18,40 @@ interface ExtraInputProps {
   isPassword?: boolean;
   error?: string | null;
   isTitle?: boolean;
+  isRequired?: boolean;
 }
 
 const Input = forwardRef(function MyInput(
   props: ExtraInputProps & TextInputProps,
   ref: React.Ref<TextInput>
 ) {
-  const { label, borderLess, isTextBox, isPassword, error, isTitle, editable = true, ...otherProps } =
-    props;
+  const {
+    label,
+    borderLess,
+    isTextBox,
+    isPassword,
+    error,
+    isTitle,
+    editable = true,
+    isRequired = false,
+    ...otherProps
+  } = props;
   const [show, setShow] = useState(false);
   return (
     <View>
-      {label ? <Text style={styles.label}>{label}</Text> : null}
+      {label ? (
+        <View style={{ display: 'flex', flexDirection: 'row' }}>
+          <Text style={styles.label}>{label}</Text>
+          {isRequired ? (
+            <View style={{ marginLeft: 5, marginTop: 5 }}>
+              <Image
+                source={require('@/assets/icons/required.png')}
+                style={{ width: 8, height: 8 }}
+              />
+            </View>
+          ) : null}
+        </View>
+      ) : null}
       <View
         style={[
           styles.inputContainer,

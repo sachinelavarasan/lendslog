@@ -1,5 +1,4 @@
 import { createContext, useEffect } from 'react';
-import { requestUserPermission } from '@/utils/notification-service';
 import * as Notifications from 'expo-notifications';
 import messaging from '@react-native-firebase/messaging';
 import { useRouter } from 'expo-router';

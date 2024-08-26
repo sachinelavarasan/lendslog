@@ -13,18 +13,18 @@ import { useRouter } from 'expo-router';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
+import { useIsFocused } from '@react-navigation/native';
 
 import Input from '@/components/Input';
 import Spacer from '@/components/Spacer';
 import AuthLink from '@/components/AuthLink';
 import SafeAreaViewComponent from '@/components/SafeAreaView';
 
-import { phoneValidation } from '@/utils/Validation';
-
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setError, signUp } from '@/redux/slices/auth/authSlice';
+
+import { phoneValidation } from '@/utils/Validation';
 import { setAsyncValue } from '@/utils/functions';
-import { useIsFocused } from '@react-navigation/native';
 
 const schema = z.object({
   name: z.string().min(3, { message: 'Minimum 3 characters' }),

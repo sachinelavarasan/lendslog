@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Toast from 'react-native-toast-message';
 
-import { IinstallmentTimelines } from '@/utils/types/lends';
 import CustomCheckBox from './CustomCheckBox';
+
 import { useAppDispatch } from '@/redux/hooks';
 import { updateInstallment } from '@/redux/slices/lends/lendsSlice';
-import Toast from 'react-native-toast-message';
+
+import { IinstallmentTimelines } from '@/utils/types/lends';
 
 const DueCard = ({
   it_id,

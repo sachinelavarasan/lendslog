@@ -1,4 +1,4 @@
-import { View, Platform, TouchableOpacity, Text, Image } from 'react-native';
+import { View, Platform, TouchableOpacity, Text } from 'react-native';
 import Animated, { useSharedValue, withSpring, useAnimatedStyle } from 'react-native-reanimated';
 
 export default function BottomTab({ state, descriptors, navigation }: any) {

@@ -14,23 +14,22 @@ import { useRouter } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useIsFocused } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 
 import Input from '@/components/Input';
 import Spacer from '@/components/Spacer';
-// import AuthLink from '@/components/AuthLink';
 import SafeAreaViewComponent from '@/components/SafeAreaView';
 import { ThemedView } from '@/components/ThemedView';
 import CustomRadioButton from '@/components/CustomRadioButton';
 import CustomCheckBox from '@/components/CustomCheckBox';
 import { CustomSelectInput } from '@/components/CustomSelectInput';
+import CustomDatePicker from '@/components/CustomDatePicker';
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { add, setError } from '@/redux/slices/lends/lendsSlice';
 
 import { lendsSchema, lendsSchemaType } from '@/utils/schema';
 import { interestList, paymentTerms, suretyType } from '@/utils/common-data';
-import CustomDatePicker from '@/components/CustomDatePicker';
-import Toast from 'react-native-toast-message';
 
 export default function AddLends() {
   const dispatch = useAppDispatch();
@@ -93,8 +92,8 @@ export default function AddLends() {
 
   const onSubmit = (data: lendsSchemaType) => {
     dispatch(
-      add(data, (error) => {
-        if (error){
+      add(data, error => {
+        if (error) {
           Toast.show({
             type: 'error',
             text1: error,
@@ -108,7 +107,7 @@ export default function AddLends() {
         });
         reset();
         dispatch(setError(null));
-        // router.replace('/dashboard/lends');
+        router.replace('/dashboard/lends');
       })
     );
   };
@@ -150,6 +149,7 @@ export default function AddLends() {
                         onChangeText={field.onChange}
                         error={errors.ld_borrower_name?.message}
                         borderLess
+                        isRequired
                       />
                     )}
                     name="ld_borrower_name"
@@ -167,6 +167,7 @@ export default function AddLends() {
                         onChangeText={field.onChange}
                         error={errors.ld_borrower_phoneno?.message}
                         borderLess
+                        isRequired
                       />
                     )}
                     name="ld_borrower_phoneno"
@@ -187,6 +188,7 @@ export default function AddLends() {
                         multiline={true}
                         numberOfLines={4}
                         isTextBox
+                        isRequired
                       />
                     )}
                     name="ld_borrower_address"
@@ -230,6 +232,7 @@ export default function AddLends() {
                         onChangeText={field.onChange}
                         error={errors.ld_lend_amount?.message}
                         borderLess
+                        isRequired
                       />
                     )}
                     name="ld_lend_amount"
@@ -246,6 +249,7 @@ export default function AddLends() {
                           field.onChange(data);
                         }}
                         options={interestList}
+                        isRequired
                       />
                     )}
                     name="ld_interest_rate"
@@ -282,6 +286,7 @@ export default function AddLends() {
                           field.onChange(data);
                         }}
                         disabled={field.disabled}
+                        isRequired
                       />
                     )}
                     name="ld_payment_term"
@@ -302,6 +307,7 @@ export default function AddLends() {
                         onChangeText={field.onChange}
                         error={errors.ld_total_weeks_or_month?.message}
                         borderLess
+                        isRequired
                       />
                     )}
                     name="ld_total_weeks_or_month"
@@ -322,6 +328,7 @@ export default function AddLends() {
                         label="Payment Start Date"
                         placeholder="DD-MM-YYYY"
                         error={errors.ld_start_date?.message}
+                        isRequired
                       />
                     )}
                     name="ld_start_date"
@@ -365,6 +372,7 @@ export default function AddLends() {
                             onChangeText={field.onChange}
                             error={errors.ld_nominee_name?.message}
                             borderLess
+                            isRequired
                           />
                         )}
                         name="ld_nominee_name"
@@ -382,6 +390,7 @@ export default function AddLends() {
                             onChangeText={field.onChange}
                             error={errors.ld_nominee_phoneno?.message}
                             borderLess
+                            isRequired
                           />
                         )}
                         name="ld_nominee_phoneno"
@@ -465,6 +474,7 @@ export default function AddLends() {
                             onChange={data => {
                               field.onChange(data);
                             }}
+                            isRequired
                           />
                         )}
                         name="ld_surety_type"
@@ -602,10 +612,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#323448',
     paddingHorizontal: 20,
     paddingVertical: 6,
-    borderRadius:6,
+    borderRadius: 6,
     color: '#c7c7c7',
-    fontFamily:'Inter-600',
-    textAlign:'center'
-
+    fontFamily: 'Inter-600',
+    textAlign: 'center',
   },
 });

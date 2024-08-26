@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import DatePicker, { getFormatedDate } from 'react-native-modern-datepicker';
 
 export default function CustomDatePicker({
@@ -9,6 +9,7 @@ export default function CustomDatePicker({
   label,
   placeholder,
   error,
+  isRequired = false,
 }: {
   onDateChange: (date: string) => void;
   value?: string;
@@ -16,6 +17,7 @@ export default function CustomDatePicker({
   label?: string;
   placeholder?: string;
   error?: string;
+  isRequired?: boolean;
 }) {
   const [selectedDate, setSelectedDate] = useState(value);
   const [datePickerVisible, setDatePickerVisible] = useState(false);
@@ -32,13 +34,25 @@ export default function CustomDatePicker({
     toggleDatePicker();
   };
   function formatDate(date: string) {
-    if(!date) return '';
+    if (!date) return '';
     const selectedDate = date.split('/').join('-');
     return getFormatedDate(new Date(selectedDate), 'YYYY-MM-DD');
   }
   return (
     <View>
-      {label ? <Text style={styles.label}>{label}</Text> : null}
+      {label ? (
+        <View style={{ display: 'flex', flexDirection: 'row' }}>
+          <Text style={styles.label}>{label}</Text>
+          {isRequired ? (
+            <View style={{ marginLeft: 5, marginTop: 5 }}>
+              <Image
+                source={require('@/assets/icons/required.png')}
+                style={{ width: 8, height: 8 }}
+              />
+            </View>
+          ) : null}
+        </View>
+      ) : null}
       <Pressable
         onPress={() => {
           toggleDatePicker();

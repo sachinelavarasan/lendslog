@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useIsFocused } from '@react-navigation/native';
-import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import {
@@ -8,7 +8,6 @@ import {
   Text,
   StyleSheet,
   ActivityIndicator,
-  FlatList,
   StatusBar,
   ScrollView,
   KeyboardAvoidingView,
@@ -21,20 +20,17 @@ import Toast from 'react-native-toast-message';
 
 import CustomCheckBox from '@/components/CustomCheckBox';
 import { CustomSelectInput } from '@/components/CustomSelectInput';
-import DueCard from '@/components/DueCard';
-import HeaderWithCount from '@/components/HeaderWithCount';
 import Input from '@/components/Input';
 import SafeAreaViewComponent from '@/components/SafeAreaView';
 import Spacer from '@/components/Spacer';
 import { ThemedView } from '@/components/ThemedView';
+import InstallmentsListModal from '@/components/InstallmentsListModal';
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { deleteLend, edit, setCurrentLend, setError } from '@/redux/slices/lends/lendsSlice';
 
 import { suretyType } from '@/utils/common-data';
 import { EditLendsSchemaType, EditLendsSchema, lendsSchemaType } from '@/utils/schema';
-import { IinstallmentTimelines } from '@/utils/types/lends';
-import InstallmentsListModal from '@/components/InstallmentsListModal';
 
 export default function DetailsScreen(props: any) {
   const { id } = useLocalSearchParams();
@@ -173,16 +169,16 @@ export default function DetailsScreen(props: any) {
               )}
 
               <View style={styles.header}>
-                <TouchableOpacity onPress={goBack}>
-                  <Image source={require('@/assets/icons/back.png')} />
-                </TouchableOpacity>
                 <View
                   style={{
                     display: 'flex',
                     flexDirection: 'row',
                     alignItems: 'center',
-                    gap: 6,
+                    gap: 10,
                   }}>
+                  <TouchableOpacity onPress={goBack}>
+                    <Image source={require('@/assets/icons/back.png')} />
+                  </TouchableOpacity>
                   <Text style={styles.label}>Lend Details</Text>
                 </View>
                 <View
@@ -211,7 +207,7 @@ export default function DetailsScreen(props: any) {
                   </TouchableOpacity>
                 </View>
               </View>
-              <Text style={{width:"100%"}}>
+              <Text style={{ width: '100%' }}>
                 <InstallmentsListModal installmentTimelines={currentLend?.installmentTimelines} />
               </Text>
               <View>
